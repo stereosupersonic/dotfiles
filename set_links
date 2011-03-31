@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 #download and init
-#svn checkout http://stereosonic@svn.foosong.com/ruby/enviroment/dotfiles ~/bin/dotfiles 
-#chmod +x ~/bin/dotfiles/set_links &&  ~/bin/dotfiles/set_links
-#svn checkout http://stereosonic@svn.foosong.com/ruby/enviroment/scripts ~/bin/scripts 
+#git clone git://github.com/ryanb/dotfiles ~/bin/dotfiles
+#cd ~/bin/dotfiles
+#rake install
+
 mv ~/.bashrc ~/.bashrc.bak
 mv ~/.bash_profile ~/.bash_profile.bak
 mv ~/.gitconfig ~/.gitconfig.bak

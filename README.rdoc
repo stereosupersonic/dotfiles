@@ -1,8 +1,8 @@
-= Michael Deimels Dot Files
+= Michael Deimel's Dot Files
 
 
 == Installation
 
   git clone git://github.com/ryanb/dotfiles ~/bin/dotfiles
-  chmod +x ~/bin/dotfiles/set_links &&  ~/bin/dotfiles/set_links
-  
+  cd ~/bin/dotfiles
+  rake install
