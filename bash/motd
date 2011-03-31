@@ -1,5 +1,4 @@
 # Hello Messsage --------------------------------------------------
 echo -e "Kernel Information: " `uname -smr`
-#echo -e "`bash --version`"
-echo -ne "${MAGENTA}Uptime  : "; uptime
-echo -ne "${WHITE}Zeit: "; date
+echo -ne "Uptime  : "; uptime
+echo -ne "Zeit: "; date
