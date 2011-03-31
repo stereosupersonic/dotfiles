@@ -1,0 +1,32 @@
+#radio
+###########vlc command line
+if [ "$OS" = "darwin" ] ; then
+  alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
+fi
+alias vlc_nc='vlc -I ncurses --extraintf "http"'
+alias play_stream='vlc_nc $1'
+alias p=vlc_nc
+
+alias radio_fritzradio='mpg123 -v@ http://www.fritz.de/live.m3u --title'
+alias radio21='mpg123 -v@ http://www.radio21.de/cms/fileadmin/playlist/radio21.m3u --title'
+alias radio_somafm='mpg123 -v@ http://www.somafm.com/indiepop.pls --title'
+alias radio_bayern1='mpg123 -v@ http://streams.br-online.de/bayern1_2.m3u --title'
+alias radio_bayern2='mpg123 -v@ http://streams.br-online.de/bayern2_2.m3u --title'
+
+alias radio_paradise='mpg123 -v@ http://www.radioparadise.com/musiclinks/rp_128.m3u --title'
+alias radio_indie1031='mpg123 -v@ http://1392.live.streamtheworld.com:443/KDLDFMCMP3 --title'
+alias rockantenne='mpg123 -v@ http://www.rockantenne.de/webradio/rockantenne.m3u --title'
+alias radio_absolute_classic_rock='mpg123 -v@ http://network.absoluteradio.co.uk/core/audio/mp3/live.pls?service=vcbb --title'
+alias fm4='mpg123 -v@ http://mp3stream1.apasf.apa.at:8000 --title'
+alias motorfm='mpg123 -v@ http://www.motorfm.de/stream-berlin --title'
+alias radio_q101='mpg123 -v@ http://1671.live.streamtheworld.com:80/WKQXFMCMP3 --title'
+#http://provisioning.streamtheworld.com/pls/KROQFM.pls
+alias radio_kroq='mpg123 -v@ http://4693.live.streamtheworld.com:80/KROQFMCMP3 --title'
+alias radio_der_von_neil_young_getoeteten='mpg123 -v@ http://streamplus3.ameus.de:11216 --title'
+#alias radio_xfm='vlc --intf dummy http://mediasrv-sov.musicradio.com/XFMLondon'
+alias radio_xfm='vlc_nc http://mediasrv-sov.musicradio.com/XFMLondon'
+alias radio_1live='vlc_nc http://www.wdr.de/wdrlive/media/einslive.m3u'
+
+#tv
+
+alias tv_zdf='vlc http://wstreaming.zdf.de/encoder/livestream4_vh.asx'

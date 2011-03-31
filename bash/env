@@ -1,0 +1,81 @@
+#
+# Identify OS and Machine -----------------------------------------
+export OS=`uname -s | sed -e 's/ *//g;y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/'`
+export OSVERSION=`uname -r`; OSVERSION=`expr "$OSVERSION" : '[^0-9]*\([0-9]*\.[0-9]*\)'`
+export MACHINE=`uname -m | sed -e 's/ *//g;y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/'`
+export PLATFORM="$MACHINE-$OS-$OSVERSION"
+
+# Note, default OS is assumed to be OSX
+export RSPEC=true
+export AUTOFEATURE=true
+#eigene bash scripts
+if [ -d ~/bin ]; then
+ PATH="$PATH:~/bin"
+fi
+
+if [ -d ~/bin/scripts ]; then
+ PATH="$PATH:~/bin/scripts"
+fi
+
+if [ -d ~/entwicklung/projects/songmetadata/bin ]; then
+ PATH="$PATH:~/entwicklung/projects/songmetadata/bin"
+fi
+
+if [ "$OS" = "darwin" ] ; then
+    #jruby
+    PATH="$PATH:~/entwicklung/jruby-1.1.6/bin"
+    #Jsl
+    PATH="$PATH:~/entwicklung/jsl-0.3.0-mac"
+    
+    #lint
+    #mysql
+    #PATH="$PATH:/usr/local/mysql-5.1.30-osx10.5-x86/bin"
+    PATH="$PATH:/usr/local/mysql/bin"
+    PATH="$PATH:/Applications/Inkscape.app/Contents/Resources/bin"
+    PATH="$PATH:/Applications/Shoes.app/Contents/MacOS/"
+    #MacPorts
+    PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+    #MacPorts
+    # Setting PATH for Subversion 1.5.1 binaries
+    # The orginal version is saved in .bash_profile.svnsave
+    
+    SVN_BIN="/opt/subversion/bin"
+    ANNOTATE_BIN="/Library/Ruby/Gems/1.8/gems/annotate-2.0.2/bin"
+    GEM_HOME="/Library/Ruby/Gems/1.8/gems/"
+    PATH="$SVN_BIN:$PATH"
+fi
+export EDITOR="vim"
+export PAGER=less
+export LESS="-M -I -N"
+export PATH
+#########
+#History#
+#########
+export HISTFILE=~/.bash_history
+export HISTFILESIZE=20000
+export HISTSIZE=10000
+# Combine multiline commands into one in historty
+shopt -s histappend
+export HISTIGNORE='&:ls:lr:ll:[bf]g:pwd:exit:..:...:lla"'
+export HISTCONTROL='ignorespace:ignoredups:ignoreboth'
+
+# Color grep
+export GREP_OPTIONS="--color=auto"
+export GREP_COLOR="4;33"
+export CLICOLOR=auto
+
+ 
+if [ "$OS" = "darwin" ] ; then
+  export LSCOLORS=FxFxCxDxBxebedabagacad #siehe http://blog.sensibleopensource.com/changing_colors_in_the_osx_terminal_1.htm
+fi
+
+#if [ "$OS" = "linux" ] ; then
+    #anleitung für ubuntu colors hier #=> http://wiki.ubuntuusers.de/dircolors
+    #dircolors -p > ~/.dircolors 
+    #eval `dircolors -b ~/.dircolors`
+#fi    
+
+#rvm
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
+

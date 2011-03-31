@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+#download and init
+#svn checkout http://stereosonic@svn.foosong.com/ruby/enviroment/dotfiles ~/bin/dotfiles 
+#chmod +x ~/bin/dotfiles/set_links &&  ~/bin/dotfiles/set_links
+#svn checkout http://stereosonic@svn.foosong.com/ruby/enviroment/scripts ~/bin/scripts 
+mv ~/.bashrc ~/.bashrc.bak
+mv ~/.bash_profile ~/.bash_profile.bak
+mv ~/.gitconfig ~/.gitconfig.bak
+
+ln -nfs ~/bin/dotfiles/bashrc ~/.bash_profile
+ln -nfs ~/bin/dotfiles/bashrc ~/.bashrc
+ln -nfs ~/bin/dotfiles/gitconfig ~/.gitconfig
+
+#ruby-rails
+mv ~/.irbrc ~/.irbrc.bak
+mv ~/.railsrc ~/.railsrc.bak
+mv ~/.autotest ~/.railsrc.bak
+mv ~/.rdebugrc  ~/.rdebugrc.bak
+mv ~/.tmux.conf  ~/.tmux_conf.bak
+
+ln -nfs ~/bin/dotfiles/irbrc ~/.irbrc
+ln -nfs ~/bin/dotfiles/railsrc ~/.railsrc
+ln -nfs ~/bin/dotfiles/autotest ~/.autotest
+ln -nfs ~/bin/dotfiles/rdebugrc ~/.rdebugrc
+ln -nfs ~/bin/dotfiles/tmuxconf ~/.tmux.conf
+
+#Install vim
+mv ~/.vimrc ~/.vimrc.bak
+mv ~/.gvimrc ~/.gvimrc.bak
+mv ~/.vim ~/.vim.bak
+
+ln -nfs ~/bin/dotfiles/vim/vimrc ~/.vimrc
+ln -nfs ~/bin/dotfiles/vim/gvimrc ~/.gvimrc
+ln -nfs ~/bin/dotfiles/vim/dot_vim ~/.vim
