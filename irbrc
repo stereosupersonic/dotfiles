@@ -7,23 +7,16 @@ def save_require(gem)
 rescue LoadError
   puts "ERROR: could not load: #{gem}"
 end
-%w{ rubygems pp yaml what_methods hpricot wirble hirb}.each { |lib| save_require lib }
-save_require 'looksee/shortcuts' #gem install looksee 
 
-#s
+%w{ rubygems pp yaml what_methods hpricot wirble hirb}.each { |lib| save_require lib }
+require "ap" #http://github.com/michaeldv/awesome_print
 
 # History
 #siehe http://drnicwilliams.com/2006/10/12/my-irbrc-for-consoleirb/
 unless defined? ETC_IRBRC_LOADED
 save_require 'irb/ext/save-history'
-  # Require RubyGems by default.
-
-
   # Activate auto-completion.
   save_require 'irb/completion'
-
-
-
   # Setup permanent history.
   HISTFILE = "~/.irb-save-history"
   MAXHISTSIZE = 1000
@@ -185,15 +178,15 @@ end
 def h
   y([
    "#{'#'*50}",
-   "lp for looksee gem. Example: lp []",
+  # "lp for looksee gem. Example: lp []",
    "local_methods #=> zeigt nur Mithoden des Objects", 
    "ap #=> for pretty print objects",
-   "c #=> clearstring",
+   "c #=> clear screen",
    "ri #=> print documentation ri 'Array#pop' Array.ri, arr.ri :pop",    
    "Object.edit", 
-   "String.to_file s", 
-   "String.from_file",
-   "String.to_clipboard",
+   "String#to_file s", 
+   "String#from_file",
+   "String#to_clipboard",
    "paste #=>paste it from the clipboard x = paste ",
    "mate #=> Opens Textmate",
    "show_regexp #=> show_regexp('bla',/a/) => bl<<a>>",
@@ -203,8 +196,8 @@ def h
   ])
 end
 
-
+puts h
 load '~/bin/dotfiles/railsrc' if $0 == 'irb' && ENV['RAILS_ENV']
 save_require 'active_support' unless ENV['RAILS_ENV'] 
-require "ap" #http://github.com/michaeldv/awesome_print
-puts h
+
+

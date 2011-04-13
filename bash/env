@@ -40,8 +40,9 @@ if [ "$OS" = "darwin" ] ; then
     # The orginal version is saved in .bash_profile.svnsave
     
     SVN_BIN="/opt/subversion/bin"
-    ANNOTATE_BIN="/Library/Ruby/Gems/1.8/gems/annotate-2.0.2/bin"
-    GEM_HOME="/Library/Ruby/Gems/1.8/gems/"
+    #ANNOTATE_BIN="/Library/Ruby/Gems/1.8/gems/annotate-2.0.2/bin"
+    GEM_HOME="/opt/local/lib/ruby/gems/1.8/gems"
+    
     PATH="$SVN_BIN:$PATH"
 fi
 export EDITOR="vim"

@@ -1,6 +1,5 @@
 #Alias erzeugen ~/.bashrc
 ##aliases and functions
-
 . ~/bin/dotfiles/bash/env
 . ~/bin/dotfiles/bash/config
 . ~/bin/dotfiles/bash/aliases
@@ -15,4 +14,3 @@ fi
 if [ -f ~/bin/dotfiles/bash/radio ]; then
   source ~/bin/dotfiles/bash/radio
 fi
-
