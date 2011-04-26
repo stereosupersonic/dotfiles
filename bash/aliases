@@ -111,18 +111,15 @@ alias h='history' # shortcut for history
 alias h?='history | grep -i $1'
 # Cool History Summerizer
 historyawk(){ history|awk '{a[$2]++}END{for(i in a){printf"%5d\t%s\n",a[i],i}}'|sort -nr |head -n 40; }
-
 #alias topcom="history | awk '{a[$2]++}END{for(i in a){print a[i] \" \" i}}' | sort -rn | head -n 40"
 #history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head -n 40
 #run history number with !123
 alias untar="tar -zxvf"
+
+
 #network
 alias last3='last -n 3'
 alias open_intern_pro="lsof -i"
-myip() {
-    ruby -e ' puts $& if `curl -s http://checkip.dyndns.org/` =~ /(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/'
-}
-alias mylocalips='ifconfig | grep "inet [0-9]" | grep -v 127.0.0.1'
 alias live_tcp='sudo tcpdump -i en0 -n -s 0 -w - | grep -a -o -E "Host\: .*|GET \/.*"'
 
 alias show_blocked='sudo ipfw -a list'
@@ -251,16 +248,7 @@ if [ "$OS" = "darwin" ] ; then
     alias tbund='cd ~/Library/Application\ Support/TextMate/Bundles/' #todo cd bundle and git pull
     alias etr="mate app config lib db schema public spec test vendor/gems vendor/plugins Rakefile Capfile Vladfile Todofile README stories merb slices tasks features &"
 fi
-cd 
 
-###########
-# MySQL #
-###########
-if [ "$OS" = "darwin" ] ; then
-  alias mysqlstart='sudo /opt/local/share/mysql5/mysql/mysql.server start'
-  alias mysqlstop='sudo /opt/local/share/mysql5/mysql/mysql.server stop'
-  alias mysqlerror_log='sudo tail -f /opt/local/var/db/mysql5/michaels-mac-book.local.err'
-fi
 ###########
 # Ruby #
 ###########
