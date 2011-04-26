@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+Dir.chdir(File.expand_path("~/Library/Application\ Support/TextMate/Bundles/")) do
+  Dir.foreach(".") do |dir|
+    if  File.directory?(dir)
+      Dir.chdir(dir) do
+        puts "Update Bundle  #{File.basename Dir.getwd}"
+        puts %x{git pull}
+      end
+    end
+  end
+  puts "reload bundles in textmate"
+  puts %x{osascript -e 'tell app "TextMate" to reload bundles'}
+  puts "finish"
+end
