@@ -16,6 +16,9 @@ if [ "$OS" = "darwin" ] ; then
 fi    
 
 alias root_shell='sudo -s'
+#######################################################################
+# dir
+#######################################################################
 
 # Quicker cd
 # Common -- Some are from Damian Conway
@@ -52,38 +55,63 @@ alias home='cd ~' # cd reicht auch
 function -() { cd -; }    
 
 alias more='less'
-alias mkdir='mkdir -p'
 alias today='date +"%A, %d. %B, %Y"'
 alias yest='date -v-1d +"%A %d. %B, %Y"'
 alias recent='ls -lAt | head -n 20'
 
 alias g='grep -i'  #case insensitive grep
 alias f='find . -iname'
-
-# Open a new terminal tab in the same directory as the current
-# SOURCE => http://pastie.caboo.se/188640
-#    AND => http://justinfrench.com/index.php?id=231
-if [ "$OS" = "darwin" ] ; then
-
-    function nt {
-        osascript -e 'tell application "Terminal"' \
-            -e 'tell application "System Events" to tell process "Terminal" to keystroke "t" using command down' \
-            -e "do script with command \"cd `pwd`;clear\" in selected tab of the front window" \
-            -e 'end tell' &> /dev/null
-    }
-fi
+function ff () { find . -name "*$1*" -print; }
 
 alias k9="sudo killall -9"
 function killnamed () { 
 ps ax | grep $1 | awk '{print $2}' | xargs kill -9
 }
-function zipr() {
-    zip -r $1.zip $1
-}
+
+
+if [ "$OS" = "darwin" ] ; then
+    pdfman(){
+        man -t $1 | open -f -a /Applications/Preview.app/  
+    }
+fi
+
+alias v=vim
+alias ducks='du -cksh * | sort -rn|head -11'
+alias systail='tail -f /var/log/syslog'
+alias mestail='tail -f /var/log/messages'
+alias profileme="history | awk '{print \$2}' | awk 'BEGIN{FS=\"|\"}{print \$1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr"
 
 if [ "$OS" = "linux" ] ; then
     alias sys_upgrade='sudo apt-get update && sudo apt-get upgrade -y'
 fi
+
+
+function zipr() {
+    zip -r $1.zip $1
+}
+
+alias untar="tar -zxvf"
+extract () {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xvjf $1    ;;
+            *.tar.gz)    tar xvzf $1    ;;
+            *.bz2)       bunzip2 $1     ;;
+            *.rar)       unrar x $1       ;;
+            *.gz)        gunzip $1      ;;
+            *.tar)       tar xvf $1     ;;
+            *.tbz2)      tar xvjf $1    ;;
+            *.tgz)       tar xvzf $1    ;;
+            *.zip)       unzip $1       ;;
+            *.Z)         uncompress $1  ;;
+            *.7z)        7z x $1        ;;
+            *)           echo "don't know how to extract '$1'..." ;;
+        esac
+    else
+        echo "'$1' is not a valid file!"
+    fi
+}
+
 
 
 if [ "$OS" = "darwin" ] ; then
@@ -99,12 +127,7 @@ if [ "$OS" = "darwin" ] ; then
     xcodebuild $* clean && ~/src/checker-0.146/scan-build -k -V xcodebuild $* 
 }
 
-alias ox="open *.xcodeproj"  
 
-function lookupip() {
-    open http://www.maxmind.com/app/locate_demo_ip?ips=$1
-}
-fi
 
 # General 
 alias h='history' # shortcut for history
@@ -114,25 +137,37 @@ historyawk(){ history|awk '{a[$2]++}END{for(i in a){printf"%5d\t%s\n",a[i],i}}'|
 #alias topcom="history | awk '{a[$2]++}END{for(i in a){print a[i] \" \" i}}' | sort -rn | head -n 40"
 #history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head -n 40
 #run history number with !123
-alias untar="tar -zxvf"
 
 
+#######################################################################
 #network
+############################################################################
 alias last3='last -n 3'
 alias open_intern_pro="lsof -i"
 alias live_tcp='sudo tcpdump -i en0 -n -s 0 -w - | grep -a -o -E "Host\: .*|GET \/.*"'
-
+alias openports='sudo lsof -i -P | grep -i "listen"'
+alias openinternet='sudo lsof -P -i -n'
 alias show_blocked='sudo ipfw -a list'
 function tracert {
     mtr $1
 }
+
+function lookupip() {
+    open http://www.maxmind.com/app/locate_demo_ip?ips=$1
+}
+fi
+
 # internetspeed
 #echo $(date +%s) > start-time; URL=http://www.google.com; while true; do echo $(curl -L --w %{speed_download} -o/dev/null -s $URL) >> bps; sleep 10; done &
 
+#######################################################################
 # Files
+#######################################################################
 alias topfiles="watch -d -n 2 'df; ls -FlAt;'"
 
+#######################################################################
 # Processes
+#######################################################################
 alias tu='top -o cpu' # cpu
 alias tm='top -o vsize' # memory
 
@@ -161,9 +196,9 @@ logssh()
 { 
 ssh $1 | tee ~/.ssh/log  ; 
 }
-########
+#######################################################################
 # SVN #
-#######
+#######################################################################
 export SVN_EDITOR='${EDITOR}'
 alias ssq='svn status -q'
 alias sup='svn up' # trust me 3 chars makes a different
@@ -184,10 +219,9 @@ function differ() {
     svn diff -r $BEFREV:$REV --diff-cmd ~/bin/scripts/fmdiff
 }
 
-########
+#######################################################################
 # Git #
-#######
-alias gitnub='/Applications/nub'
+#######################################################################
 alias ungit="find . -name '.git' -exec rm -rf {} \;"
 alias gb='git branch'
 alias gba='git branch -a'
@@ -230,17 +264,39 @@ function new-git() {
     git config push.default current
 }
 
-###########
+#######################################################################
 # OSX     #
-###########
+#######################################################################
 if [ "$OS" = "darwin" ] ; then
     alias login_photo='open /Library/Caches/com.apple.user501pictureCache.tiff'
     alias osx_restart_apache='sudo /usr/sbin/apachectl restart'
 fi
 
-###########
+# Open a new terminal tab in the same directory as the current
+# SOURCE => http://pastie.caboo.se/188640
+#    AND => http://justinfrench.com/index.php?id=231
+if [ "$OS" = "darwin" ] ; then
+
+    function nt {
+        osascript -e 'tell application "Terminal"' \
+            -e 'tell application "System Events" to tell process "Terminal" to keystroke "t" using command down' \
+            -e "do script with command \"cd `pwd`;clear\" in selected tab of the front window" \
+            -e 'end tell' &> /dev/null
+    }
+fi
+
+if [ "$OS" = "darwin" ] ; then
+    alias doc='cd ~/Documents' 
+    alias dow='cd ~/Downloads'
+    alias down='cd ~/Downloads'
+    alias desk='cd ~/Desktop'
+    alias vim='mvim -v'
+    alias vi='mvim -v'   
+fi
+
+#######################################################################
 # TEXTMATE #
-###########
+#######################################################################
 
 if [ "$OS" = "darwin" ] ; then
     alias e='mate . &' # open current dir
@@ -249,9 +305,9 @@ if [ "$OS" = "darwin" ] ; then
     alias etr="mate app config lib db schema public spec test vendor/gems vendor/plugins Rakefile Capfile Vladfile Todofile README stories merb slices tasks features &"
 fi
 
-###########
+#######################################################################
 # Ruby #
-###########
+#######################################################################
 alias r="rake"
 alias cg='cd $GEM_HOME'
 alias irb='irb --readline'
@@ -289,13 +345,9 @@ function rbeauty {
     fi
 }
 
-alias rakeEE='/opt/ruby-enterprise/bin/rake'
-alias gemEE='/opt/ruby-enterprise/bin/gem'
-alias rubyEE='/opt/ruby-enterprise/bin/ruby'
-alias irbEE='/opt/ruby-enterprise/bin/irb'
-#######
+#######################################################################
 #Rails#
-#######
+#######################################################################
 alias migrate='rake db:migrate && rake db:test:clone'
 alias migrate_last='rake db:rollback && migrate'
 alias remigrate='migrate_last'
@@ -405,10 +457,9 @@ function ruby_grep {
 function find_in_specs {
     find . -name "spec" -type d -print | xargs find -name "*.rb" | xargs egrep -li "$1" | xargs mate
 }
-#######
+#######################################################################
 #Cucumber &RSpec#
-#######
-##
+#########################################################################
 alias fo='rake log:clear && rake features tag=focus'
 alias wip='rake cucumber:wip'
 alias cucview='cd ~/entwicklung/celerity-viewers/rubycocoa/ && rake'
@@ -431,40 +482,10 @@ alias aas="./script/autospec"
 alias javascript_console="jsc"
 
 
-if [ "$OS" = "darwin" ] ; then
-    pdfman(){
-        man -t $1 | open -f -a /Applications/Preview.app/  
-    }
-fi
-
-extract () {
-    if [ -f $1 ] ; then
-        case $1 in
-            *.tar.bz2)   tar xvjf $1    ;;
-            *.tar.gz)    tar xvzf $1    ;;
-            *.bz2)       bunzip2 $1     ;;
-            *.rar)       unrar x $1       ;;
-            *.gz)        gunzip $1      ;;
-            *.tar)       tar xvf $1     ;;
-            *.tbz2)      tar xvjf $1    ;;
-            *.tgz)       tar xvzf $1    ;;
-            *.zip)       unzip $1       ;;
-            *.Z)         uncompress $1  ;;
-            *.7z)        7z x $1        ;;
-            *)           echo "don't know how to extract '$1'..." ;;
-        esac
-    else
-        echo "'$1' is not a valid file!"
-    fi
-}
-
-alias v=vim
-alias ducks='du -cksh * | sort -rn|head -11'
-alias systail='tail -f /var/log/syslog'
-alias mestail='tail -f /var/log/messages'
-alias profileme="history | awk '{print \$2}' | awk 'BEGIN{FS=\"|\"}{print \$1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr"
-
+#######################################################################
 #bookmarking
+#######################################################################
+
 #bookm foo
 #...
 #cd foo
@@ -481,7 +502,7 @@ bookm (){
 source ~/.dirs  # Initialization for the above 'save' facility: source the .sdirs file
 shopt -s cdable_vars # set the bash option so that no '$' is required when using the above facility
 
-################################
+#######################################################################
 alias hacker_top='watch hacker_news --differences -n 300'
 function hacker_news {
     open "http://news.ycombinator.com/news"    
@@ -495,21 +516,9 @@ alias cheat?="cheat sheets|grep $1"
 alias irc="irssi --connect=irc.freenode.net 8001 -n steresonix"
 
 #new from http://superuser.com/questions/7083/useful-command-line-aliases
-function ff () { find . -name "*$1*" -print; }
-alias openports='sudo lsof -i -P | grep -i "listen"'
-alias openinternet='sudo lsof -P -i -n'
+
 alias please=''
 alias cwd='cd `pwd -P`; pwd'
 function pedia () { dig +short txt $1.wp.dg.cx; }
-
 alias t='tmux -u'
 
-#echo "OSX"
-if [ "$OS" = "darwin" ] ; then
-    alias doc='cd ~/Documents' 
-    alias dow='cd ~/Downloads'
-    alias down='cd ~/Downloads'
-    alias desk='cd ~/Desktop'
-    alias vim='mvim -v'
-    alias vi='mvim -v'   
-fi
