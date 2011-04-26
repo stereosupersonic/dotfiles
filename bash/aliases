@@ -1,7 +1,7 @@
 #http://www.pixelbeat.org/cmdline.html
 #http://www.unixguide.net/linux/linuxshortcuts.shtml
 
-alias bash_reload='cd  ~/bin/dotfiles && git pull && source ~/bin/dotfiles/bash/aliases'
+alias bash_reload='cd ~/bin/dotfiles && rake update && source bash/aliases'
 
 
 alias alias?='alias| grep -i $1'
