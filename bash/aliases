@@ -424,9 +424,7 @@ modelstopdf() {
     else
         echo "Fehler!!!"
     fi
-
 }
-
 
 function railsapp {
     if [ $# -eq 0 ]; then
@@ -512,13 +510,9 @@ function hacker_news {
 #cheats
 #http://cheat.errtheblog.com/
 alias cheat?="cheat sheets|grep $1"
-
 alias irc="irssi --connect=irc.freenode.net 8001 -n steresonix"
 
 #new from http://superuser.com/questions/7083/useful-command-line-aliases
-
-alias please=''
-alias cwd='cd `pwd -P`; pwd'
 function pedia () { dig +short txt $1.wp.dg.cx; }
 alias t='tmux -u'
 
