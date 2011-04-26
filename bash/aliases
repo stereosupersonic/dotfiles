@@ -1,8 +1,8 @@
 #http://www.pixelbeat.org/cmdline.html
 #http://www.unixguide.net/linux/linuxshortcuts.shtml
 
-alias reload='svn up ~/bin/dotfiles && source ~/bin/dotfiles/bash/aliases'
-#alias update_bash='svn up ~/bin/dotfiles'
+alias bash_reload='cd  ~/bin/dotfiles && git pull && source ~/bin/dotfiles/bash/aliases'
+
 
 alias alias?='alias| grep -i $1'
 alias serverinfo="echo $PLATFORM"
