@@ -15,11 +15,10 @@ alias root_shell='sudo -s'
 #######################################################################
 # dir
 #######################################################################
-
 # Quicker cd
 # Common -- Some are from Damian Conway
 function cdc() { 
-cd $1; ls 
+  cd $1; ls 
 }
 
 if [ "$OS" = "linux" ] ; then
@@ -127,9 +126,11 @@ if [ "$OS" = "darwin" ] ; then
     function sxx() { 
     xcodebuild $* clean && ~/src/checker-0.146/scan-build -k -V xcodebuild $* 
 }
+fi
 
-
-# General 
+#######################################################################
+#history
+############################################################################ 
 alias h='history' # shortcut for history
 alias h?='history | grep -i $1'
 # Cool History Summerizer
@@ -155,7 +156,7 @@ function tracert {
 function lookupip() {
     open http://www.maxmind.com/app/locate_demo_ip?ips=$1
 }
-fi
+
 
 # internetspeed
 #echo $(date +%s) > start-time; URL=http://www.google.com; while true; do echo $(curl -L --w %{speed_download} -o/dev/null -s $URL) >> bps; sleep 10; done &

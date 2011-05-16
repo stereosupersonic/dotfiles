@@ -8,7 +8,8 @@ export PLATFORM="$MACHINE-$OS-$OSVERSION"
 # Note, default OS is assumed to be OSX
 export RSPEC=true
 export AUTOFEATURE=true
-#eigene bash scripts
+
+
 if [ -d ~/bin ]; then
  PATH="$PATH:~/bin"
 fi
@@ -17,43 +18,35 @@ if [ -d ~/bin/scripts ]; then
  PATH="$PATH:~/bin/scripts"
 fi
 
-
 if [ -d ~/bin/dotfiles/bash/bin ]; then
  PATH="$PATH:~/bin/dotfiles/bash/bin"
 fi
-
-if [ -d ~/entwicklung/projects/songmetadata/bin ]; then
- PATH="$PATH:~/entwicklung/projects/songmetadata/bin"
+#shared scripts
+if [ -d ~/Dropbox/bash/bin ]; then
+ PATH="$PATH:~/Dropbox/bash/bin"
 fi
 
 if [ "$OS" = "darwin" ] ; then
-    #jruby
-    PATH="$PATH:~/entwicklung/jruby-1.1.6/bin"
-    #Jsl
-    PATH="$PATH:~/entwicklung/jsl-0.3.0-mac"
-    
-    #lint
-    #mysql
-    #PATH="$PATH:/usr/local/mysql-5.1.30-osx10.5-x86/bin"
-    PATH="$PATH:/usr/local/mysql/bin"
-    PATH="$PATH:/Applications/Inkscape.app/Contents/Resources/bin"
-    PATH="$PATH:/Applications/Shoes.app/Contents/MacOS/"
-    #MacPorts
-    PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-    #MacPorts
-    # Setting PATH for Subversion 1.5.1 binaries
-    # The orginal version is saved in .bash_profile.svnsave
-    
-    SVN_BIN="/opt/subversion/bin"
-    #ANNOTATE_BIN="/Library/Ruby/Gems/1.8/gems/annotate-2.0.2/bin"
-    GEM_HOME="/opt/local/lib/ruby/gems/1.8/gems"
-    
-    PATH="$SVN_BIN:$PATH"
+#  #MacPorts
+#  PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+#  #MacPorts
+#  # Setting PATH for Subversion 1.5.1 binaries
+#  # The orginal version is saved in .bash_profile.svnsave
+#  
+#  SVN_BIN="/opt/subversion/bin"
+#  #ANNOTATE_BIN="/Library/Ruby/Gems/1.8/gems/annotate-2.0.2/bin"
+#  GEM_HOME="/opt/local/lib/ruby/gems/1.8/gems"
+#  
+#  PATH="$SVN_BIN:$PATH"
+ alias mvim=/Applications/mvim
 fi
+
+export PATH
+
 export EDITOR="vim"
 export PAGER=less
 export LESS="-M -I -N"
-export PATH
+
 #########
 #History#
 #########
