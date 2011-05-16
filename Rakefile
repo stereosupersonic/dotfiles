@@ -7,6 +7,6 @@ task :install do
 end
 
 task :update do
-  puts %x{git pull}
-  sh "source #{File.join(File.dirname(__FILE__),'bash','aliases')}"
+  puts %x{git pull --rebase}
+  #sh "source #{File.join(File.dirname(__FILE__),'bash','aliases')}"
 end

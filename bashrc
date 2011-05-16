@@ -6,6 +6,12 @@
 if [ "$OS" = "darwin" ] ; then
 . ~/bin/dotfiles/bash/motd
 fi
+
+#for shared with dropbox for private config
+if [ -f ~/Dropbox/bash/bashrc_local ]; then
+  source ~/Dropbox/bash/bashrc_local
+fi
+
 #for special alias path etc...
 if [ -f ~/.bashrc_local ]; then
   source ~/.bashrc_local

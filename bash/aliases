@@ -1,13 +1,9 @@
 #http://www.pixelbeat.org/cmdline.html
 #http://www.unixguide.net/linux/linuxshortcuts.shtml
-
 alias bash_reload='cd ~/bin/dotfiles && rake update && source bash/aliases'
-
-
 alias alias?='alias| grep -i $1'
-alias serverinfo="echo $PLATFORM"
+alias platform="echo $PLATFORM"
 
-#echo "OSX"
 if [ "$OS" = "darwin" ] ; then
     alias ea='mate -w ~/bin/dotfiles/bash/aliases && reload' # Edit aliases
     alias ee="mate ~/bin/dotfiles/bash/env"
@@ -41,18 +37,23 @@ alias lo='ls -laptr' #oldest first sort
 alias labc='ls -lap' #alphabetical sort
 alias lsize='ls -lhSG'
 alias ltime='l'
-
 alias cl='clear; l'
+
 alias dirsize='du -csh'
 
 alias c='clear' # shortcut to clear your terminal auch mit CTRL-L
+alias x='exit'
+
+alias psa='ps wwwax'
 alias md='mkdir -p'
 
-alias s='cd ..'   # up one dir
+alias b='cd -'  # back
+function -() { cd -; }   
 alias ..='cd ..' # move up 1 dir
 alias ...='cd ../..' # move up 2 dirs
+alias ....='cd ../../..' # move up 3 dirs
 alias home='cd ~' # cd reicht auch
-function -() { cd -; }    
+ 
 
 alias more='less'
 alias today='date +"%A, %d. %B, %Y"'
@@ -68,7 +69,6 @@ function killnamed () {
 ps ax | grep $1 | awk '{print $2}' | xargs kill -9
 }
 
-
 if [ "$OS" = "darwin" ] ; then
     pdfman(){
         man -t $1 | open -f -a /Applications/Preview.app/  
@@ -77,6 +77,7 @@ fi
 
 alias v=vim
 alias ducks='du -cksh * | sort -rn|head -11'
+alias du1='du -h -d 1'
 alias systail='tail -f /var/log/syslog'
 alias mestail='tail -f /var/log/messages'
 alias profileme="history | awk '{print \$2}' | awk 'BEGIN{FS=\"|\"}{print \$1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr"
@@ -128,7 +129,6 @@ if [ "$OS" = "darwin" ] ; then
 }
 
 
-
 # General 
 alias h='history' # shortcut for history
 alias h?='history | grep -i $1'
@@ -138,7 +138,6 @@ historyawk(){ history|awk '{a[$2]++}END{for(i in a){printf"%5d\t%s\n",a[i],i}}'|
 #history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head -n 40
 #run history number with !123
 
-
 #######################################################################
 #network
 ############################################################################
@@ -147,6 +146,7 @@ alias open_intern_pro="lsof -i"
 alias live_tcp='sudo tcpdump -i en0 -n -s 0 -w - | grep -a -o -E "Host\: .*|GET \/.*"'
 alias openports='sudo lsof -i -P | grep -i "listen"'
 alias openinternet='sudo lsof -P -i -n'
+alias apps_with_internetconnection='sudo  lsof -nPi | cut -f 1 -d " "| uniq | tail -n +2'
 alias show_blocked='sudo ipfw -a list'
 function tracert {
     mtr $1
@@ -164,7 +164,6 @@ fi
 # Files
 #######################################################################
 alias topfiles="watch -d -n 2 'df; ls -FlAt;'"
-
 #######################################################################
 # Processes
 #######################################################################
@@ -268,30 +267,29 @@ function new-git() {
 # OSX     #
 #######################################################################
 if [ "$OS" = "darwin" ] ; then
+    alias top='top -u'
     alias login_photo='open /Library/Caches/com.apple.user501pictureCache.tiff'
-    alias osx_restart_apache='sudo /usr/sbin/apachectl restart'
-fi
-
 # Open a new terminal tab in the same directory as the current
 # SOURCE => http://pastie.caboo.se/188640
 #    AND => http://justinfrench.com/index.php?id=231
-if [ "$OS" = "darwin" ] ; then
-
     function nt {
         osascript -e 'tell application "Terminal"' \
             -e 'tell application "System Events" to tell process "Terminal" to keystroke "t" using command down' \
             -e "do script with command \"cd `pwd`;clear\" in selected tab of the front window" \
             -e 'end tell' &> /dev/null
     }
-fi
 
-if [ "$OS" = "darwin" ] ; then
     alias doc='cd ~/Documents' 
     alias dow='cd ~/Downloads'
     alias down='cd ~/Downloads'
     alias desk='cd ~/Desktop'
     alias vim='mvim -v'
-    alias vi='mvim -v'   
+    alias vi='mvim -v'
+    alias serial_number='system_profiler |grep "r (system)"'
+
+	alias system_log='tail -f /var/log/system.log'
+    alias kernel_log='tail -f /var/log/kernel.log'
+
 fi
 
 #######################################################################
@@ -479,6 +477,23 @@ alias aaf='autotest -f' # Don't run all at start
 alias aas="./script/autospec"
 alias javascript_console="jsc"
 
+#######################################################################
+#Apache
+#######################################################################
+
+if [ "$OS" = "darwin" ] ; then
+  alias apache_restart='sudo apachectl graceful'
+  alias apache_info='sudo apachectl -V'
+  alias apache_errorlog=' sudo tail -f /var/log/apache2/error_log '
+  alias apache_accesslog='sudo tail -f /var/log/apache2/access_log'
+fi
+
+if [ "$OS" = "linux" ] ; then
+  alias apache_restart='sudo apache2ctl graceful'
+  alias apache_info='sudo apache2ctl -V'
+  alias apache_errorlog='sudo tail -f /var/log/apache2/error.log'
+  alias apache_accesslog='sudo tail -f /var/log/apache2/access.log'
+fi
 
 #######################################################################
 #bookmarking
