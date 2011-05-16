@@ -18,8 +18,8 @@ if [ -d ~/bin/scripts ]; then
 fi
 
 
-if [ -d ~/bin/dotfiles/bash/scripts ]; then
- PATH="$PATH:~/bin/dotfiles/bash/scripts"
+if [ -d ~/bin/dotfiles/bash/bin ]; then
+ PATH="$PATH:~/bin/dotfiles/bash/bin"
 fi
 
 if [ -d ~/entwicklung/projects/songmetadata/bin ]; then
