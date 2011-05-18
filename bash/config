@@ -38,8 +38,6 @@ BMAGENTA='\e[45m'
 BCYAN='\e[46m'
 BWHITE='\e[47m'
 
-
-
 #Prompts
 # * \d - Current date
 # * \t - Current time

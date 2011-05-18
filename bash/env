@@ -26,10 +26,12 @@ if [ -d ~/Dropbox/bash/bin ]; then
  PATH="$PATH:~/Dropbox/bash/bin"
 fi
 
+
 if [ "$OS" = "darwin" ] ; then
+#mysql
+PATH="$PATH:/usr/local/mysql/bin/"
 #  #MacPorts
 #  PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-#  #MacPorts
 #  # Setting PATH for Subversion 1.5.1 binaries
 #  # The orginal version is saved in .bash_profile.svnsave
 #  
