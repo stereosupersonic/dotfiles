@@ -41,11 +41,12 @@ PATH="$PATH:/usr/local/mysql/bin/"
 #  
 #  PATH="$SVN_BIN:$PATH"
  alias mvim=/Applications/mvim
+ export EDITOR="mate"
 fi
 
 export PATH
 
-export EDITOR="vim"
+
 export PAGER=less
 export LESS="-M -I -N"
 
@@ -70,11 +71,12 @@ if [ "$OS" = "darwin" ] ; then
   export LSCOLORS=FxFxCxDxBxebedabagacad #siehe http://blog.sensibleopensource.com/changing_colors_in_the_osx_terminal_1.htm
 fi
 
-#if [ "$OS" = "linux" ] ; then
+if [ "$OS" = "linux" ] ; then
     #anleitung für ubuntu colors hier #=> http://wiki.ubuntuusers.de/dircolors
     #dircolors -p > ~/.dircolors 
     #eval `dircolors -b ~/.dircolors`
-#fi    
+   export EDITOR="vi"
+fi    
 
 #rvm
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
