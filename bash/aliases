@@ -6,8 +6,7 @@ alias platform="echo $PLATFORM"
 
 if [ "$OS" = "darwin" ] ; then
     alias ea='mate -w ~/bin/dotfiles/bash/aliases && reload' # Edit aliases
-    alias ee="mate ~/bin/dotfiles/bash/env"
-    alias ec="mate ~/bin/dotfiles"
+    alias ee="mate ~/bin/dotfiles/bash/env"   
     alias es="mate ~/entwicklung/scripts"
 fi    
 

@@ -5,8 +5,8 @@ task :install do
   puts %x{chmod +x set_links}
   puts %x{./set_links}
 end
+
 desc "update the dot files form the repo"
 task :update do
   puts %x{git pull --rebase}
-  #sh "source #{File.join(File.dirname(__FILE__),'bash','aliases')}"
 end
