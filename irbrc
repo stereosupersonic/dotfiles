@@ -1,4 +1,5 @@
 #!/usr/bin/ruby
+puts "start"
 $VERBOSE = false
 puts "init irb"
 puts "load #{__FILE__}"
@@ -8,11 +9,12 @@ rescue LoadError
   puts "ERROR: could not load: #{gem}"
 end
 
-%w{ rubygems pp yaml what_methods hpricot wirble hirb}.each { |lib| save_require lib }
-require "ap" #http://github.com/michaeldv/awesome_print
+%w{ rubygems pp yaml what_methods hpricot wirble hirb ap}.each { |lib| save_require lib }
+# ap =>  #http://github.com/michaeldv/awesome_print
 
 # History
 #siehe http://drnicwilliams.com/2006/10/12/my-irbrc-for-consoleirb/
+
 unless defined? ETC_IRBRC_LOADED
 save_require 'irb/ext/save-history'
   # Activate auto-completion.
@@ -31,7 +33,7 @@ save_require 'irb/ext/save-history'
     end
     Kernel::at_exit do
       lines = Readline::HISTORY.to_a.reverse.uniq.reverse
-      lines = lines[-MAXHISTSIZE, MAXHISTSIZE] if lines.nitems > MAXHISTSIZE
+      lines = lines[-MAXHISTSIZE, MAXHISTSIZE] if lines.size > MAXHISTSIZE
       puts "Saving #{lines.length} history lines to '#{histfile}'." if $VERBOSE
       File::open(histfile, File::WRONLY|File::CREAT|File::TRUNC) { |io| io.puts lines.join("\n") }
     end
@@ -66,7 +68,6 @@ def edit_obj( obj )
   File.delete( tempfile )
   content
 end
-
 
 def local_methods(obj = self)
   (obj.methods - (obj.class.superclass || obj.class).send(:instance_methods)).sort

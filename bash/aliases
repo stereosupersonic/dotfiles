@@ -39,6 +39,7 @@ alias ltime='l'
 alias cl='clear; l'
 
 alias dirsize='du -csh'
+alias lsdirsizes='du -sch *'
 
 alias c='clear' # shortcut to clear your terminal auch mit CTRL-L
 alias x='exit'
@@ -223,28 +224,23 @@ function differ() {
 # Git #
 #######################################################################
 alias ungit="find . -name '.git' -exec rm -rf {} \;"
-alias gb='git branch'
-alias gba='git branch -a'
-alias gc='git commit -v'
-alias gca='git commit -v -a'
-# Commit pending changes and quote all args as message
-function gg() { 
-git commit -v -a -m "$*"
-}
-alias gco='git checkout'
-alias gd='git diff'
-alias gdm='git diff master'
-alias gl='git pull'
-alias gnp="git-notpushed"
+#from here http://www.catonmat.net/blog/git-aliases
+alias ga='git add'
 alias gp='git push'
-alias gst='git status'
-alias gt='git status'
+alias gl='git log'
 alias gs='git status'
+alias gd='git diff'
+alias gm='git commit -m'
+alias gma='git commit -am'
+alias gb='git branch'
+alias gc='git checkout'
+alias gra='git remote add'
+alias grr='git remote rm'
+alias gpu='git pull'
+alias gcl='git clone'
+
 alias eg='mate .git/config'
-# Git clone from GitHub
-function gch() {
-    git clone git://github.com/$USER/$1.git
-}
+
 # Setup a tracking branch from [remote] [branch_name]
 function gbt() { 
 git branch --track $2 $1/$2 && git checkout $2 
@@ -290,6 +286,8 @@ if [ "$OS" = "darwin" ] ; then
 
 	alias system_log='tail -f /var/log/system.log'
     alias kernel_log='tail -f /var/log/kernel.log'
+    alias restart_finder='killall -KILL Finder'
+    alias restart_dock='killall -KILL Dock'
 
 fi
 
@@ -385,7 +383,7 @@ ss () {
 }
 
 alias styles='cd public/stylesheets'
-alias ssclean='svn up && dbsync && migrate && cleanup && ss'
+alias ssclean='cleanup && svn up && dbsync && migrate && cleanup && ss'
 alias rp='touch tmp/restart.txt'
 
 alias tl='tail -f log/*.log'
@@ -397,8 +395,9 @@ alias td=taildev
 alias tailtest='rake log:clear && clear && tail -F log/test.log'
 alias tailcuc='rake log:clear && clear && tail -F log/cucumber.log'
 alias mysqllog='tail -F /var/log/mysql/mysqld.log'
+alias routes?="routes | grep -i $1' "
 
-alias ts='thin start'
+
 #erzeugt ein digramm Ÿber alle Models in der Rails-App
 #muss im Root-Verzeichnis der Rails-App gestartet werden.
 modelstopdf() {
