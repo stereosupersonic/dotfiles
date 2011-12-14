@@ -12,6 +12,7 @@ mv ~/.gitconfig ~/.gitconfig.bak
 ln -nfs ~/bin/dotfiles/bashrc ~/.bash_profile
 ln -nfs ~/bin/dotfiles/bashrc ~/.bashrc
 ln -nfs ~/bin/dotfiles/gitconfig ~/.gitconfig
+ln -nfs ~/Dropbox/bash/lib ~/lib
 
 #ruby-rails
 mv ~/.irbrc ~/.irbrc.bak

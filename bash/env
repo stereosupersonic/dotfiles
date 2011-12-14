@@ -43,7 +43,8 @@ PATH="$PATH:/usr/local/mysql/bin/"
  alias mvim=/Applications/mvim
  export EDITOR="mate"
 fi
-
+PATH="/usr/local/sbin:$PATH" 
+PATH="/usr/local/bin:$PATH" 
 export PATH
 
 
@@ -62,8 +63,8 @@ export HISTIGNORE='&:ls:lr:ll:[bf]g:pwd:exit:..:...:lla"'
 export HISTCONTROL='ignorespace:ignoredups:ignoreboth'
 
 # Color grep
-export GREP_OPTIONS="--color=auto"
-export GREP_COLOR="4;33"
+#export GREP_OPTIONS="--color=auto"
+#export GREP_COLOR="4;33"
 export CLICOLOR=auto
 
  
@@ -78,7 +79,5 @@ if [ "$OS" = "linux" ] ; then
    export EDITOR="vi"
 fi    
 
-#rvm
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-
-
+#svn svnserve: warning: cannot set LC_CTYPE locale
+export LC_ALL=C
