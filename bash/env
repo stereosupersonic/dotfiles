@@ -61,7 +61,7 @@ export HISTSIZE=10000
 shopt -s histappend
 export HISTIGNORE='&:ls:lr:ll:[bf]g:pwd:exit:..:...:lla"'
 export HISTCONTROL='ignorespace:ignoredups:ignoreboth'
-
+export HISTTIMEFORMAT="%F %T " #anzeige der Zeit in der histry
 # Color grep
 #export GREP_OPTIONS="--color=auto"
 #export GREP_COLOR="4;33"
