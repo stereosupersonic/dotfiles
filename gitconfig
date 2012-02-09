@@ -1,56 +1,67 @@
 [user]
-	name = Michael Deimel
-	email = michael@deimel.de
+  name = Michael Deimel
+  email = michael@deimel.de
 
 [github]
-        user = stereosupersonic 
-        token = github API token
-
+  user = stereosupersonic 
+  token = github API token
+  
 [color]
-        diff = auto
-        status = auto
-        branch = auto
-        interactive = auto
-        ui = true
-        pager = true
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  ui = true
+  pager = true
 
 [color "branch"]
-        current = yellow reverse
-        local = yellow
-        remote = green
+  current = yellow reverse
+  local = yellow
+  remote = green
 
 [color "diff"]
-        meta = yellow bold
-        frag = magenta bold
-        old = green bold
-        new = red bold
-        whitespace = blue reverse
-        
+  meta = yellow bold
+  frag = magenta bold
+  old = green bold
+  new = red bold
+  whitespace = blue reverse        
 
 [color "status"]
-        added = yellow
-        changed = green
-        untracked = cyan
-
+  added = yellow
+  changed = green
+  untracked = cyan
+  
 [core]
-        pager = less -FRSX
-        whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
-	      editor = mate -w
-
+  pager = less -FRSX
+  whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+  editor = vim
+   
 [alias] 
-     st = status
-     ci = commit
-     co = checkout
-     w = whatchanged
-     df = diff
-     lg = log -p
-
+  b = branch -v
+  r = remote -v
+  t = tag -l  
+  st = status
+  ci = commit
+  br = branch
+  co = checkout
+  df = diff
+  lg = log -p
+  who = shortlog -s --
+  revertall = checkout .
+  unstage = reset HEAD
+  uncommit = reset --soft HEAD^
+   
 [merge]
-    tool = chdiff
+  tool = chdiff
+  summary = true
+    
 [mergetool "chdiff"]
-    cmd = /usr/bin/chdiff --wait "$LOCAL" "$REMOTE"
-    keepBackup = false
-    trustExitCode = false
+  cmd = /usr/bin/chdiff --wait "$LOCAL" "$REMOTE"
+  keepBackup = false
+  trustExitCode = false
 
 [difftool]
-	prompt = false
+  prompt = false
+  
+[gc]
+  auto=1 #Automatic cleanup and compression of the repo  
