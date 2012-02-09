@@ -46,7 +46,7 @@ alias x='exit'
 alias psa='ps wwwax'
 alias md='mkdir -p'
 
-alias b='cd -'  # back
+
 function -() { cd -; }   
 alias ..='cd ..' # move up 1 dir
 alias ...='cd ../..' # move up 2 dirs
@@ -65,7 +65,7 @@ function ff () { find . -name "*$1*" -print; }
 
 alias k9="sudo killall -9"
 function killnamed () { 
-ps ax | grep $1 | awk '{print $2}' | xargs kill -9
+ps ax | grep $1 |  grep -v grep | awk '{print $2}' | xargs kill -9
 }
 
 if [ "$OS" = "darwin" ] ; then
@@ -80,7 +80,7 @@ alias du1='du -h -d 1'
 alias systail='tail -f /var/log/syslog'
 alias mestail='tail -f /var/log/messages'
 alias profileme="history | awk '{print \$2}' | awk 'BEGIN{FS=\"|\"}{print \$1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr"
-
+alias freedisk="df -h | grep /disk0"
 if [ "$OS" = "linux" ] ; then
     alias sys_upgrade='sudo apt-get update && sudo apt-get upgrade -y'
 fi
@@ -181,9 +181,11 @@ if [ "$OS" = "linux" ] ; then
     alias topcpu='ps -auxf | sort -nr -k 3| head -10'
 fi
 alias topten='top -orsize -FR -l1 | grep % | grep -v Load | grep -v COMMAND | cut -c 7-19,64-69 | head -n 10'
+
 function ps? {
     ps ax | grep -i $1 | grep -v grep 
 }
+
 function apt? {
     apt-cache search $1 
 }
@@ -314,6 +316,11 @@ alias rake?='rake -T|grep $1'
 alias cap?='cap -T|grep $1'
 alias rgrowl='rake -rubygems -r rakegrowl'
 alias ruby-info='gem env'
+
+# Bundler
+alias b="bundle"
+alias be="bundle exec"
+alias bake="bundle exec rake"
 
 if [ "$OS" = "darwin" ] ; then
     function markdown() { 
@@ -529,4 +536,6 @@ alias irc="irssi --connect=irc.freenode.net 8001 -n steresonix"
 #new from http://superuser.com/questions/7083/useful-command-line-aliases
 function pedia () { dig +short txt $1.wp.dg.cx; }
 alias t='tmux -u'
+
+
 
