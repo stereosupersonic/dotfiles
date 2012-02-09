@@ -16,6 +16,7 @@ ln -nfs ~/Dropbox/bash/lib ~/lib
 
 #ruby-rails
 mv ~/.irbrc ~/.irbrc.bak
+mv ~/.railsconsolerc ~/.railsconsolerc.bak
 mv ~/.railsrc ~/.railsrc.bak
 mv ~/.autotest ~/.railsrc.bak
 mv ~/.rdebugrc  ~/.rdebugrc.bak
@@ -23,6 +24,7 @@ mv ~/.tmux.conf  ~/.tmux_conf.bak
 
 ln -nfs ~/bin/dotfiles/irbrc ~/.irbrc
 ln -nfs ~/bin/dotfiles/railsrc ~/.railsrc
+ln -nfs ~/bin/dotfiles/railsconsolerc ~/.railsconsolerc
 ln -nfs ~/bin/dotfiles/autotest ~/.autotest
 ln -nfs ~/bin/dotfiles/rdebugrc ~/.rdebugrc
 ln -nfs ~/bin/dotfiles/tmuxconf ~/.tmux.conf
