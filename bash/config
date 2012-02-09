@@ -61,4 +61,4 @@ esac
 # Update the command prompt to be <user>:<current_directory>(git_branch) >
 # Note that the git branch is given a special color
 #PS1="\n\u:\w \[$EBLACK\]\$(vcprompt)\[$NO_COLOR\] \n→ "\w\[\033[00m\]: 
-PS1="$XTITLE""\e[1;32m[\u@\h]\033[0;33m\]:\w\033[00m\] \n→ "
+#PS1="$XTITLE""\e[1;32m[\u@\h]\033[0;33m\]:\w\033[00m\] \n→ "
