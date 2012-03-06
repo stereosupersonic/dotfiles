@@ -1,6 +1,14 @@
 #http://www.pixelbeat.org/cmdline.html
 #http://www.unixguide.net/linux/linuxshortcuts.shtml
-alias bash_reload='cd ~/bin/dotfiles && rake update && source bash/aliases'
+alias rld="source ~/.bashrc"
+alias bash_reload='cd ~/bin/dotfiles && rake update && rld'
+alias dot="cd ~/bin/dotfiles/"
+alias dev="cd ~/entwicklung/"
+
+# copy present working dir to clipboard
+alias cwd="pwd | pbcopy && pwd"
+
+
 alias alias?='alias| grep -i $1'
 alias platform="echo $PLATFORM"
 
@@ -196,7 +204,7 @@ alias lastlogs="sudo find /var/log/ -mmin -10"
 
 logssh() 
 { 
-ssh $1 | tee ~/.ssh/log  ; 
+  ssh $1 | tee ~/.ssh/log  ; 
 }
 #######################################################################
 # SVN #
@@ -226,7 +234,7 @@ function differ() {
 #######################################################################
 alias ungit="find . -name '.git' -exec rm -rf {} \;"
 #from here http://www.catonmat.net/blog/git-aliases
-alias ga='git add'
+alias ga='git add .'
 alias gp='git push'
 alias gl='git log'
 alias gs='git status'
@@ -234,7 +242,7 @@ alias gd='git diff'
 alias gm='git commit -m'
 alias gma='git commit -am'
 alias gb='git branch'
-alias gc='git checkout'
+alias gco='git checkout'
 alias gra='git remote add'
 alias grr='git remote rm'
 alias gpu='git pull'
@@ -242,24 +250,30 @@ alias gcl='git clone'
 
 alias eg='mate .git/config'
 
-# Setup a tracking branch from [remote] [branch_name]
-function gbt() { 
-git branch --track $2 $1/$2 && git checkout $2 
+# to create a new git-branch and switch to it
+# 
+# params: 
+# $1 branchname
+#
+# gnb development 
+#
+function gnb () {
+  git checkout -b "$1"
 }
+
 # Quickly clobber a file and checkout
-function grf() { 
+function grm() { 
 rm $1
 git checkout $1 
 }
-# Call from inside an initialized Git repo, with the name of the repo.
-function new-git() {
-    ssh git@example.com "mkdir $1.git && cd $1.git && git --bare init"
-    git remote add origin git@example.com:$1.git
-    git push origin master
-    git config branch.master.remote origin
-    git config branch.master.merge refs/heads/master
-    git config push.default current
+
+#go to the  github project
+gurl() {
+  echo `ruby -e " gith = %x{git config --get remote.origin.url}.gsub(/\.git/,'').to_s;  puts gith =~ /git@github/ ? gith.gsub(/git@github\.com:/,'https://github.com/') : gith"`
 }
+
+alias github="open `gurl`"
+
 
 #######################################################################
 # OSX     #
@@ -306,7 +320,7 @@ fi
 #######################################################################
 # Ruby #
 #######################################################################
-alias r="bundle exec rake"
+
 alias cg='cd $GEM_HOME'
 alias irb='irb --readline'
 alias gemup='sudo gem update && sudo gem cleanup'
@@ -320,7 +334,9 @@ alias ruby-info='gem env'
 # Bundler
 alias b="bundle"
 alias be="bundle exec"
-alias bake="bundle exec rake"
+alias bi="bundle install"
+alias bu="bundle update"
+alias r="bundle exec rake"
 
 if [ "$OS" = "darwin" ] ; then
     function markdown() { 
@@ -351,7 +367,7 @@ function rbeauty {
 #######################################################################
 #Rails#
 #######################################################################
-alias migrate='bundle exec rake db:migrate && bundle exec rake db:test:clone'
+alias migrate='bundle exec rake db:migrate && bundle exec rake db:annotate && bundle exec rake db:test:clone'
 alias migrate_last='bundle exec  rake db:rollback && migrate'
 alias remigrate='migrate_last'
 #alias remigrate='rake db:migrate:reset && migrate'
@@ -376,20 +392,29 @@ function sg {
 
 #startet den den server
 ss () {
-    if [ -f ./vendor/plugins/konvenit_plugin_trunk/start_server.rb ] 
-        then
-        ./vendor/plugins/konvenit_plugin_trunk/start_server.rb
-    else
-        if [ -e script/rails ]; then
-            script/rails server $@
-        else
-            script/server $@
-        fi
-    fi
+
+  for app in auftragsbuch reaktor katalysator ratefinder2 loginator
+  do
+    array[$app]=1
+  done
+
+  export dir="`basename $PWD`"
+  echo $dir
+
+  if [ -f ./vendor/plugins/konvenit_plugin_trunk/start_server.rb ]; then
+    ./vendor/plugins/konvenit_plugin_trunk/start_server.rb
+  elif [[ ${array[$dir ]} ]]; then
+    bundle exec rake start_server
+  elif [ -e script/rails ]; then   
+    script/rails server $@
+  else
+    script/server $@   
+  fi
 }
 
+
 alias styles='cd public/stylesheets'
-alias ssclean='cleanup && svn up && bundle install && dbsync && migrate && cleanup && ss'
+alias ssclean='git pull origin develop && bundle install && dbsync && migrate && cleanup && ss'
 alias rp='touch tmp/restart.txt'
 
 alias tl='tail -f log/*.log'
@@ -536,6 +561,5 @@ alias irc="irssi --connect=irc.freenode.net 8001 -n steresonix"
 #new from http://superuser.com/questions/7083/useful-command-line-aliases
 function pedia () { dig +short txt $1.wp.dg.cx; }
 alias t='tmux -u'
-
 
 
