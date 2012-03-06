@@ -1,6 +1,0 @@
-#!/bin/sh
-
-#config is here: ~/Backup/config.rb
-backup perform --trigger mymac
-#morbackups
-#backup perform --trigger blah
