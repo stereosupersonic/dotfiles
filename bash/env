@@ -59,16 +59,18 @@ export HISTFILESIZE=20000
 export HISTSIZE=10000
 # Combine multiline commands into one in historty
 shopt -s histappend
-export HISTIGNORE='&:ls:lr:ll:[bf]g:pwd:exit:..:...:lla"'
+export HISTIGNORE='&:ls:lr:ll:[bf]g:pwd:exit:..:...:lla:cat'
 export HISTCONTROL='ignorespace:ignoredups:ignoreboth'
-export HISTTIMEFORMAT="%F %T " #anzeige der Zeit in der histry
+export HISTTIMEFORMAT="%F %T " #anzeige der Zeit in der history
 # Color grep
 #export GREP_OPTIONS="--color=auto"
 #export GREP_COLOR="4;33"
 export CLICOLOR=auto
 
  
-if [ "$OS" = "darwin" ] ; then
+if [ "$OS" = "darwin" ] ; then  
+  export LANG=de_DE.UTF-8    
+  export LC_ALL=de_DE.UTF-8 
   export LSCOLORS=FxFxCxDxBxebedabagacad #siehe http://blog.sensibleopensource.com/changing_colors_in_the_osx_terminal_1.htm
 fi
 
@@ -80,4 +82,3 @@ if [ "$OS" = "linux" ] ; then
 fi    
 
 #svn svnserve: warning: cannot set LC_CTYPE locale
-export LC_ALL=C
