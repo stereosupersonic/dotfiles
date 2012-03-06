@@ -2,12 +2,12 @@
 #for shared with dropbox for private config   
 
 
+#load miceportal settings
 if [ -f ~/entwicklung/miceportal/git/dotfiles/bash/env   ]; then
   source ~/entwicklung/miceportal/git/dotfiles/bash/env   
 else
   echo "not exits '~/entwicklung/miceportal/git/dotfiles/bash/env'"
-fi  
-
+fi   
 
 if [ -f ~/entwicklung/miceportal/git/dotfiles/bash/config   ]; then
   source ~/entwicklung/miceportal/git/dotfiles/bash/config   
@@ -21,10 +21,25 @@ else
   echo "not exits '~/entwicklung/miceportal/git/dotfiles/bash/aliases'"
 fi
 
-##aliases and functions
-. ~/bin/dotfiles/bash/env
-. ~/bin/dotfiles/bash/config
-. ~/bin/dotfiles/bash/aliases
+##aliases and functions  
+if [ -f ~/bin/dotfiles/bash/env   ]; then
+  source ~/bin/dotfiles/bash/env  
+else
+  echo "not exits '~/bin/dotfiles/bash/env'"
+fi   
+
+if [ -f ~/bin/dotfiles/bash/config   ]; then
+  source ~/bin/dotfiles/bash/config  
+else
+  echo "not exits '~/bin/dotfiles/bash/config'"
+fi
+
+if [ -f ~/bin/dotfiles/bash/aliases   ]; then
+  source ~/bin/dotfiles/bash/aliases  
+else
+  echo "not exits '~/bin/dotfiles/bash/aliases'"
+fi
+
 if [ "$OS" = "darwin" ] ; then
 . ~/bin/dotfiles/bash/motd
 else
