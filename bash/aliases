@@ -44,6 +44,8 @@ alias labc='ls -lap' #alphabetical sort
 alias lsize='ls -lhSG'
 alias ltime='l'
 alias cl='clear; l'
+# List only directories
+alias lsd='ls -l | grep "^d"'
 
 alias dirsize='du -csh'
 alias lsdirsizes='du -sch *'
@@ -54,6 +56,7 @@ alias x='exit'
 alias psa='ps wwwax'
 alias md='mkdir -p'
 
+alias filesize="stat -f \"%z bytes\""
 
 function -() { cd -; }   
 alias ..='cd ..' # move up 1 dir
@@ -236,8 +239,7 @@ alias ungit="find . -name '.git' -exec rm -rf {} \;"
 #from here http://www.catonmat.net/blog/git-aliases
 alias ga='git add .'
 alias gp='git push'
-alias gl='git log'
-alias gs='git status'
+alias gl='git log'  
 alias gd='git diff'
 alias gm='git commit -m'
 alias gma='git commit -am'
@@ -248,7 +250,17 @@ alias grr='git remote rm'
 alias gpu='git pull'
 alias gcl='git clone'
 
-alias eg='mate .git/config'
+alias eg='mate .git/config'   
+#special tooles
+alias pull='pull-branch'
+alias push='push-branch'
+alias stage='stage-branch' 
+alias reb='rebase-branch' 
+alias pulr='pull-request'
+alias tstart='ticket-start'
+alias prodeploy='bundle exec cap production deploy'
+alias commit='commit-branch'
+
 
 # to create a new git-branch and switch to it
 # 
@@ -367,12 +379,12 @@ function rbeauty {
 #######################################################################
 #Rails#
 #######################################################################
-alias migrate='bundle exec rake db:migrate && bundle exec rake db:annotate && bundle exec rake db:test:clone'
+alias migrate='bundle exec rake db:migrate && bundle exec rake db:test:clone'
 alias migrate_last='bundle exec  rake db:rollback && migrate'
 alias remigrate='migrate_last'
 #alias remigrate='rake db:migrate:reset && migrate'
 #alias remigrate="rake db:migrate && rake db:migrate:redo && rake db:schema:dump db:test:prepare"
-alias dbsync='LIVEDUMP=true bundle exec rake db:sync_production_to_local_db --trace'
+#alias dbsync='LIVEDUMP=true IGNORE=report_values,correspondences bundle exec rake db:sync_production_to_local_db --trace'
 alias dbsync_last='bundle exec rake db:import_last --trace'
 
 function sc {
@@ -414,19 +426,18 @@ ss () {
 
 
 alias styles='cd public/stylesheets'
-alias ssclean='git pull origin develop && bundle install && dbsync && migrate && cleanup && ss'
+alias ssclean='pull && bootstrap && dbsync && bundle exec rake db:migrate && bundle exec rake db:test:clone && cleanup && ss'
 alias rp='touch tmp/restart.txt'
 
 alias tl='tail -f log/*.log'
-alias devlog='spike log/development.log'
-alias testlog='spike log/test.log'
+alias devlog='tail -f log/development.log'
+alias testlog='tail -f log/test.log'
 alias taildev='rake log:clear && clear && tail -F log/development.log'
 alias tailcuc='rake log:clear && clear && tail -F log/cucumber.log'
-alias td=taildev
 alias tailtest='rake log:clear && clear && tail -F log/test.log'
 alias tailcuc='rake log:clear && clear && tail -F log/cucumber.log'
 #alias mysqllog='tail -F /var/log/mysql/mysqld.log'
-alias routes?="routes | grep -i $1' "
+alias routes?="routes | grep -i $1 "
 
 
 #erzeugt ein digramm Ÿber alle Models in der Rails-App
@@ -561,5 +572,6 @@ alias irc="irssi --connect=irc.freenode.net 8001 -n steresonix"
 #new from http://superuser.com/questions/7083/useful-command-line-aliases
 function pedia () { dig +short txt $1.wp.dg.cx; }
 alias t='tmux -u'
+
 
 
