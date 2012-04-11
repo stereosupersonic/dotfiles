@@ -2,26 +2,7 @@
 #for shared with dropbox for private config   
 
 
-#load miceportal settings
-if [ -f ~/entwicklung/miceportal/git/dotfiles/bash/env   ]; then
-  source ~/entwicklung/miceportal/git/dotfiles/bash/env   
-else
-  #echo "not exits '~/entwicklung/miceportal/git/dotfiles/bash/env'"
-fi   
-
-if [ -f ~/entwicklung/miceportal/git/dotfiles/bash/config   ]; then
-  source ~/entwicklung/miceportal/git/dotfiles/bash/config   
-else
-  #echo "not exits '~/entwicklung/miceportal/git/dotfiles/bash/config'"
-fi   
-
-if [ -f ~/entwicklung/miceportal/git/dotfiles/bash/aliases   ]; then
-  source ~/entwicklung/miceportal/git/dotfiles/bash/aliases   
-else
-  #echo "not exits '~/entwicklung/miceportal/git/dotfiles/bash/aliases'"
-fi
-
-##aliases and functions  
+#aliases and functions  
 if [ -f ~/bin/dotfiles/bash/env   ]; then
   source ~/bin/dotfiles/bash/env  
 else
@@ -42,14 +23,7 @@ fi
  
 if [ -f ~/bin/dotfiles/bash/motd ]; then 
   source ~/bin/dotfiles/bash/motd
-fi
-
-#for shared with dropbox for private config
-if [ -f ~/Dropbox/bash/bashrc_local ]; then
-  source ~/Dropbox/bash/bashrc_local 
-else
-  #echo "not exits '~/Dropbox/bash/bashrc_local'"
-fi
+fi   
 
 #for special alias path etc...
 if [ -f ~/.bashrc_local ]; then
