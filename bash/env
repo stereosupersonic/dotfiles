@@ -5,11 +5,7 @@ export OSVERSION=`uname -r`; OSVERSION=`expr "$OSVERSION" : '[^0-9]*\([0-9]*\.[0
 export MACHINE=`uname -m | sed -e 's/ *//g;y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/'`
 export PLATFORM="$MACHINE-$OS-$OSVERSION"
 
-# Note, default OS is assumed to be OSX
-export RSPEC=true
-export AUTOFEATURE=true
-
-
+#PATH
 if [ -d ~/bin ]; then
  PATH="$PATH:~/bin"
 fi
@@ -20,34 +16,23 @@ fi
 
 if [ -d ~/bin/dotfiles/bash/bin ]; then
  PATH="$PATH:~/bin/dotfiles/bash/bin"
-fi
+fi   
+
 #shared scripts
 if [ -d ~/Dropbox/bash/bin ]; then
  PATH="$PATH:~/Dropbox/bash/bin"
-fi
-
+fi    
 
 if [ "$OS" = "darwin" ] ; then
-#mysql
-PATH="$PATH:/usr/local/mysql/bin/"
-#  #MacPorts
-#  PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-#  # Setting PATH for Subversion 1.5.1 binaries
-#  # The orginal version is saved in .bash_profile.svnsave
-#  
-#  SVN_BIN="/opt/subversion/bin"
-#  #ANNOTATE_BIN="/Library/Ruby/Gems/1.8/gems/annotate-2.0.2/bin"
-#  GEM_HOME="/opt/local/lib/ruby/gems/1.8/gems"
-#  
-#  PATH="$SVN_BIN:$PATH"
  alias mvim=/Applications/mvim
  export EDITOR="mate"
-fi
+fi 
+
 PATH="/usr/local/sbin:$PATH" 
 PATH="/usr/local/bin:$PATH" 
 export PATH
 
-
+#DIVERSE
 export PAGER=less
 export LESS="-M -I -N"
 
@@ -62,11 +47,12 @@ shopt -s histappend
 export HISTIGNORE='&:ls:lr:ll:[bf]g:pwd:exit:..:...:lla:cat'
 export HISTCONTROL='ignorespace:ignoredups:ignoreboth'
 export HISTTIMEFORMAT="%F %T " #anzeige der Zeit in der history
+
+
 # Color grep
 #export GREP_OPTIONS="--color=auto"
 #export GREP_COLOR="4;33"
-export CLICOLOR=auto
-
+export CLICOLOR=auto   
  
 if [ "$OS" = "darwin" ] ; then  
   export LANG=de_DE.UTF-8    
@@ -79,6 +65,4 @@ if [ "$OS" = "linux" ] ; then
     #dircolors -p > ~/.dircolors 
     #eval `dircolors -b ~/.dircolors`
    export EDITOR="vi"
-fi    
-
-#svn svnserve: warning: cannot set LC_CTYPE locale
+fi

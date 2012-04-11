@@ -45,20 +45,15 @@ BWHITE='\e[47m'
 # * \# - Command number
 # * \u - User name
 # * \W - Current working directory (ie: Desktop/)
-# * \w - Current working directory, full path (ie: /Users/Admin/Desktop)
-
-# computer:directory $
-#PS1="macbook:\W \$"
-#export PS1="\u \W \$"
+# * \w - Current working directory, full path (ie: /Users/Admin/Desktop)  
+ 
 case $TERM in
 	xterm* | aterm | rxvt | screen )
 	XTITLE="\[\e]0;\w \a\]" ;;
 	* )
 	XTITLE="" ;;
 esac
-#PS1="$XTITLE""[\u@\h:\w]\n\\$ "
 
-# Update the command prompt to be <user>:<current_directory>(git_branch) >
-# Note that the git branch is given a special color
-#PS1="\n\u:\w \[$EBLACK\]\$(vcprompt)\[$NO_COLOR\] \n→ "\w\[\033[00m\]: 
-#PS1="$XTITLE""\e[1;32m[\u@\h]\033[0;33m\]:\w\033[00m\] \n→ "
+if [ "$OS" = "linux" ]; then
+  PS1="$XTITLE""\e[1;32m[\u@\h]\033[0;33m\]:\w\033[00m\] \n→ "
+fi
