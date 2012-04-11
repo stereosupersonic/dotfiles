@@ -5,18 +5,8 @@ alias bash_reload='cd ~/bin/dotfiles && rake update && rld'
 alias dot="cd ~/bin/dotfiles/"
 alias dev="cd ~/entwicklung/"
 
-# copy present working dir to clipboard
-alias cwd="pwd | pbcopy && pwd"
-
-
 alias alias?='alias| grep -i $1'
 alias platform="echo $PLATFORM"
-
-if [ "$OS" = "darwin" ] ; then
-    alias ea='mate -w ~/bin/dotfiles/bash/aliases && reload' # Edit aliases
-    alias ee="mate ~/bin/dotfiles/bash/env"   
-    alias es="mate ~/entwicklung/scripts"
-fi    
 
 alias root_shell='sudo -s'
 #######################################################################
@@ -62,8 +52,7 @@ function -() { cd -; }
 alias ..='cd ..' # move up 1 dir
 alias ...='cd ../..' # move up 2 dirs
 alias ....='cd ../../..' # move up 3 dirs
-alias home='cd ~' # cd reicht auch
- 
+alias home='cd ~' # cd reicht auch   
 
 alias more='less'
 alias today='date +"%A, %d. %B, %Y"'
@@ -78,12 +67,6 @@ alias k9="sudo killall -9"
 function killnamed () { 
 ps ax | grep $1 |  grep -v grep | awk '{print $2}' | xargs kill -9
 }
-
-if [ "$OS" = "darwin" ] ; then
-    pdfman(){
-        man -t $1 | open -f -a /Applications/Preview.app/  
-    }
-fi
 
 alias v=vim
 alias ducks='du -cksh * | sort -rn|head -11'
@@ -122,22 +105,6 @@ extract () {
         echo "'$1' is not a valid file!"
     fi
 }
-
-
-
-if [ "$OS" = "darwin" ] ; then
-    # Finder
-    alias o='open . &'
-    # XCode
-    # Analyze release build
-    alias sx="xcodebuild clean && ~/src/checker-0.146/scan-build -k -V xcodebuild"
-    # Analyze test build
-    alias sxt="xcodebuild -target Test clean && ~/src/checker-0.146/scan-build -k -V xcodebuild -target Test"
-    # Call with -target Foo
-    function sxx() { 
-    xcodebuild $* clean && ~/src/checker-0.146/scan-build -k -V xcodebuild $* 
-}
-fi
 
 #######################################################################
 #history
@@ -217,104 +184,54 @@ alias ssq='svn status -q'
 alias sup='svn up' # trust me 3 chars makes a different
 alias sst='svn st' # local file changes
 alias sstu='svn st -u' # remote repository changes
-alias svn_new='svn status | grep "^\?" | awk "{print \$2}"'
-
+alias svn_new='svn status | grep "^\?" | awk "{print \$2}"'  
 alias svnclear='rm -rf `find . -type d -name .svn`' # removes all .svn folders from directory recursively
 #alias svnaddall='svn status | grep "^\?" | awk "{print \$2}" | xargs svn add' # adds all unadded files
 alias svn_log='svn log --limit 10'
-alias diff_head='svn diff -r HEAD --diff-cmd ~/bin/scripts/fmdiff'
-alias diff_prev='svn diff -r PREV --diff-cmd ~/bin/scripts/fmdiff'
 alias svstatusremote='svn status --show-updates' # Show status here and on the server
-
-function differ() {
-    REV=$1
-    BEFREV=$((REV-1))
-    svn diff -r $BEFREV:$REV --diff-cmd ~/bin/scripts/fmdiff
-}
 
 #######################################################################
 # Git #
 #######################################################################
-alias ungit="find . -name '.git' -exec rm -rf {} \;"
-#from here http://www.catonmat.net/blog/git-aliases
-alias ga='git add .'
-alias gp='git push'
-alias gl='git log'  
-alias gd='git diff'
-alias gm='git commit -m'
-alias gma='git commit -am'
-alias gb='git branch'
-alias gco='git checkout'
-alias gra='git remote add'
-alias grr='git remote rm'
-alias gpu='git pull'
-alias gcl='git clone'
-
-alias eg='mate .git/config'   
-#special tooles
-alias pull='pull-branch'
-alias push='push-branch'
-alias stage='stage-branch' 
-alias reb='rebase-branch' 
-alias pulr='pull-request'
-alias tstart='ticket-start'
-alias prodeploy='bundle exec cap production deploy'
-alias commit='commit-branch'
-
-
-# to create a new git-branch and switch to it
-# 
-# params: 
-# $1 branchname
-#
-# gnb development 
-#
-function gnb () {
-  git checkout -b "$1"
-}
-
-# Quickly clobber a file and checkout
-function grm() { 
-rm $1
-git checkout $1 
-}
-
-#go to the  github project
-gurl() {
-  echo `ruby -e " gith = %x{git config --get remote.origin.url}.gsub(/\.git/,'').to_s;  puts gith =~ /git@github/ ? gith.gsub(/git@github\.com:/,'https://github.com/') : gith"`
-}
-
-alias github="open `gurl`"
-
+alias ungit="find . -name '.git' -exec rm -rf {} \;"  
 
 #######################################################################
 # OSX     #
 #######################################################################
 if [ "$OS" = "darwin" ] ; then
-    alias top='top -u'
-    alias login_photo='open /Library/Caches/com.apple.user501pictureCache.tiff'
-# Open a new terminal tab in the same directory as the current
-# SOURCE => http://pastie.caboo.se/188640
-#    AND => http://justinfrench.com/index.php?id=231
-    function nt {
-        osascript -e 'tell application "Terminal"' \
-            -e 'tell application "System Events" to tell process "Terminal" to keystroke "t" using command down' \
-            -e "do script with command \"cd `pwd`;clear\" in selected tab of the front window" \
-            -e 'end tell' &> /dev/null
-    }
+  alias top='top -u'
+  alias login_photo='open /Library/Caches/com.apple.user501pictureCache.tiff'
+  # Open a new terminal tab in the same directory as the current
+  # SOURCE => http://pastie.caboo.se/188640
+  #    AND => http://justinfrench.com/index.php?id=231
+  function nt {
+    osascript -e 'tell application "Terminal"' \
+      -e 'tell application "System Events" to tell process "Terminal" to keystroke "t" using command down' \
+      -e "do script with command \"cd `pwd`;clear\" in selected tab of the front window" \
+      -e 'end tell' &> /dev/null
+  }
 
-    alias doc='cd ~/Documents' 
-    alias dow='cd ~/Downloads'
-    alias down='cd ~/Downloads'
-    alias desk='cd ~/Desktop'
-    alias vim='mvim -v'
-    alias vi='mvim -v'
-    alias serial_number='system_profiler |grep "r (system)"'
+  alias doc='cd ~/Documents' 
+  alias dow='cd ~/Downloads'
+  alias down='cd ~/Downloads'
+  alias desk='cd ~/Desktop'
+  alias vim='mvim -v'
+  alias vi='mvim -v'
+  alias serial_number='system_profiler |grep "r (system)"'
 
-	alias system_log='tail -f /var/log/system.log'
-    alias kernel_log='tail -f /var/log/kernel.log'
-    alias restart_finder='killall -KILL Finder'
-    alias restart_dock='killall -KILL Dock'
+  alias system_log='tail -f /var/log/system.log'
+  alias kernel_log='tail -f /var/log/kernel.log'
+  alias restart_finder='killall -KILL Finder'
+  alias restart_dock='killall -KILL Dock'  
+  
+  alias cwd="pwd | pbcopy && pwd"  # copy present working dir to clipboard          
+  alias ea='mate -w ~/bin/dotfiles/bash/aliases && reload' # Edit aliases
+  alias ee="mate ~/bin/dotfiles/bash/env"   
+  alias es="mate ~/entwicklung/scripts"    
+  alias o='open . &'  
+  pdfman(){
+      man -t $1 | open -f -a /Applications/Preview.app/  
+  }
 
 fi
 
@@ -349,21 +266,6 @@ alias be="bundle exec"
 alias bi="bundle install"
 alias bu="bundle update"
 alias r="bundle exec rake"
-
-if [ "$OS" = "darwin" ] ; then
-    function markdown() { 
-    /Applications/TextMate.app/Contents/SharedSupport/Support/bin/Markdown.pl $1 > $1.html 
-}
-fi
-
-function grepinruby() {
-    find . -name *.rb -exec grep -i -a5 $1 {} \; 
-} 
-
-function gem_install() {
-    sudo gem install  $1 --no-rdoc --no-ri
-}
-
 
 function rbeauty {
     if [ $# -eq 0 ]; then
@@ -466,24 +368,6 @@ modelstopdf() {
     fi
 }
 
-function railsapp {
-    if [ $# -eq 0 ]; then
-        echo "$0 : You must supply at least one argument for the application name."
-        exit 1
-    fi
-
-    if [ $# -eq 1 ]; then
-        rails $1 -m  ~/entwicklung/basisvorlagen/rails_template.txt
-        # rails $1 -m http://gist.github.com/raw/133842/fdc00b40dfabc83aa71dad2a97727a89ca00c575/my_template.rb
-    fi
-
-    if [ $# -eq 2 ]; then
-        rails $1 -m $2
-        #rails $1 -m http://github.com/delynn/rails-templates/raw/master/$2.rb
-    fi 
-
-}
-
 function find_in_rails {
     find .  -path './spec' -prune -o -path '*.svn' -prune -o  -type f -name "*.rb" -exec egrep -qi "$1" {} \; -print | xargs mate
 }
@@ -497,27 +381,8 @@ function find_in_specs {
 }
 #######################################################################
 #Cucumber &RSpec#
-#########################################################################
-alias fo='rake log:clear && rake features tag=focus'
-alias wip='rake cucumber:wip'
-alias cucview='cd ~/entwicklung/celerity-viewers/rubycocoa/ && rake'
-alias rf='rake log:clear && rake features'
-alias asp='autospec'
-alias asp_without_cuc='AUTOFEATURE=false && autospec'
-alias autospec_without_cuc='asp_without_cuc'
-alias auto_cucu='./script/rstakeout "./script/cucumber" "app/**/*.rb" "features/**/*"'
-# For running specific features. rake features FEATURE=features/a_feature.feature
-function rff {
-    rake features FEATURE=features/"$1".feature
-}
-# For running specific line numbers
-function rffl {
-    cucumber features/"$1".feature:"$2"
-}
-alias aa='autotest'
-alias aaf='autotest -f' # Don't run all at start
-alias aas="./script/autospec"
-alias javascript_console="jsc"
+######################################################################### 
+alias wip='rake cucumber:wip'   
 
 #######################################################################
 #Apache
@@ -558,11 +423,6 @@ source ~/.dirs  # Initialization for the above 'save' facility: source the .sdir
 shopt -s cdable_vars # set the bash option so that no '$' is required when using the above facility
 
 #######################################################################
-alias hacker_top='watch hacker_news --differences -n 300'
-function hacker_news {
-    open "http://news.ycombinator.com/news"    
-}
-
 
 #cheats
 #http://cheat.errtheblog.com/
@@ -570,8 +430,7 @@ alias cheat?="cheat sheets|grep $1"
 alias irc="irssi --connect=irc.freenode.net 8001 -n steresonix"
 
 #new from http://superuser.com/questions/7083/useful-command-line-aliases
-function pedia () { dig +short txt $1.wp.dg.cx; }
-alias t='tmux -u'
+function pedia () { dig +short txt $1.wp.dg.cx; } 
 
 
 
