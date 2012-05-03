@@ -17,6 +17,8 @@ else
   echo "DOTFILESPATH not exits"  
   exit
 fi   
+echo "DOTFILES Path: ${DOTFILE}"
+echo "HOME Path: ${HOME}"   
 
 mv ~/.bashrc ~/.bashrc.bak 
 rm ~/.bashrc
@@ -24,10 +26,10 @@ mv ~/.bash_profile ~/.bash_profile.bak
 rm ~/.bash_profile  
 mv ~/.gitconfig ~/.gitconfig.bak
 
-ln -nfs "$DOTFILE/DOTFILE" ~/.DOTFILE   
-ln -nfs "$DOTFILE/bashrc" ~/.bash_profile
-ln -nfs "$DOTFILE/bashrc" ~/.bashrc
-ln -nfs "$DOTFILE/gitconfig" ~/.gitconfig
+ln -nfsv "$DOTFILE/DOTFILE" ~/.DOTFILE   
+ln -nfsv "$DOTFILE/bashrc" ~/.bash_profile
+ln -nfsv "$DOTFILE/bashrc" ~/.bashrc
+ln -nfsv "$DOTFILE/gitconfig" ~/.gitconfig
 
 #ruby-rails
 mv ~/.irbrc ~/.irbrc.bak
@@ -37,19 +39,19 @@ mv ~/.autotest ~/.railsrc.bak
 mv ~/.rdebugrc  ~/.rdebugrc.bak
 mv ~/.tmux.conf  ~/.tmux_conf.bak
 
-ln -nfs "$DOTFILE/irbrc" ~/.irbrc
-ln -nfs "$DOTFILE/railsrc" ~/.railsrc
-ln -nfs "$DOTFILE/railsconsolerc" ~/.railsconsolerc
-ln -nfs "$DOTFILE/autotest" ~/.autotest
-ln -nfs "$DOTFILE/rdebugrc" ~/.rdebugrc
-ln -nfs "$DOTFILE/tmuxconf" ~/.tmux.conf
+ln -nfsv "$DOTFILE/irbrc" ~/.irbrc
+ln -nfsv "$DOTFILE/railsrc" ~/.railsrc
+ln -nfsv "$DOTFILE/railsconsolerc" ~/.railsconsolerc
+ln -nfsv "$DOTFILE/autotest" ~/.autotest
+ln -nfsv "$DOTFILE/rdebugrc" ~/.rdebugrc
+ln -nfsv "$DOTFILE/tmuxconf" ~/.tmux.conf
 
 #Install vim
 mv ~/.vimrc ~/.vimrc.bak
 mv ~/.gvimrc ~/.gvimrc.bak
 
-ln -nfs "$DOTFILE/vim/vimrc" ~/.vimrc
-ln -nfs "$DOTFILE/vim/gvimrc" ~/.gvimrc
-ln -nfs "$DOTFILE/vim/dot_vim" ~/.vim   
+ln -nfsv "$DOTFILE/vim/vimrc" ~/.vimrc
+ln -nfsv "$DOTFILE/vim/gvimrc" ~/.gvimrc
+ln -nfsv "$DOTFILE/vim/dot_vim" ~/.vim   
 
 echo "fertig set_links" 
