@@ -1,17 +1,16 @@
 #!/usr/bin/env sh
 
-if [ -f DOTFILE ]; then
+if [ -f "`pwd`/DOTFILE" ]; then
   echo "DOTFILE exits" 
-  source DOTFILE
-  echo $DOTFILESPATH
- 
+  source "`pwd`/DOTFILE"
+  echo $DOTFILESPATH 
 else
   echo "DOTFILE not exits"  
   echo "exec: rake install"  
   exit
 fi   
 
-if [ -z "$DOTFILESPATH" ]; then 
+if [ -n "${DOTFILESPATH+x}" ]; then
   export DOTFILE=$DOTFILESPATH 
 else
   echo "DOTFILESPATH not exits"  
