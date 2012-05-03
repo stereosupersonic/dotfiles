@@ -2,6 +2,6 @@
 
 == Installation
 
-  git clone git://github.com/konvenit/dotfiles ~/.dotfiles
+  git clone git://github.com/stereosupersonic/dotfiles ~/.dotfiles
   cd ~/.dotfiles
   rake install
