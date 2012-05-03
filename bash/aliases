@@ -1,8 +1,8 @@
 #http://www.pixelbeat.org/cmdline.html
 #http://www.unixguide.net/linux/linuxshortcuts.shtml
 alias rld="source ~/.bashrc"
-alias bash_reload='cd ~/bin/dotfiles && rake update && rld'
-alias dot="cd ~/bin/dotfiles/"
+alias bash_reload='cd ~/.dotfiles && rake update && rld'
+alias dot="cd ~/.dotfiles/"
 alias dev="cd ~/entwicklung/"
 
 alias alias?='alias| grep -i $1'
@@ -328,7 +328,7 @@ ss () {
 
 
 alias styles='cd public/stylesheets'
-alias ssclean='pull && bootstrap && dbsync && bundle exec rake db:migrate && bundle exec rake db:test:clone && cleanup && ss'
+alias ssclean='master && bootstrap && dbsync && bundle exec rake db:migrate && bundle exec rake db:test:clone && cleanup && ss'
 alias rp='touch tmp/restart.txt'
 
 alias tl='tail -f log/*.log'

@@ -14,8 +14,8 @@ if [ -d ~/bin/scripts ]; then
  PATH="$PATH:~/bin/scripts"
 fi
 
-if [ -d ~/bin/dotfiles/bash/bin ]; then
- PATH="$PATH:~/bin/dotfiles/bash/bin"
+if [ -d ~/.dotfiles/bash/bin ]; then
+ PATH="$PATH:~/.dotfiles/bash/bin"
 fi   
 
 #shared scripts
