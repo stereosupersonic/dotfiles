@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+begin
+  require 'twitter'
+rescue LoadError
+  puts " install twitter gem: gem install twitter -v=1.4.1"
+end
+
+YOUR_CONSUMER_KEY = "gCyjnvXXVQyVhm5hpNdBqA"
+YOUR_CONSUMER_SECRET = "OKSNNzdCq7Dmy8qoVL90BgNvIdNKmcfDpABhiqgY5Yk"
+YOUR_OAUTH_TOKEN = "52028427-wL9ByK0xurUt3wXV3UACsJo96eCsh3YImAg0nR7RU"
+YOUR_OAUTH_TOKEN_SECRET  ="DTUCldSd5r1BCTN6CQTzUe01rDFal7Y8SHcDDkErGo"
+
+Twitter.configure do |config|
+  config.consumer_key = YOUR_CONSUMER_KEY
+  config.consumer_secret = YOUR_CONSUMER_SECRET
+  config.oauth_token = YOUR_OAUTH_TOKEN
+  config.oauth_token_secret = YOUR_OAUTH_TOKEN_SECRET
+end
+
+#IT tweets direct tweet -f 'blah blah blah'
+if ARGV[0] == '-f'
+  input = ARGV[1]  
+  Twitter.update input
+else
+  input = ARGV.join('') || STDIN.read
+  print "Wollen Sie wirklich '#{input}' tweeten? (Ja/Nein)"
+  answer = STDIN.gets
+  if answer =~ /ja/i
+    Twitter.update input
+    puts "getweetet!!!" 
+  else
+    puts "dann halt nicht"
+  end
+end
+
+
+
+
+

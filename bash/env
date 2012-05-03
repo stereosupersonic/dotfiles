@@ -18,6 +18,10 @@ if [ -d $DOTFILE/bash/bin ]; then
  PATH="$PATH:$DOTFILE/bash/bin"
 fi   
 
+if [ -d $DOTFILE/bin ]; then
+ PATH="$PATH:$DOTFILE/bin"
+fi
+
 #shared scripts
 if [ -d $HOME/Dropbox/bash/bin ]; then
  PATH="$PATH:$HOME/Dropbox/bash/bin"
