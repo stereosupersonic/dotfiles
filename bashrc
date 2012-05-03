@@ -21,7 +21,7 @@ else
   exit
 fi 
 
-if [ -z "$DOTFILESPATH" ];  
+if [ -z "$DOTFILESPATH" ]; then 
   export DOTFILE=$DOTFILESPATH 
 else
   echo "DOTFILESPATH not exits"  
