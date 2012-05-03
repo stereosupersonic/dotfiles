@@ -18,8 +18,10 @@ else
   exit
 fi   
 
-mv $HOME/.bashrc $HOME/.bashrc.bak
-mv $HOME/.bash_profile $HOME/.bash_profile.bak
+mv $HOME/.bashrc $HOME/.bashrc.bak 
+rm $HOME/.bashrc
+mv $HOME/.bash_profile $HOME/.bash_profile.bak 
+rm $HOME/.bash_profile  
 mv $HOME/.gitconfig $HOME/.gitconfig.bak
 
 ln -nfs $DOTFILE/DOTFILE $HOME/.DOTFILE   
