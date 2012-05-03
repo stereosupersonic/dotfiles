@@ -14,25 +14,18 @@ if [ -f $HOME/entwicklung/miceportal/git/dotfiles/bash/aliases   ]; then
   source $HOME/entwicklung/miceportal/git/dotfiles/bash/aliases     
 fi
 
-if [ -f "`pwd`/DOTFILE" ]; then
-  echo "DOTFILE exits" 
-  source "`pwd`/DOTFILE"
-  echo $DOTFILESPATH 
+if [ -f "`pwd`/DOTFILE" ]; then   
+  source "`pwd`/DOTFILE" 
 else
-  echo "DOTFILE not exits"  
-  echo "exec: rake install"  
+  echo "DOTFILE not exits"   
   #exit
 fi   
 
 if [ -n "${DOTFILESPATH+x}" ]; then
   export DOTFILE=$DOTFILESPATH 
 else
-  echo "DOTFILESPATH not exits"  
-  #exit
-fi   
-echo "DOTFILES Path: ${DOTFILE}"
-echo "HOME Path: ${HOME}"
-
+  echo "DOTFILESPATH not exits" 
+fi 
 
 #aliases and functions  
 if [ -f $DOTFILE/bash/env   ]; then
