@@ -1,21 +1,21 @@
-#Alias erzeugen ~/.bashrc  
+#Alias erzeugen $HOME/.bashrc  
 #for shared with dropbox for private config       
 
 #load miceportal settings
-if [ -f ~/entwicklung/miceportal/git/dotfiles/bash/env   ]; then
-  source ~/entwicklung/miceportal/git/dotfiles/bash/env   
+if [ -f $HOME/entwicklung/miceportal/git/dotfiles/bash/env   ]; then
+  source $HOME/entwicklung/miceportal/git/dotfiles/bash/env   
 fi
 
-if [ -f ~/entwicklung/miceportal/git/dotfiles/bash/config   ]; then
-  source ~/entwicklung/miceportal/git/dotfiles/bash/config   
+if [ -f $HOME/entwicklung/miceportal/git/dotfiles/bash/config   ]; then
+  source $HOME/entwicklung/miceportal/git/dotfiles/bash/config   
 fi  
 
-if [ -f ~/entwicklung/miceportal/git/dotfiles/bash/aliases   ]; then
-  source ~/entwicklung/miceportal/git/dotfiles/bash/aliases     
+if [ -f $HOME/entwicklung/miceportal/git/dotfiles/bash/aliases   ]; then
+  source $HOME/entwicklung/miceportal/git/dotfiles/bash/aliases     
 fi
 
-if [ -f  ~/.DOTFILE ]; then
-  source ~/.DOTFILE  
+if [ -f  $HOME/.DOTFILE ]; then
+  source $HOME/.DOTFILE  
 else
   echo "DOTFILE not exits"  
   exit
@@ -45,10 +45,10 @@ if [ -f $DOTFILE/bash/motd ]; then
 fi   
 
 #for special alias path etc...
-if [ -f ~/.bashrc_local ]; then
-  source ~/.bashrc_local
+if [ -f $HOME/.bashrc_local ]; then
+  source $HOME/.bashrc_local
 else
-  echo "not exits ' ~/.bashrc_local'"
+  echo "not exits ' $HOME/.bashrc_local'"
 fi
 
 if [ -f $DOTFILE/bash/radio ]; then

@@ -20,7 +20,7 @@ save_require 'irb/ext/save-history'
   # Activate auto-completion.
   save_require 'irb/completion'
   # Setup permanent history.
-  HISTFILE = "~/.irb-save-history"
+  HISTFILE = "$HOME/.irb-save-history"
   MAXHISTSIZE = 1000
   begin
     histfile = File::expand_path(HISTFILE)

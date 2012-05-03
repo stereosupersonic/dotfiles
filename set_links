@@ -10,37 +10,37 @@ fi
 
 source DOTFILE  
 echo $DOTFILE
-mv ~/.bashrc ~/.bashrc.bak
-mv ~/.bash_profile ~/.bash_profile.bak
-mv ~/.gitconfig ~/.gitconfig.bak
+mv $HOME/.bashrc $HOME/.bashrc.bak
+mv $HOME/.bash_profile $HOME/.bash_profile.bak
+mv $HOME/.gitconfig $HOME/.gitconfig.bak
 
-ln -nfs $DOTFILE/DOTFILE ~/.DOTFILE   
-ln -nfs $DOTFILE/bashrc ~/.bash_profile
-ln -nfs $DOTFILE/bashrc ~/.bashrc
-ln -nfs $DOTFILE/gitconfig ~/.gitconfig
+ln -nfs $DOTFILE/DOTFILE $HOME/.DOTFILE   
+ln -nfs $DOTFILE/bashrc $HOME/.bash_profile
+ln -nfs $DOTFILE/bashrc $HOME/.bashrc
+ln -nfs $DOTFILE/gitconfig $HOME/.gitconfig
 
 #ruby-rails
-mv ~/.irbrc ~/.irbrc.bak
-mv ~/.railsconsolerc ~/.railsconsolerc.bak
-mv ~/.railsrc ~/.railsrc.bak
-mv ~/.autotest ~/.railsrc.bak
-mv ~/.rdebugrc  ~/.rdebugrc.bak
-mv ~/.tmux.conf  ~/.tmux_conf.bak
+mv $HOME/.irbrc $HOME/.irbrc.bak
+mv $HOME/.railsconsolerc $HOME/.railsconsolerc.bak
+mv $HOME/.railsrc $HOME/.railsrc.bak
+mv $HOME/.autotest $HOME/.railsrc.bak
+mv $HOME/.rdebugrc  $HOME/.rdebugrc.bak
+mv $HOME/.tmux.conf  $HOME/.tmux_conf.bak
 
-ln -nfs $DOTFILE/irbrc ~/.irbrc
-ln -nfs $DOTFILE/railsrc ~/.railsrc
-ln -nfs $DOTFILE/railsconsolerc ~/.railsconsolerc
-ln -nfs $DOTFILE/autotest ~/.autotest
-ln -nfs $DOTFILE/rdebugrc ~/.rdebugrc
-ln -nfs $DOTFILE/tmuxconf ~/.tmux.conf
+ln -nfs $DOTFILE/irbrc $HOME/.irbrc
+ln -nfs $DOTFILE/railsrc $HOME/.railsrc
+ln -nfs $DOTFILE/railsconsolerc $HOME/.railsconsolerc
+ln -nfs $DOTFILE/autotest $HOME/.autotest
+ln -nfs $DOTFILE/rdebugrc $HOME/.rdebugrc
+ln -nfs $DOTFILE/tmuxconf $HOME/.tmux.conf
 
 #Install vim
-mv ~/.vimrc ~/.vimrc.bak
-mv ~/.gvimrc ~/.gvimrc.bak
-mv ~/.vim ~/.vim.bak
+mv $HOME/.vimrc $HOME/.vimrc.bak
+mv $HOME/.gvimrc $HOME/.gvimrc.bak
+mv $HOME/.vim $HOME/.vim.bak
 
-ln -nfs $DOTFILE/vim/vimrc ~/.vimrc
-ln -nfs $DOTFILE/vim/gvimrc ~/.gvimrc
-ln -nfs $DOTFILE/vim/dot_vim ~/.vim   
+ln -nfs $DOTFILE/vim/vimrc $HOME/.vimrc
+ln -nfs $DOTFILE/vim/gvimrc $HOME/.gvimrc
+ln -nfs $DOTFILE/vim/dot_vim $HOME/.vim   
 
-echo "fertig" 
+echo "fertig set_links" 

@@ -1,9 +1,9 @@
 #http://www.pixelbeat.org/cmdline.html
 #http://www.unixguide.net/linux/linuxshortcuts.shtml
-alias rld="source ~/.bashrc"
+alias rld="source $HOME/.bashrc"
 alias bash_reload="cd $DOTFILE && rake update && rld"
 alias dot="cd $DOTFILE"
-alias dev="cd ~/entwicklung/"
+alias dev="cd $HOME/entwicklung/"
 
 alias alias?='alias| grep -i $1'
 alias platform="echo $PLATFORM"
@@ -52,7 +52,7 @@ function -() { cd -; }
 alias ..='cd ..' # move up 1 dir
 alias ...='cd ../..' # move up 2 dirs
 alias ....='cd ../../..' # move up 3 dirs
-alias home='cd ~' # cd reicht auch   
+alias home='cd $HOME' # cd reicht auch   
 
 alias more='less'
 alias today='date +"%A, %d. %B, %Y"'
@@ -174,7 +174,7 @@ alias lastlogs="sudo find /var/log/ -mmin -10"
 
 logssh() 
 { 
-  ssh $1 | tee ~/.ssh/log  ; 
+  ssh $1 | tee $HOME/.ssh/log  ; 
 }
 #######################################################################
 # SVN #
@@ -211,10 +211,10 @@ if [ "$OS" = "darwin" ] ; then
       -e 'end tell' &> /dev/null
   }
 
-  alias doc='cd ~/Documents' 
-  alias dow='cd ~/Downloads'
-  alias down='cd ~/Downloads'
-  alias desk='cd ~/Desktop'
+  alias doc='cd $HOME/Documents' 
+  alias dow='cd $HOME/Downloads'
+  alias down='cd $HOME/Downloads'
+  alias desk='cd $HOME/Desktop'
   alias vim='mvim -v'
   alias vi='mvim -v'
   alias serial_number='system_profiler |grep "r (system)"'
@@ -227,7 +227,7 @@ if [ "$OS" = "darwin" ] ; then
   alias cwd="pwd | pbcopy && pwd"  # copy present working dir to clipboard          
   alias ea="mate -w $DOTFILE/bash/aliases && reload" # Edit aliases
   alias ee="mate $DOTFILE//bash/env"   
-  alias es="mate ~/entwicklung/scripts"    
+  alias es="mate $HOME/entwicklung/scripts"    
   alias o='open . &'  
   pdfman(){
       man -t $1 | open -f -a /Applications/Preview.app/  
@@ -242,7 +242,7 @@ fi
 if [ "$OS" = "darwin" ] ; then
     alias e='mate . &' # open current dir
     alias et='mate app spec features vendor/plugins &' # open current dir assuming rails
-    alias tbund='cd ~/Library/Application\ Support/TextMate/Bundles/' #todo cd bundle and git pull
+    alias tbund='cd $HOME/Library/Application\ Support/TextMate/Bundles/' #todo cd bundle and git pull
     alias etr="mate app config lib db schema public spec test vendor/gems vendor/plugins Rakefile Capfile Vladfile Todofile README stories merb slices tasks features &"
 fi
 
@@ -274,7 +274,7 @@ function rbeauty {
     fi
 
     if [ $# -eq 1 ]; then
-        ~/entwicklung/ruby/utils/rbeautify.rb  $1
+        $HOME/entwicklung/ruby/utils/rbeautify.rb  $1
     fi
 }
 
@@ -411,15 +411,15 @@ fi
 #cd foo
 #anzeige der bookmarks
 #show foo="/Users/joebob/foo"
-if [ ! -f ~/.dirs ]; then  # if doesn't exist, create it
-    touch ~/.dirs
+if [ ! -f $HOME/.dirs ]; then  # if doesn't exist, create it
+    touch $HOME/.dirs
 fi
 
-alias show='cat ~/.dirs'
+alias show='cat $HOME/.dirs'
 bookm (){
-    command sed "/!$/d" ~/.dirs > ~/.dirs1; \mv ~/.dirs1 ~/.dirs; echo "$@"=\"`pwd`\" >> ~/.dirs; source ~/.dirs ; 
+    command sed "/!$/d" $HOME/.dirs > $HOME/.dirs1; \mv $HOME/.dirs1 $HOME/.dirs; echo "$@"=\"`pwd`\" >> $HOME/.dirs; source $HOME/.dirs ; 
 }
-source ~/.dirs  # Initialization for the above 'save' facility: source the .sdirs file
+source $HOME/.dirs  # Initialization for the above 'save' facility: source the .sdirs file
 shopt -s cdable_vars # set the bash option so that no '$' is required when using the above facility
 
 #######################################################################

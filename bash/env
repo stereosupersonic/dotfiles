@@ -6,12 +6,12 @@ export MACHINE=`uname -m | sed -e 's/ *//g;y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefgh
 export PLATFORM="$MACHINE-$OS-$OSVERSION"
 
 #PATH
-if [ -d ~/bin ]; then
- PATH="$PATH:~/bin"
+if [ -d $HOME/bin ]; then
+ PATH="$PATH:$HOME/bin"
 fi
 
-if [ -d ~/bin/scripts ]; then
- PATH="$PATH:~/bin/scripts"
+if [ -d $HOME/bin/scripts ]; then
+ PATH="$PATH:$HOME/bin/scripts"
 fi
 
 if [ -d $DOTFILE/bash/bin ]; then
@@ -19,8 +19,8 @@ if [ -d $DOTFILE/bash/bin ]; then
 fi   
 
 #shared scripts
-if [ -d ~/Dropbox/bash/bin ]; then
- PATH="$PATH:~/Dropbox/bash/bin"
+if [ -d $HOME/Dropbox/bash/bin ]; then
+ PATH="$PATH:$HOME/Dropbox/bash/bin"
 fi    
 
 if [ "$OS" = "darwin" ] ; then
@@ -39,7 +39,7 @@ export LESS="-M -I -N"
 #########
 #History#
 #########
-export HISTFILE=~/.bash_history
+export HISTFILE=$HOME/.bash_history
 export HISTFILESIZE=20000
 export HISTSIZE=10000
 # Combine multiline commands into one in historty
@@ -62,7 +62,7 @@ fi
 
 if [ "$OS" = "linux" ] ; then
     #anleitung für ubuntu colors hier #=> http://wiki.ubuntuusers.de/dircolors
-    #dircolors -p > ~/.dircolors 
-    #eval `dircolors -b ~/.dircolors`
+    #dircolors -p > $HOME/.dircolors 
+    #eval `dircolors -b $HOME/.dircolors`
    export EDITOR="vi"
 fi
