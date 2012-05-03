@@ -37,7 +37,6 @@ ln -nfs $DOTFILE/tmuxconf $HOME/.tmux.conf
 #Install vim
 mv $HOME/.vimrc $HOME/.vimrc.bak
 mv $HOME/.gvimrc $HOME/.gvimrc.bak
-mv $HOME/.vim $HOME/.vim.bak
 
 ln -nfs $DOTFILE/vim/vimrc $HOME/.vimrc
 ln -nfs $DOTFILE/vim/gvimrc $HOME/.gvimrc
