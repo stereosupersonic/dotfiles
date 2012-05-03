@@ -19,7 +19,15 @@ if [ -f  $HOME/.DOTFILE ]; then
 else
   echo "DOTFILE not exits"  
   exit
+fi 
+
+if [ -z "$DOTFILESPATH" ];  
+  export DOTFILE=$DOTFILESPATH 
+else
+  echo "DOTFILESPATH not exits"  
+  exit
 fi
+
 
 #aliases and functions  
 if [ -f $DOTFILE/bash/env   ]; then

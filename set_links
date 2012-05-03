@@ -2,14 +2,22 @@
 
 if [ -f DOTFILE ]; then
   echo "DOTFILE exits" 
+  source DOTFILE
+  echo $DOTFILESPATH
+ 
 else
   echo "DOTFILE not exits"  
   echo "exec: rake install"  
   exit
-fi
+fi   
 
-source DOTFILE  
-echo $DOTFILE
+if [ -z "$DOTFILESPATH" ];  
+  export DOTFILE=$DOTFILESPATH 
+else
+  echo "DOTFILESPATH not exits"  
+  exit
+fi   
+
 mv $HOME/.bashrc $HOME/.bashrc.bak
 mv $HOME/.bash_profile $HOME/.bash_profile.bak
 mv $HOME/.gitconfig $HOME/.gitconfig.bak
