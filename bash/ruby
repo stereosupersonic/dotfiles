@@ -1,0 +1,31 @@
+#######################################################################
+# Ruby #
+#######################################################################
+
+alias cg='cd $GEM_HOME'
+alias irb='irb --readline'
+alias gemup='sudo gem update && sudo gem cleanup'
+alias gemin='sudo gem install $1 --no-rdoc --no-ri --verbose'
+alias gem?='gem list|grep $1'
+alias rake?='rake -T|grep $1'
+alias cap?='cap -T|grep $1'
+alias rgrowl='rake -rubygems -r rakegrowl'
+alias ruby-info='gem env'
+
+# Bundler
+alias b="bundle"
+alias be="bundle exec"
+alias bi="bundle install"
+alias bu="bundle update"
+alias r="bundle exec rake"
+
+function rbeauty {
+    if [ $# -eq 0 ]; then
+        echo "$0 : You must supply at least one argument for the application name."
+        exit 1
+    fi
+
+    if [ $# -eq 1 ]; then
+        $HOME/entwicklung/ruby/utils/rbeautify.rb  $1
+    fi
+}

@@ -19,38 +19,38 @@ fi
 echo "DOTFILES Path: ${DOTFILE}"
 echo "HOME Path: ${HOME}"   
 
-mv ~/.bashrc ~/.bashrc.bak 
-rm ~/.bashrc
-mv ~/.bash_profile ~/.bash_profile.bak 
-rm ~/.bash_profile  
-mv ~/.gitconfig ~/.gitconfig.bak
+mv $HOME/.bashrc $HOME/.bashrc.bak 
+rm $HOME/.bashrc
+mv $HOME/.bash_profile $HOME/.bash_profile.bak 
+rm $HOME/.bash_profile  
+mv $HOME/.gitconfig $HOME/.gitconfig.bak
 
-ln -nfsv "$DOTFILE/DOTFILE" ~/.DOTFILE   
-ln -nfsv "$DOTFILE/bashrc" ~/.bash_profile
-ln -nfsv "$DOTFILE/bashrc" ~/.bashrc
-ln -nfsv "$DOTFILE/gitconfig" ~/.gitconfig
+ln -nfsv "$DOTFILE/DOTFILE" $HOME/.DOTFILE   
+ln -nfsv "$DOTFILE/bashrc" $HOME/.bash_profile
+ln -nfsv "$DOTFILE/bashrc" $HOME/.bashrc
+ln -nfsv "$DOTFILE/gitconfig" $HOME/.gitconfig
 
 #ruby-rails
-mv ~/.irbrc ~/.irbrc.bak
-mv ~/.railsconsolerc ~/.railsconsolerc.bak
-mv ~/.railsrc ~/.railsrc.bak
-mv ~/.autotest ~/.railsrc.bak
-mv ~/.rdebugrc  ~/.rdebugrc.bak
-mv ~/.tmux.conf  ~/.tmux_conf.bak
+mv $HOME/.irbrc $HOME/.irbrc.bak
+mv $HOME/.railsconsolerc $HOME/.railsconsolerc.bak
+mv $HOME/.railsrc $HOME/.railsrc.bak
+mv $HOME/.autotest $HOME/.railsrc.bak
+mv $HOME/.rdebugrc  $HOME/.rdebugrc.bak
+mv $HOME/.tmux.conf  $HOME/.tmux_conf.bak
 
-ln -nfsv "$DOTFILE/irbrc" ~/.irbrc
-ln -nfsv "$DOTFILE/railsrc" ~/.railsrc
-ln -nfsv "$DOTFILE/railsconsolerc" ~/.railsconsolerc
-ln -nfsv "$DOTFILE/autotest" ~/.autotest
-ln -nfsv "$DOTFILE/rdebugrc" ~/.rdebugrc
-ln -nfsv "$DOTFILE/tmuxconf" ~/.tmux.conf
+ln -nfsv "$DOTFILE/irbrc" $HOME/.irbrc
+ln -nfsv "$DOTFILE/railsrc" $HOME/.railsrc
+ln -nfsv "$DOTFILE/railsconsolerc" $HOME/.railsconsolerc
+ln -nfsv "$DOTFILE/autotest" $HOME/.autotest
+ln -nfsv "$DOTFILE/rdebugrc" $HOME/.rdebugrc
+ln -nfsv "$DOTFILE/tmuxconf" $HOME/.tmux.conf
 
 #Install vim
-mv ~/.vimrc ~/.vimrc.bak
-mv ~/.gvimrc ~/.gvimrc.bak
+mv $HOME/.vimrc $HOME/.vimrc.bak
+mv $HOME/.gvimrc $HOME/.gvimrc.bak
 
-ln -nfsv "$DOTFILE/vim/vimrc" ~/.vimrc
-ln -nfsv "$DOTFILE/vim/gvimrc" ~/.gvimrc
-ln -nfsv "$DOTFILE/vim/dot_vim" ~/.vim   
+ln -nfsv "$DOTFILE/vim/vimrc" $HOME/.vimrc
+ln -nfsv "$DOTFILE/vim/gvimrc" $HOME/.gvimrc
+ln -nfsv "$DOTFILE/vim/dot_vim" $HOME/.vim   
 
 echo "fertig set_links" 

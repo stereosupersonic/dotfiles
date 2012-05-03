@@ -14,11 +14,10 @@ if [ -f $HOME/entwicklung/miceportal/git/dotfiles/bash/aliases   ]; then
   source $HOME/entwicklung/miceportal/git/dotfiles/bash/aliases     
 fi
 
-if [ -f "`pwd`/DOTFILE" ]; then   
-  source "`pwd`/DOTFILE" 
+if [ -f "$HOME/.DOTFILE" ]; then   
+  source "$HOME/.DOTFILE" 
 else
-  echo "DOTFILE not exits"   
-  #exit
+  echo "DOTFILE not exits"
 fi   
 
 if [ -n "${DOTFILESPATH+x}" ]; then
@@ -45,7 +44,48 @@ if [ -f $DOTFILE/bash/aliases   ]; then
 else
   echo "not exits '$DOTFILE/bash/aliases'"
 fi
- 
+
+if [ -f $DOTFILE/bash/filenavigation   ]; then
+  source $DOTFILE/bash/filenavigation  
+else
+  echo "not exits '$DOTFILE/bash/filenavigation'"
+fi
+
+if [ -f $DOTFILE/bash/ruby ]; then
+  source $DOTFILE/bash/ruby  
+else
+  echo "not exits '$DOTFILE/bash/ruby'"
+fi  
+
+if [ -f $DOTFILE/bash/rails ]; then
+  source $DOTFILE/bash/rails  
+else
+  echo "not exits '$DOTFILE/bash/rails'"
+fi
+
+if [ -f $DOTFILE/bash/git ]; then
+  source $DOTFILE/bash/git  
+else
+  echo "not exits '$DOTFILE/bash/git'"
+fi 
+
+if [ -f $DOTFILE/bash/osx ]; then
+  source $DOTFILE/bash/osx  
+else
+  echo "not exits '$DOTFILE/bash/osx'"
+fi
+
+if [ -f $DOTFILE/bash/linux ]; then
+  source $DOTFILE/bash/linux 
+else
+  echo "not exits '$DOTFILE/bash/linux'"
+fi
+if [ -f $DOTFILE/bash/system ]; then
+  source $DOTFILE/bash/system 
+else
+  echo "not exits '$DOTFILE/bash/system'"
+fi
+
 if [ -f $DOTFILE/bash/motd ]; then 
   source $DOTFILE/bash/motd
 fi   

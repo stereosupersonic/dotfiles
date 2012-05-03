@@ -1,0 +1,44 @@
+#######################################################################
+# dir
+#######################################################################
+# Quicker cd
+# Common -- Some are from Damian Conway
+function cdc() { 
+  cd $1; ls 
+}
+
+if [ "$OS" = "linux" ] ; then
+    alias ls='ls --color=always'
+fi
+alias a='ls -A' # -A all except literal . ..
+alias la="ls -A -l -G"
+alias l.='ls -d .[^.]*'
+alias l='ls -lhGt'  # -l long listing, most recent first -G color
+alias lh="ls -lh"
+alias ll='ls -lhG'  # -l long listing, human readable, no group info
+alias lt='ls -lt' # sort with recently modified first
+alias lg='ls | grep $1'
+alias lo='ls -laptr' #oldest first sort
+alias labc='ls -lap' #alphabetical sort
+alias lsize='ls -lhSG'
+alias ltime='l'
+alias cl='clear; l'
+# List only directories
+alias lsd='ls -l | grep "^d"'
+
+alias dirsize='du -csh'
+alias lsdirsizes='du -sch *'
+
+alias c='clear' # shortcut to clear your terminal auch mit CTRL-L
+alias x='exit'
+
+alias psa='ps wwwax'
+alias md='mkdir -p'
+
+alias filesize="stat -f \"%z bytes\""
+
+function -() { cd -; }   
+alias ..='cd ..' # move up 1 dir
+alias ...='cd ../..' # move up 2 dirs
+alias ....='cd ../../..' # move up 3 dirs
+alias home='cd $HOME' # cd reicht auch   

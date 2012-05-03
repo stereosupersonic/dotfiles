@@ -1,0 +1,52 @@
+
+#######################################################################
+# osx only #
+#######################################################################
+
+if [ "$OS" = "darwin" ] ; then    
+  #######################################################################
+  # TEXTMATE #
+  #######################################################################
+  
+  alias e='mate . &' # open current dir
+  alias et='mate app spec features vendor/plugins &' # open current dir assuming rails
+  alias tbund='cd $HOME/Library/Application\ Support/TextMate/Bundles/' #todo cd bundle and git pull
+  alias etr="mate app config lib db schema public spec test vendor/gems vendor/plugins Rakefile Capfile Vladfile Todofile README stories merb slices tasks features &"
+
+
+  alias top='top -u'
+  alias login_photo='open /Library/Caches/com.apple.user501pictureCache.tiff'
+  # Open a new terminal tab in the same directory as the current
+  # SOURCE => http://pastie.caboo.se/188640
+  #    AND => http://justinfrench.com/index.php?id=231
+  function nt {
+    osascript -e 'tell application "Terminal"' \
+      -e 'tell application "System Events" to tell process "Terminal" to keystroke "t" using command down' \
+      -e "do script with command \"cd `pwd`;clear\" in selected tab of the front window" \
+      -e 'end tell' &> /dev/null
+  }
+
+  alias doc='cd $HOME/Documents' 
+  alias dow='cd $HOME/Downloads'
+  alias down='cd $HOME/Downloads'
+  alias desk='cd $HOME/Desktop'
+  alias vim='mvim -v'
+  alias vi='mvim -v'
+  alias serial_number='system_profiler |grep "r (system)"'
+
+  alias system_log='tail -f /var/log/system.log'
+  alias kernel_log='tail -f /var/log/kernel.log'
+  alias restart_finder='killall -KILL Finder'
+  alias restart_dock='killall -KILL Dock'  
+  
+  alias cwd="pwd | pbcopy && pwd"  # copy present working dir to clipboard          
+  alias ea="mate -w $DOTFILE/bash/aliases && reload" # Edit aliases
+  alias ee="mate $DOTFILE//bash/env"   
+  alias es="mate $HOME/entwicklung/scripts"    
+  alias o='open . &'  
+  pdfman(){
+      man -t $1 | open -f -a /Applications/Preview.app/  
+  }
+
+
+fi

@@ -9,50 +9,6 @@ alias alias?='alias| grep -i $1'
 alias platform="echo $PLATFORM"
 
 alias root_shell='sudo -s'
-#######################################################################
-# dir
-#######################################################################
-# Quicker cd
-# Common -- Some are from Damian Conway
-function cdc() { 
-  cd $1; ls 
-}
-
-if [ "$OS" = "linux" ] ; then
-    alias ls='ls --color=always'
-fi
-alias a='ls -A' # -A all except literal . ..
-alias la="ls -A -l -G"
-alias l.='ls -d .[^.]*'
-alias l='ls -lhGt'  # -l long listing, most recent first -G color
-alias lh="ls -lh"
-alias ll='ls -lhG'  # -l long listing, human readable, no group info
-alias lt='ls -lt' # sort with recently modified first
-alias lg='ls | grep $1'
-alias lo='ls -laptr' #oldest first sort
-alias labc='ls -lap' #alphabetical sort
-alias lsize='ls -lhSG'
-alias ltime='l'
-alias cl='clear; l'
-# List only directories
-alias lsd='ls -l | grep "^d"'
-
-alias dirsize='du -csh'
-alias lsdirsizes='du -sch *'
-
-alias c='clear' # shortcut to clear your terminal auch mit CTRL-L
-alias x='exit'
-
-alias psa='ps wwwax'
-alias md='mkdir -p'
-
-alias filesize="stat -f \"%z bytes\""
-
-function -() { cd -; }   
-alias ..='cd ..' # move up 1 dir
-alias ...='cd ../..' # move up 2 dirs
-alias ....='cd ../../..' # move up 3 dirs
-alias home='cd $HOME' # cd reicht auch   
 
 alias more='less'
 alias today='date +"%A, %d. %B, %Y"'
@@ -69,15 +25,6 @@ ps ax | grep $1 |  grep -v grep | awk '{print $2}' | xargs kill -9
 }
 
 alias v=vim
-alias ducks='du -cksh * | sort -rn|head -11'
-alias du1='du -h -d 1'
-alias systail='tail -f /var/log/syslog'
-alias mestail='tail -f /var/log/messages'
-alias profileme="history | awk '{print \$2}' | awk 'BEGIN{FS=\"|\"}{print \$1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr"
-alias freedisk="df -h | grep /disk0"
-if [ "$OS" = "linux" ] ; then
-    alias sys_upgrade='sudo apt-get update && sudo apt-get upgrade -y'
-fi
 
 
 function zipr() {
@@ -139,38 +86,7 @@ function lookupip() {
 # internetspeed
 #echo $(date +%s) > start-time; URL=http://www.google.com; while true; do echo $(curl -L --w %{speed_download} -o/dev/null -s $URL) >> bps; sleep 10; done &
 
-#######################################################################
-# Files
-#######################################################################
-alias topfiles="watch -d -n 2 'df; ls -FlAt;'"
-#######################################################################
-# Processes
-#######################################################################
-alias tu='top -o cpu' # cpu
-alias tm='top -o vsize' # memory
 
-if [ "$OS" = "darwin" ] ; then
-    alias topmem='ps -o rss,command -waxc | sort -nr | head -10'
-    alias topcpu='ps -o pcpu,command -waxc | sort -nr | head -10'
-fi    
-#
-if [ "$OS" = "linux" ] ; then
-    alias topmem='ps -auxf | sort -nr -k 4| head -10'
-    alias topcpu='ps -auxf | sort -nr -k 3| head -10'
-fi
-alias topten='top -orsize -FR -l1 | grep % | grep -v Load | grep -v COMMAND | cut -c 7-19,64-69 | head -n 10'
-
-function ps? {
-    ps ax | grep -i $1 | grep -v grep 
-}
-
-function apt? {
-    apt-cache search $1 
-}
-#hardware
-alias cpu='cat /proc/cpuinfo'
-#logs 
-alias lastlogs="sudo find /var/log/ -mmin -10"
 
 logssh() 
 { 
@@ -190,199 +106,9 @@ alias svnclear='rm -rf `find . -type d -name .svn`' # removes all .svn folders f
 alias svn_log='svn log --limit 10'
 alias svstatusremote='svn status --show-updates' # Show status here and on the server
 
-#######################################################################
-# Git #
-#######################################################################
-alias ungit="find . -name '.git' -exec rm -rf {} \;"  
-
-#######################################################################
-# OSX     #
-#######################################################################
-if [ "$OS" = "darwin" ] ; then
-  alias top='top -u'
-  alias login_photo='open /Library/Caches/com.apple.user501pictureCache.tiff'
-  # Open a new terminal tab in the same directory as the current
-  # SOURCE => http://pastie.caboo.se/188640
-  #    AND => http://justinfrench.com/index.php?id=231
-  function nt {
-    osascript -e 'tell application "Terminal"' \
-      -e 'tell application "System Events" to tell process "Terminal" to keystroke "t" using command down' \
-      -e "do script with command \"cd `pwd`;clear\" in selected tab of the front window" \
-      -e 'end tell' &> /dev/null
-  }
-
-  alias doc='cd $HOME/Documents' 
-  alias dow='cd $HOME/Downloads'
-  alias down='cd $HOME/Downloads'
-  alias desk='cd $HOME/Desktop'
-  alias vim='mvim -v'
-  alias vi='mvim -v'
-  alias serial_number='system_profiler |grep "r (system)"'
-
-  alias system_log='tail -f /var/log/system.log'
-  alias kernel_log='tail -f /var/log/kernel.log'
-  alias restart_finder='killall -KILL Finder'
-  alias restart_dock='killall -KILL Dock'  
-  
-  alias cwd="pwd | pbcopy && pwd"  # copy present working dir to clipboard          
-  alias ea="mate -w $DOTFILE/bash/aliases && reload" # Edit aliases
-  alias ee="mate $DOTFILE//bash/env"   
-  alias es="mate $HOME/entwicklung/scripts"    
-  alias o='open . &'  
-  pdfman(){
-      man -t $1 | open -f -a /Applications/Preview.app/  
-  }
-
-fi
-
-#######################################################################
-# TEXTMATE #
-#######################################################################
-
-if [ "$OS" = "darwin" ] ; then
-    alias e='mate . &' # open current dir
-    alias et='mate app spec features vendor/plugins &' # open current dir assuming rails
-    alias tbund='cd $HOME/Library/Application\ Support/TextMate/Bundles/' #todo cd bundle and git pull
-    alias etr="mate app config lib db schema public spec test vendor/gems vendor/plugins Rakefile Capfile Vladfile Todofile README stories merb slices tasks features &"
-fi
-
-#######################################################################
-# Ruby #
-#######################################################################
-
-alias cg='cd $GEM_HOME'
-alias irb='irb --readline'
-alias gemup='sudo gem update && sudo gem cleanup'
-alias gemin='sudo gem install $1 --no-rdoc --no-ri --verbose'
-alias gem?='gem list|grep $1'
-alias rake?='rake -T|grep $1'
-alias cap?='cap -T|grep $1'
-alias rgrowl='rake -rubygems -r rakegrowl'
-alias ruby-info='gem env'
-
-# Bundler
-alias b="bundle"
-alias be="bundle exec"
-alias bi="bundle install"
-alias bu="bundle update"
-alias r="bundle exec rake"
-
-function rbeauty {
-    if [ $# -eq 0 ]; then
-        echo "$0 : You must supply at least one argument for the application name."
-        exit 1
-    fi
-
-    if [ $# -eq 1 ]; then
-        $HOME/entwicklung/ruby/utils/rbeautify.rb  $1
-    fi
-}
-
-#######################################################################
-#Rails#
-#######################################################################
-alias migrate='bundle exec rake db:migrate && bundle exec rake db:test:clone'
-alias migrate_last='bundle exec  rake db:rollback && migrate'
-alias remigrate='migrate_last'
-#alias remigrate='rake db:migrate:reset && migrate'
-#alias remigrate="rake db:migrate && rake db:migrate:redo && rake db:schema:dump db:test:prepare"
-#alias dbsync='LIVEDUMP=true IGNORE=report_values,correspondences bundle exec rake db:sync_production_to_local_db --trace'
-alias dbsync_last='bundle exec rake db:import_last --trace'
-
-function sc {
-    if [ -e script/rails ]; then
-        script/rails console $@
-    else
-        script/console $@
-    fi
-}
-function sg {
-    if [ -e script/rails ]; then
-        script/rails generate $@
-    else
-        script/generate $@
-    fi
-}
-
-#startet den den server
-ss () {
-
-  for app in auftragsbuch reaktor katalysator ratefinder2 loginator
-  do
-    array[$app]=1
-  done
-
-  export dir="`basename $PWD`"
-  echo $dir
-
-  if [ -f ./vendor/plugins/konvenit_plugin_trunk/start_server.rb ]; then
-    ./vendor/plugins/konvenit_plugin_trunk/start_server.rb
-  elif [[ ${array[$dir ]} ]]; then
-    bundle exec rake start_server
-  elif [ -e script/rails ]; then   
-    script/rails server $@
-  else
-    script/server $@   
-  fi
-}
 
 
-alias styles='cd public/stylesheets'
-alias ssclean='master && bootstrap && dbsync && bundle exec rake db:migrate && bundle exec rake db:test:clone && cleanup && ss'
-alias rp='touch tmp/restart.txt'
 
-alias tl='tail -f log/*.log'
-alias devlog='tail -f log/development.log'
-alias testlog='tail -f log/test.log'
-alias taildev='rake log:clear && clear && tail -F log/development.log'
-alias tailcuc='rake log:clear && clear && tail -F log/cucumber.log'
-alias tailtest='rake log:clear && clear && tail -F log/test.log'
-alias tailcuc='rake log:clear && clear && tail -F log/cucumber.log'
-#alias mysqllog='tail -F /var/log/mysql/mysqld.log'
-alias routes?="routes | grep -i $1 "
-
-
-#erzeugt ein digramm Ÿber alle Models in der Rails-App
-#muss im Root-Verzeichnis der Rails-App gestartet werden.
-modelstopdf() {
-    if [ -f models.svg ]
-        then
-        rm -f models.svg
-    fi
-    if [ -f models.pdf ]
-        then
-        rm -f models.pdf
-    fi
-    # railroad -M | dot -Tsvg > models.svg
-    railroad -a -i -M | dot -Tsvg > models.svg
-    inkscape -z models.svg --export-pdf=models.pdf
-    rm -f models.svg
-
-    if [ -f models.pdf ]
-        then
-        echo "models.pdf wurde erstell!"
-        #gleich šffnen
-        open models.pdf
-    else
-        echo "Fehler!!!"
-    fi
-}
-
-function find_in_rails {
-    find .  -path './spec' -prune -o -path '*.svn' -prune -o  -type f -name "*.rb" -exec egrep -qi "$1" {} \; -print | xargs mate
-}
-
-function ruby_grep {
-    find . -type f -name "*.rb"  -exec egrep -qi "$1" {} \; -print | xargs mate
-}
-
-function find_in_specs {
-    find . -name "spec" -type d -print | xargs find -name "*.rb" | xargs egrep -li "$1" | xargs mate
-}
-#######################################################################
-#Cucumber &RSpec#
-######################################################################### 
-alias wip='rake cucumber:wip'   
 
 #######################################################################
 #Apache
@@ -432,23 +158,5 @@ alias irc="irssi --connect=irc.freenode.net 8001 -n steresonix"
 #new from http://superuser.com/questions/7083/useful-command-line-aliases
 function pedia () { dig +short txt $1.wp.dg.cx; } 
 
- # disk usage per directory
-# in Mac OS X and Linux
-usage ()
-{
-    if [ $(uname) = "Darwin" ]; then
-        if [ -n $1 ]; then
-            du -hd $1
-        else
-            du -hd 1
-        fi
 
-    elif [ $(uname) = "Linux" ]; then
-        if [ -n $1 ]; then
-            du -h --max-depth=1 $1
-        else
-            du -h --max-depth=1
-        fi
-    fi
-}
 
