@@ -4,20 +4,14 @@
 #load miceportal settings
 if [ -f ~/entwicklung/miceportal/git/dotfiles/bash/env   ]; then
   source ~/entwicklung/miceportal/git/dotfiles/bash/env   
-else
- # echo "not exits '~/entwicklung/miceportal/git/dotfiles/bash/env'"
-fi   
+fi
 
 if [ -f ~/entwicklung/miceportal/git/dotfiles/bash/config   ]; then
   source ~/entwicklung/miceportal/git/dotfiles/bash/config   
-else
-  #echo "not exits '~/entwicklung/miceportal/git/dotfiles/bash/config'"
-fi   
+fi  
 
 if [ -f ~/entwicklung/miceportal/git/dotfiles/bash/aliases   ]; then
   source ~/entwicklung/miceportal/git/dotfiles/bash/aliases   
-else
-  #echo "not exits '~/entwicklung/miceportal/git/dotfiles/bash/aliases'"
 fi
 
 
