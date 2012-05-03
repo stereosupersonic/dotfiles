@@ -1,8 +1,8 @@
 #http://www.pixelbeat.org/cmdline.html
 #http://www.unixguide.net/linux/linuxshortcuts.shtml
 alias rld="source ~/.bashrc"
-alias bash_reload='cd ~/.dotfiles && rake update && rld'
-alias dot="cd ~/.dotfiles/"
+alias bash_reload="cd $DOTFILE && rake update && rld"
+alias dot="cd $DOTFILE"
 alias dev="cd ~/entwicklung/"
 
 alias alias?='alias| grep -i $1'
@@ -225,8 +225,8 @@ if [ "$OS" = "darwin" ] ; then
   alias restart_dock='killall -KILL Dock'  
   
   alias cwd="pwd | pbcopy && pwd"  # copy present working dir to clipboard          
-  alias ea='mate -w ~/bin/dotfiles/bash/aliases && reload' # Edit aliases
-  alias ee="mate ~/bin/dotfiles/bash/env"   
+  alias ea="mate -w $DOTFILE/bash/aliases && reload" # Edit aliases
+  alias ee="mate $DOTFILE//bash/env"   
   alias es="mate ~/entwicklung/scripts"    
   alias o='open . &'  
   pdfman(){

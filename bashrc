@@ -11,31 +11,37 @@ if [ -f ~/entwicklung/miceportal/git/dotfiles/bash/config   ]; then
 fi  
 
 if [ -f ~/entwicklung/miceportal/git/dotfiles/bash/aliases   ]; then
-  source ~/entwicklung/miceportal/git/dotfiles/bash/aliases   
+  source ~/entwicklung/miceportal/git/dotfiles/bash/aliases     
 fi
 
+if [ -f  ~/.DOTFILE ]; then
+  source ~/.DOTFILE  
+else
+  echo "DOTFILE not exits"  
+  exit
+fi
 
 #aliases and functions  
-if [ -f ~/.dotfiles/bash/env   ]; then
-  source ~/.dotfiles/bash/env  
+if [ -f $DOTFILE/bash/env   ]; then
+  source $DOTFILE/bash/env  
 else
-  echo "not exits '~/.dotfiles/bash/env'"
+  echo "not exits '$DOTFILE/bash/env'"
 fi   
 
-if [ -f ~/.dotfiles/bash/prompt   ]; then
-  source ~/.dotfiles/bash/prompt  
+if [ -f $DOTFILE/bash/prompt   ]; then
+  source $DOTFILE/bash/prompt  
 else
-  echo "not exits '~/.dotfiles/bash/prompt'"
+  echo "not exits '$DOTFILE/bash/prompt'"
 fi
 
-if [ -f ~/.dotfiles/bash/aliases   ]; then
-  source ~/.dotfiles/bash/aliases  
+if [ -f $DOTFILE/bash/aliases   ]; then
+  source $DOTFILE/bash/aliases  
 else
-  echo "not exits '~/.dotfiles/bash/aliases'"
+  echo "not exits '$DOTFILE/bash/aliases'"
 fi
  
-if [ -f ~/.dotfiles/bash/motd ]; then 
-  source ~/.dotfiles/bash/motd
+if [ -f $DOTFILE/bash/motd ]; then 
+  source $DOTFILE/bash/motd
 fi   
 
 #for special alias path etc...
@@ -45,8 +51,8 @@ else
   echo "not exits ' ~/.bashrc_local'"
 fi
 
-if [ -f ~/.dotfiles/bash/radio ]; then
-  source ~/.dotfiles/bash/radio
+if [ -f $DOTFILE/bash/radio ]; then
+  source $DOTFILE/bash/radio
 fi
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 

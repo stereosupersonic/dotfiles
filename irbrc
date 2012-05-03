@@ -198,7 +198,7 @@ def h
 end
 
 puts h
-load '~/.dotfiles/railsrc' if $0 == 'irb' && ENV['RAILS_ENV']
+load "$DOTFILE/railsrc" if $0 == 'irb' && ENV['RAILS_ENV']
 save_require 'active_support' unless ENV['RAILS_ENV'] 
 
 
