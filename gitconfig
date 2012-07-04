@@ -45,12 +45,14 @@
   br = branch
   co = checkout
   df = diff
-  lg = log -p
-  who = shortlog -s --
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+  who = shortlog -n -s --no-merges
   revertall = checkout .
   unstage = reset HEAD
   uncommit = reset --soft HEAD^
-   
+  up = !git fetch origin && git rebase origin/master
+  rmb = !sh -c 'git branch -D $1 && git push origin :$1' - #remove lokal an remote branch 
+  cleanup = !git remote prune origin && git gc && git clean -dfx && git stash clear
 [merge]
   tool = chdiff
   summary = true
@@ -68,3 +70,7 @@
  
 [apply]
 	whitespace = nowarn
+[browser "gitscm"]
+	cmd = /bin/sh -c 'open http://git-scm.com/docs/$(basename $1 .html)' --
+[help]
+	browser = gitscm

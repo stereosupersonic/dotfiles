@@ -9,55 +9,53 @@ rescue LoadError
   puts "ERROR: could not load: #{gem}"
 end
 
-%w{ rubygems pp yaml what_methods hpricot wirble hirb ap}.each { |lib| save_require lib }
-# ap =>  #http://github.com/michaeldv/awesome_print
+# Break out of the Bundler jail
+# from https://github.com/ConradIrwin/pry-debundle/blob/master/lib/pry-debundle.rb
+if defined? Bundler
+  Gem.post_reset_hooks.reject! { |hook| hook.source_location.first =~ %r{/bundler/} }
+  Gem::Specification.reset
+  load 'rubygems/custom_require.rb'
+end
+
+
 
 # History
 #siehe http://drnicwilliams.com/2006/10/12/my-irbrc-for-consoleirb/
 
-unless defined? ETC_IRBRC_LOADED
+
 save_require 'irb/ext/save-history'
-  # Activate auto-completion.
-  save_require 'irb/completion'
+# Activate auto-completion.
+save_require 'irb/completion'
   # Setup permanent history.
-  HISTFILE = "$HOME/.irb-save-history"
-  MAXHISTSIZE = 1000
-  begin
-    histfile = File::expand_path(HISTFILE)
-    if File::exists?(histfile)
-      lines = IO::readlines(histfile).collect { |line| line.chomp }
-      puts "Read #{lines.nitems} saved history commands from '#{histfile}'." if $VERBOSE
-      Readline::HISTORY.push(*lines)
-    else
-      puts "History file '#{histfile}' was empty or non-existant." if $VERBOSE
-    end
-    Kernel::at_exit do
-      lines = Readline::HISTORY.to_a.reverse.uniq.reverse
-      lines = lines[-MAXHISTSIZE, MAXHISTSIZE] if lines.size > MAXHISTSIZE
-      puts "Saving #{lines.length} history lines to '#{histfile}'." if $VERBOSE
-      File::open(histfile, File::WRONLY|File::CREAT|File::TRUNC) { |io| io.puts lines.join("\n") }
-    end
-  rescue => e
-    puts "Error when configuring permanent history: #{e}" if $VERBOSE
-  end
 
-  ETC_IRBRC_LOADED=true
-end
+ # begin
+ #   histfile = File::expand_path(HISTFILE)
+ #   if File::exists?(histfile)
+ #     lines = IO::readlines(histfile).collect { |line| line.chomp }
+ #     puts "Read #{lines.nitems} saved history commands from '#{histfile}'." if $VERBOSE
+ #     Readline::HISTORY.push(*lines)
+ #   else
+ #     puts "History file '#{histfile}' was empty or non-existant." if $VERBOSE
+ #   end
+ #   Kernel::at_exit do
+ #     lines = Readline::HISTORY.to_a.reverse.uniq.reverse
+ #     lines = lines[-MAXHISTSIZE, MAXHISTSIZE] if lines.size > MAXHISTSIZE
+ #     puts "Saving #{lines.length} history lines to '#{histfile}'." if $VERBOSE
+ #     File::open(histfile, File::WRONLY|File::CREAT|File::TRUNC) { |io| io.puts lines.join("\n") }
+ #   end
+ # rescue => e
+ #   puts "Error when configuring permanent history: #{e}" if $VERBOSE
+ # end
 
-# IRB Options
+# IRB Option  
 IRB.conf[:PROMPT_MODE] = :SIMPLE
+IRB.conf[:SAVE_HISTORY] = 1000
+IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"    
 IRB.conf[:AUTO_INDENT] = true
-IRB.conf[:SAVE_HISTORY] = MAXHISTSIZE
-IRB.conf[:EVAL_HISTORY] = 1000
-# Use the simple prompt if possible.
-IRB.conf[:PROMPT_MODE] = :SIMPLE if IRB.conf[:PROMPT_MODE] == :DEFAULT
-# start wirble (with color)
 
-Wirble.init
-Wirble.colorize
-# hirb (active record output format in table)
 
-Hirb::View.enable
+#####################helpers
+
 
 def edit_obj( obj )
   tempfile = File.join('/tmp',"yobj_#{ Time.now.to_i }")
@@ -67,6 +65,10 @@ def edit_obj( obj )
   content = YAML::load( File.open( tempfile ) )
   File.delete( tempfile )
   content
+end      
+
+def y(obj)
+  puts obj.to_yaml
 end
 
 def local_methods(obj = self)
@@ -77,7 +79,14 @@ class Object
   
   def edit
     edit_obj(self)
-  end
+  end 
+  
+  #opens Textmate on an Methode
+  def show(method_name)
+     file, line = method(method_name).source_location
+     `mate '#{file}' -l #{line}`
+   end
+  
   # list methods which aren't in superclass
   def local_methods(obj = self)
     (obj.methods - (obj.class.superclass || obj.class).send(:instance_methods)).sort
@@ -113,7 +122,7 @@ class String
     open(file_name, 'w') { |f| f << self.to_s}
   end
   
-  def self.from_file(file_name)
+  def self.from_file(file_namee='output.txt')
     File.read(file_name) 
   end
   
@@ -126,7 +135,6 @@ class String
   end
 end
 
-# paste it from the clipboeard
 def c
   system('clear')
 end
@@ -195,10 +203,74 @@ def h
    "time{} #=> Benchmarks",
    "#{'#'*50}"
   ])
+end  
+
+
+def ls(path='.')
+  Dir[ File.join( path, '*' )].map{|filename| File.basename filename }
+end
+alias dir ls
+
+# read file contents (also see ray for ruby source files ;) )
+def cat(path)
+  File.read path
 end
 
-puts h
-load "$DOTFILE/railsrc" if $0 == 'irb' && ENV['RAILS_ENV']
-save_require 'active_support' unless ENV['RAILS_ENV'] 
+# allows concise syntax like rq:mathn
+def rq(lib)
+  require lib.to_s
+end
 
+# load shortcut, not suited for non-rb
+def ld(lib)
+  load lib.to_s + '.rb'
+end
 
+# rerequire, not suited for non-rb, please note: can have non-intended side effects in rare cases
+def rerequire(lib)
+  $".dup.each{ |path|
+    if path =~ %r</#{lib}\.rb$>
+      $".delete path.to_s
+      require path.to_s
+    end
+  }
+  require lib.to_s
+  true
+end
+alias rrq rerequire
+
+# restart irb
+def reset!
+  # remember history...
+  reset_irb = proc{ exec$0 } 
+  if defined?(Ripl) && Ripl.respond_to?(:started?) && Ripl.started?
+    Ripl.shell.write_history if Ripl.shell.respond_to? :write_history
+    reset_irb.call
+  else
+    at_exit(&reset_irb)
+    exit
+  end
+end
+
+# just clear the screen
+def clear
+  system 'clear'
+end
+
+save_require 'active_support' unless defined? Rails    
+
+require 'rubygems' unless defined? Gem
+
+begin
+  require 'hirb'
+  Hirb.enable
+rescue => e 
+  puts e
+end    
+
+begin
+  require 'wirb'
+  Wirb.start
+rescue => e 
+  puts e
+end

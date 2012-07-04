@@ -48,7 +48,7 @@ ss () {
 
 
 alias styles='cd public/stylesheets'
-alias ssclean='master && bootstrap && dbsync && bundle exec rake db:migrate && bundle exec rake db:test:clone && cleanup && ss'
+alias ssclean='branch-pull && bootstrap && dbsync && bundle exec rake db:migrate && bundle exec rake db:test:clone && cleanup && ss'
 alias rp='touch tmp/restart.txt'
 
 alias tl='tail -f log/*.log'
