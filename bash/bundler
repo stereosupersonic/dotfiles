@@ -1,0 +1,13 @@
+#######################################################################
+#Bundler
+############################################################################
+alias b="bundle"
+alias be="bundle exec"
+alias bi="bundle install"  
+alias bu="bundle update"     
+alias bo="bundle open"
+alias r="bundle exec rake"  
+alias bguard="bundle exec guard"  
+alias brails="bundle exec rails"  
+alias migration="bundle exec rails generate migration"   
+alias rgenerate="bundle exec rails generate"

@@ -23,7 +23,7 @@ if ARGV[0] == '-f'
   input = ARGV[1]  
   Twitter.update input
 else
-  input = ARGV.join('') || STDIN.read
+  input = ARGV.join(' ')
   print "Wollen Sie wirklich '#{input}' tweeten? (Ja/Nein)"
   answer = STDIN.gets
   if answer =~ /ja/i

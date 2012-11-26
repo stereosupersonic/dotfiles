@@ -22,9 +22,9 @@
 [color "diff"]
   meta = yellow bold
   frag = magenta bold
-  old = green bold
-  new = red bold
-  whitespace = blue reverse        
+  old = red bold
+  new = green bold
+  whitespace = white reverse        
  
 [color "status"]
   added = yellow
@@ -53,6 +53,8 @@
   up = !git fetch origin && git rebase origin/master
   rmb = !sh -c 'git branch -D $1 && git push origin :$1' - #remove lokal an remote branch 
   cleanup = !git remote prune origin && git gc && git clean -dfx && git stash clear
+  nb = !git push origin master:refs/heads/$1 && git fetch origin && git branch --track $1 origin/$1 && git checkout $1 
+  
 [merge]
   tool = chdiff
   summary = true

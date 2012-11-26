@@ -1,5 +1,4 @@
-#!/usr/bin/ruby
-puts "start"
+#!/usr/bin/ruby   
 $VERBOSE = false
 puts "init irb"
 puts "load #{__FILE__}"
@@ -150,7 +149,7 @@ end
 # Awesome benchmarking function
 # Source: http://ozmm.org/posts/time_in_irb.html
 def time(times=1)
-  require "benchmark"
+  save_require "benchmark"
   ret = nil
   Benchmark.bm { |x| x.report { times.times { ret = yield } } }
   ret
@@ -218,7 +217,7 @@ end
 
 # allows concise syntax like rq:mathn
 def rq(lib)
-  require lib.to_s
+  save_require lib.to_s
 end
 
 # load shortcut, not suited for non-rb
@@ -231,10 +230,10 @@ def rerequire(lib)
   $".dup.each{ |path|
     if path =~ %r</#{lib}\.rb$>
       $".delete path.to_s
-      require path.to_s
+      save_require path.to_s
     end
   }
-  require lib.to_s
+  save_require lib.to_s
   true
 end
 alias rrq rerequire
@@ -259,18 +258,22 @@ end
 
 save_require 'active_support' unless defined? Rails    
 
-require 'rubygems' unless defined? Gem
+save_require 'rubygems' unless defined? Gem
 
 begin
-  require 'hirb'
-  Hirb.enable
+  save_require 'hirb'
+  Hirb.enable unless defined? Hirb 
 rescue => e 
   puts e
 end    
 
 begin
-  require 'wirb'
-  Wirb.start
+  save_require 'wirb'
+  Wirb.start unless defined? Wirb       
 rescue => e 
   puts e
+end   
+
+if defined? Rails 
+  load File.join(File.dirname(__FILE__),".railsconsolerc")  
 end

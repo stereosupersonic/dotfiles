@@ -64,28 +64,6 @@ historyawk(){ history|awk '{a[$2]++}END{for(i in a){printf"%5d\t%s\n",a[i],i}}'|
 #history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head -n 40
 #run history number with !123
 
-#######################################################################
-#network
-############################################################################
-alias last3='last -n 3'
-alias open_intern_pro="lsof -i"
-alias live_tcp='sudo tcpdump -i en0 -n -s 0 -w - | grep -a -o -E "Host\: .*|GET \/.*"'
-alias openports='sudo lsof -i -P | grep -i "listen"'
-alias openinternet='sudo lsof -P -i -n'
-alias apps_with_internetconnection='sudo  lsof -nPi | cut -f 1 -d " "| uniq | tail -n +2'
-alias show_blocked='sudo ipfw -a list'
-function tracert {
-    mtr $1
-}
-
-function lookupip() {
-    open http://www.maxmind.com/app/locate_demo_ip?ips=$1
-}
-
-
-# internetspeed
-#echo $(date +%s) > start-time; URL=http://www.google.com; while true; do echo $(curl -L --w %{speed_download} -o/dev/null -s $URL) >> bps; sleep 10; done &
-
 
 
 logssh() 

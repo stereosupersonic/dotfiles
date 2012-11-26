@@ -1,13 +1,5 @@
-#!/usr/bin/ruby
-require 'logger'
-begin
-  require 'hirb' # sudo gem install cldwalker-hirb --source http://gems.github.com
-
-  #Hirb.enable
-  Hirb.enable :pager => false
-
-rescue LoadError
-end
+#!/usr/bin/ruby  
+puts "load #{__FILE__}" 
 
 def all_models
   result = []
@@ -41,27 +33,25 @@ def db_inspect
   nil
 end
 
-if ENV.include?('RAILS_ENV') && !Object.const_defined?('RAILS_DEFAULT_LOGGER')
-  #RAILS_DEFAULT_LOGGER = Logger.new(STDOUT)
+def change_log(stream)
+  ActiveRecord::Base.logger = Logger.new(stream)
+  ActiveRecord::Base.clear_active_connections!
+end
+
+def show_log
+  change_log(STDOUT)
+end
+
+def hide_log
+  change_log(nil)
 end
 
 def logon
-   set_logger Logger.new(STDOUT)
+  show_log
 end
 
 def logoff
-   set_logger @logger
-end
+  hide_log
+end  
 
-def get_logger
-   ActiveRecord::Base.connection.instance_variable_get("@logger")
-end
-
-def set_logger(logger)
-   @logger ||= get_logger
-   ActiveRecord::Base.connection.instance_variable_set("@logger", logger)
-end
-
-
-puts "load #{__FILE__}"
-puts "SQL logging ein/ausschalten mit logon/logoff"
+puts "SQL logging ein/ausschalten mit logon/logoff" 
