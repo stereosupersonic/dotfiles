@@ -1,9 +1,9 @@
 #######################################################################
 #Rails#
 #######################################################################
-alias migrate="bundle exec rake db:migrate && bundle exec annotate -s && bundle exec rake db:test:clone"  
-alias migrate_last='bundle exec  rake db:rollback && migrate'   
-alias anno='bundle exec annotate -s'           
+alias migrate="bundle exec rake db:migrate && bundle exec annotate -s && bundle exec rake db:test:clone"
+alias migrate_last='bundle exec  rake db:rollback && migrate'
+alias anno='bundle exec annotate -s'
 alias remigrate='migrate_last'
 #alias remigrate='rake db:migrate:reset && migrate'
 #alias remigrate="rake db:migrate && rake db:migrate:redo && rake db:schema:dump db:test:prepare"
@@ -40,16 +40,16 @@ ss () {
     ./vendor/plugins/konvenit_plugin_trunk/start_server.rb
   elif [[ ${array[$dir ]} ]]; then
     bundle exec rake start_server
-  elif [ -e script/rails ]; then   
+  elif [ -e script/rails ]; then
     script/rails server $@
   else
-    script/server $@   
+    script/server $@
   fi
 }
 
 
 alias styles='cd public/stylesheets'
-alias ssclean='branch-pull && bootstrap && dbsync && bundle exec rake db:migrate && bundle exec rake db:test:clone && cleanup && ss'
+alias ssclean='bundle && fetch && branch-pull && bootstrap && dbsync && bundle exec rake db:migrate && bundle exec rake db:test:clone && cleanup && ss'
 alias rp='touch tmp/restart.txt'
 
 alias tl='tail -f log/*.log'
@@ -102,5 +102,8 @@ function find_in_specs {
 }
 #######################################################################
 #Cucumber &RSpec#
-######################################################################### 
+#########################################################################
 alias wip='rake cucumber:wip'
+
+
+alias redis='redis-server /usr/local/etc/redis.conf'

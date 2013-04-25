@@ -8,8 +8,8 @@ if [ "$OS" = "darwin" ] ; then
   # TEXTMATE #
   #######################################################################
   
-  alias e='mate . &' # open current dir  
-  alias er="mate app config db lib public features spec test Gemfile README"  
+  alias e='subl . &'
+ 
   alias tbund='cd $HOME/Library/Application\ Support/TextMate/Bundles/' #todo cd bundle and git pull
 
 

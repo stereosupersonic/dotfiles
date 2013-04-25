@@ -1,6 +1,6 @@
 [user]
-  name = Michael Deimel
-  email = michael@deimel.de
+	name = Michael Deimel
+	email = michael@deimel.de
  
 [github]
   user = $GITHUB_USER
@@ -54,18 +54,20 @@
   rmb = !sh -c 'git branch -D $1 && git push origin :$1' - #remove lokal an remote branch 
   cleanup = !git remote prune origin && git gc && git clean -dfx && git stash clear
   nb = !git push origin master:refs/heads/$1 && git fetch origin && git branch --track $1 origin/$1 && git checkout $1 
+  news = log -p HEAD@{1}..HEAD@{0} #http://chneukirchen.org/blog/archive/2013/01/a-grab-bag-of-git-tricks.html
   
 [merge]
-  tool = chdiff
+  tool = vimdiff
   summary = true
     
-[mergetool "chdiff"]
-  cmd = /usr/bin/chdiff --wait "$LOCAL" "$REMOTE"
+[mergetool "vimdiff"]
+  cmd = vimdiff "$LOCAL" "$REMOTE"
   keepBackup = false
   trustExitCode = false
- 
+
 [difftool]
-  prompt = false
+  tool = vimdiff $LOCAL $REMOTE
+  prompt = true
   
 [gc]
   auto=1 #Automatic cleanup and compression of the repo  
@@ -76,3 +78,5 @@
 	cmd = /bin/sh -c 'open http://git-scm.com/docs/$(basename $1 .html)' --
 [help]
 	browser = gitscm
+[mergetool]
+	keepBackup = true

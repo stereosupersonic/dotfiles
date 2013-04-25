@@ -29,7 +29,7 @@ fi
 
 if [ "$OS" = "darwin" ] ; then
  alias mvim=/Applications/mvim
- export EDITOR="mate"
+ export EDITOR="subl"
 fi 
 
 PATH="/usr/local/sbin:$PATH" 
@@ -51,7 +51,6 @@ shopt -s histappend
 export HISTIGNORE='&:ls:lr:ll:[bf]g:pwd:exit:..:...:lla:cat'
 export HISTCONTROL='ignorespace:ignoredups:ignoreboth'
 export HISTTIMEFORMAT="%F %T " #anzeige der Zeit in der history
-
 
 # Color grep
 #export GREP_OPTIONS="--color=auto"

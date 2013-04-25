@@ -16,7 +16,11 @@ if [ "$OS" = "darwin" ] ; then
   alias radio_paradise='vlc_nc http://www.radioparadise.com/musiclinks/rp_128.m3u'
   alias radio_indie1031='vlc_nc http://1392.live.streamtheworld.com:443/KDLDFMCMP3'
   
+  #classic rock
   alias radio_absolute_classic_rock='vlc_nc http://network.absoluteradio.co.uk/core/audio/mp3/live.pls?service=vcbb'
+  alias radio_planet_rock='vlc_nc http://www.planetrock.com/planetrock.m3u'
+  
+  
   alias radio_fm4='vlc_nc http://mp3stream1.apasf.apa.at:8000 '
   alias radio_motorfm='vlc_nc http://www.motorfm.de/stream-berlin '
   alias radio_q101='vlc_nc http://1671.live.streamtheworld.com:80/WKQXFMCMP3'#http://provisioning.streamtheworld.com/pls/KROQFM.pls
@@ -26,6 +30,7 @@ if [ "$OS" = "darwin" ] ; then
   alias radio_1live='vlc_nc http://www.wdr.de/wdrlive/media/einslive.m3u'
   alias radio_rockantenne='vlc_nc http://www.rockantenne.de/webradio/rockantenne.m3u'
   alias radio_pirate_radio_metal='vlc_nc http://loudcity.com/stations/pirate-radio-100-3fm-kqlz-los-angeles-ca/files/show/128kmp3.pls'
+
   
   #tv
   alias tv_zdf='vlc http://wstreaming.zdf.de/encoder/livestream4_vh.asx'

@@ -134,6 +134,21 @@ class String
   end
 end
 
+class Array
+  def to_csv(file_name='output.csv')
+    require 'csv'
+    CSV.open(file_name, "w") do |csv|
+      self.each do |arr|
+        if arr.is_a?(Array)
+          csv << arr 
+        else
+          csv << [arr] 
+        end
+      end
+    end
+  end
+end
+
 def c
   system('clear')
 end
