@@ -1,34 +1,36 @@
-#!/usr/bin/env bash   
+#!/usr/bin/env bash
 
 if [ -f "`pwd`/DOTFILE" ]; then
-  echo "DOTFILE exits" 
+  echo "DOTFILE exits"
   source "`pwd`/DOTFILE"
-  echo $DOTFILESPATH 
+  echo $DOTFILESPATH
 else
-  echo "DOTFILE not exits"  
-  echo "exec: rake install"  
+  echo "DOTFILE not exits"
+  echo "exec: rake install"
   exit
-fi   
+fi
 
 if [ -n "${DOTFILESPATH+x}" ]; then
-  export DOTFILE=$DOTFILESPATH 
+  export DOTFILE=$DOTFILESPATH
 else
-  echo "DOTFILESPATH not exits"  
+  echo "DOTFILESPATH not exits"
   exit
-fi   
+fi
 echo "DOTFILES Path: ${DOTFILE}"
-echo "HOME Path: ${HOME}"   
+echo "HOME Path: ${HOME}"
 
-mv $HOME/.bashrc $HOME/.bashrc.bak 
+mv $HOME/.bashrc $HOME/.bashrc.bak
 rm $HOME/.bashrc
-mv $HOME/.bash_profile $HOME/.bash_profile.bak 
-rm $HOME/.bash_profile  
+mv $HOME/.bash_profile $HOME/.bash_profile.bak
+rm $HOME/.bash_profile
 mv $HOME/.gitconfig $HOME/.gitconfig.bak
+mv $HOME/.rubocop.yml $HOME/.rubocop.yml.bak
 
-ln -nfsv "$DOTFILE/DOTFILE" $HOME/.DOTFILE   
+ln -nfsv "$DOTFILE/DOTFILE" $HOME/.DOTFILE
 ln -nfsv "$DOTFILE/bashrc" $HOME/.bash_profile
 ln -nfsv "$DOTFILE/bashrc" $HOME/.bashrc
 ln -nfsv "$DOTFILE/gitconfig" $HOME/.gitconfig
+ln -nfsv "$DOTFILE/rubocop.yml" $HOME/.rubocop.yml
 
 #ruby-rails
 mv $HOME/.irbrc $HOME/.irbrc.bak
@@ -51,6 +53,6 @@ mv $HOME/.gvimrc $HOME/.gvimrc.bak
 
 ln -nfsv "$DOTFILE/vim/vimrc" $HOME/.vimrc
 ln -nfsv "$DOTFILE/vim/gvimrc" $HOME/.gvimrc
-ln -nfsv "$DOTFILE/vim/dot_vim" $HOME/.vim   
+ln -nfsv "$DOTFILE/vim/dot_vim" $HOME/.vim
 
-echo "fertig set_links" 
+echo "fertig set_links"
