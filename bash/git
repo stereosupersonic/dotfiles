@@ -5,7 +5,7 @@ alias ungit="find . -name '.git' -exec rm -rf {} \;"
 alias gs="git status -sb"
 alias gd="git df"
 alias gl='git log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"'
-
+alias github-diff-branch="branch-diff"
 function diffmaster() {
   git difftool master
 }

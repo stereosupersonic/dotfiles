@@ -8,7 +8,7 @@ Encoding:
 # Limit lines to 80 characters.
 LineLength:
   Enabled: true
-  Max: 79
+  Max: 160
 
 # Avoid methods longer than 10 lines of code
 MethodLength:
