@@ -1,7 +1,1 @@
-# Hello Messsage --------------------------------------------------
-#echo -e  "Kernel: "`uname -smr`
-echo -ne "Uptime: "; uptime
-echo -ne "Zeit:   "; date      
-if [ "$OS" = "linux" ] ; then     
-  echo -ne "\n" 
-fi
+
