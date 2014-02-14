@@ -21,7 +21,7 @@ function ip-remote() {
 }
 
 function ip-local() {
-    hostname --ip-address
+     hostname --ip-address
 }
 
 
