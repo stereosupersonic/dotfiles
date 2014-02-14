@@ -3,8 +3,8 @@
 #######################################################################
 # Quicker cd
 # Common -- Some are from Damian Conway
-function cdc() { 
-  cd $1; ls 
+function cdc() {
+  cd $1; ls
 }
 
 if [ "$OS" = "linux" ] ; then
@@ -37,8 +37,7 @@ alias md='mkdir -p'
 
 alias filesize="stat -f \"%z bytes\""
 
-function -() { cd -; }   
 alias ..='cd ..' # move up 1 dir
 alias ...='cd ../..' # move up 2 dirs
 alias ....='cd ../../..' # move up 3 dirs
-alias home='cd $HOME' # cd reicht auch   
+alias home='cd $HOME' # cd reicht auch

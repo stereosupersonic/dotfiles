@@ -1,11 +1,11 @@
 [user]
 	name = Michael Deimel
 	email = michael@deimel.de
- 
+
 [github]
   user = $GITHUB_USER
   token = $GITHUB_TOKEN
-  
+
 [color]
   diff = auto
   status = auto
@@ -13,33 +13,33 @@
   interactive = auto
   ui = true
   pager = true
- 
+
 [color "branch"]
   current = yellow reverse
   local = yellow
   remote = green
- 
+
 [color "diff"]
   meta = yellow bold
   frag = magenta bold
   old = red bold
   new = green bold
-  whitespace = white reverse        
- 
+  whitespace = white reverse
+
 [color "status"]
   added = yellow
   changed = green
   untracked = cyan
-  
+
 [core]
   pager = less -FRSX
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
   editor = vim
-   
-[alias] 
+
+[alias]
   b = branch -v
   r = remote -v
-  t = tag -l  
+  t = tag -l
   st = status
   ci = commit
   br = branch
@@ -51,15 +51,15 @@
   unstage = reset HEAD
   uncommit = reset --soft HEAD^
   up = !git fetch origin && git rebase origin/master
-  rmb = !sh -c 'git branch -D $1 && git push origin :$1' - #remove lokal an remote branch 
+  rmb = !sh -c 'git branch -D $1 && git push origin :$1' - #remove lokal an remote branch
   cleanup = !git remote prune origin && git gc && git clean -dfx && git stash clear
-  nb = !git push origin master:refs/heads/$1 && git fetch origin && git branch --track $1 origin/$1 && git checkout $1 
+  nb = !git push origin master:refs/heads/$1 && git fetch origin && git branch --track $1 origin/$1 && git checkout $1
   news = log -p HEAD@{1}..HEAD@{0} #http://chneukirchen.org/blog/archive/2013/01/a-grab-bag-of-git-tricks.html
-  
+
 [merge]
   tool = vimdiff
   summary = true
-    
+
 [mergetool "vimdiff"]
   cmd = vimdiff "$LOCAL" "$REMOTE"
   keepBackup = false
@@ -68,10 +68,10 @@
 [difftool]
   tool = vimdiff $LOCAL $REMOTE
   prompt = true
-  
+
 [gc]
-  auto=1 #Automatic cleanup and compression of the repo  
- 
+  auto=1 #Automatic cleanup and compression of the repo
+
 [apply]
 	whitespace = nowarn
 [browser "gitscm"]
@@ -80,3 +80,6 @@
 	browser = gitscm
 [mergetool]
 	keepBackup = true
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f

@@ -39,7 +39,7 @@ alias tm='top -o vsize' # memory
 if [ "$OS" = "darwin" ] ; then
   alias topmem='ps -o rss,command -waxc | sort -nr | head -10'
   alias topcpu='ps -o pcpu,command -waxc | sort -nr | head -10'
-fi    
+fi
 #
 if [ "$OS" = "linux" ] ; then
   alias topmem='ps -auxf | sort -nr -k 4| head -10'
@@ -47,14 +47,8 @@ if [ "$OS" = "linux" ] ; then
 fi
 alias topten='top -orsize -FR -l1 | grep % | grep -v Load | grep -v COMMAND | cut -c 7-19,64-69 | head -n 10'
 
-function ps? {
-  ps ax | grep -i $1 | grep -v grep 
-}
 
-function apt? {
-  apt-cache search $1 
-}
 #hardware
 alias cpu='cat /proc/cpuinfo'
-#logs 
+#logs
 alias lastlogs="sudo find /var/log/ -mmin -10"

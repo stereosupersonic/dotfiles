@@ -14,8 +14,9 @@ if [ -f $HOME/entwicklung/miceportal/git/dotfiles/bash/aliases   ]; then
   source $HOME/entwicklung/miceportal/git/dotfiles/bash/aliases
 fi
 
-
-
+if [ -d $HOME/entwicklung/miceportal/git/dotfiles/bin   ]; then
+  PATH=$PATH:$HOME/entwicklung/miceportal/git/dotfiles/bin
+fi
 
 if [ -f "$HOME/.DOTFILE" ]; then
   source "$HOME/.DOTFILE"
@@ -46,3 +47,6 @@ fi
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"

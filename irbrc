@@ -1,9 +1,11 @@
-#!/usr/bin/ruby   
+#!/usr/bin/env ruby
+# -*- coding: UTF-8 -*-
+
 $VERBOSE = false
 puts "init irb"
 puts "load #{__FILE__}"
 def save_require(gem)
-  require gem  
+  require gem
 rescue LoadError
   puts "ERROR: could not load: #{gem}"
 end
@@ -46,10 +48,10 @@ save_require 'irb/completion'
  #   puts "Error when configuring permanent history: #{e}" if $VERBOSE
  # end
 
-# IRB Option  
+# IRB Option
 IRB.conf[:PROMPT_MODE] = :SIMPLE
 IRB.conf[:SAVE_HISTORY] = 1000
-IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"    
+IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
 IRB.conf[:AUTO_INDENT] = true
 
 
@@ -64,7 +66,7 @@ def edit_obj( obj )
   content = YAML::load( File.open( tempfile ) )
   File.delete( tempfile )
   content
-end      
+end
 
 def y(obj)
   puts obj.to_yaml
@@ -74,23 +76,23 @@ def local_methods(obj = self)
   (obj.methods - (obj.class.superclass || obj.class).send(:instance_methods)).sort
 end
 
-class Object  
-  
+class Object
+
   def edit
     edit_obj(self)
-  end 
-  
+  end
+
   #opens Textmate on an Methode
   def show(method_name)
      file, line = method(method_name).source_location
      `mate '#{file}' -l #{line}`
    end
-  
+
   # list methods which aren't in superclass
   def local_methods(obj = self)
     (obj.methods - (obj.class.superclass || obj.class).send(:instance_methods)).sort
   end
-  
+
   # print documentation
   #
   #   ri 'Array#pop'
@@ -116,19 +118,19 @@ def paste
 end
 
 class String
-  
+
   def to_file(file_name='output.txt')
     open(file_name, 'w') { |f| f << self.to_s}
   end
-  
+
   def self.from_file(file_namee='output.txt')
-    File.read(file_name) 
+    File.read(file_name)
   end
-  
+
   def to_clipboard
      IO.popen('pbcopy', 'w') { |f| f << self.to_s }
   end
-  
+
   def self.from_clipboard
     paste
   end
@@ -140,9 +142,9 @@ class Array
     CSV.open(file_name, "w") do |csv|
       self.each do |arr|
         if arr.is_a?(Array)
-          csv << arr 
+          csv << arr
         else
-          csv << [arr] 
+          csv << [arr]
         end
       end
     end
@@ -202,12 +204,12 @@ def h
   y([
    "#{'#'*50}",
   # "lp for looksee gem. Example: lp []",
-   "local_methods #=> zeigt nur Mithoden des Objects", 
+   "local_methods #=> zeigt nur Mithoden des Objects",
    "ap #=> for pretty print objects",
    "c #=> clear screen",
-   "ri #=> print documentation ri 'Array#pop' Array.ri, arr.ri :pop",    
-   "Object.edit", 
-   "String#to_file s", 
+   "ri #=> print documentation ri 'Array#pop' Array.ri, arr.ri :pop",
+   "Object.edit",
+   "String#to_file s",
    "String#from_file",
    "String#to_clipboard",
    "paste #=>paste it from the clipboard x = paste ",
@@ -217,7 +219,7 @@ def h
    "time{} #=> Benchmarks",
    "#{'#'*50}"
   ])
-end  
+end
 
 
 def ls(path='.')
@@ -256,7 +258,7 @@ alias rrq rerequire
 # restart irb
 def reset!
   # remember history...
-  reset_irb = proc{ exec$0 } 
+  reset_irb = proc{ exec$0 }
   if defined?(Ripl) && Ripl.respond_to?(:started?) && Ripl.started?
     Ripl.shell.write_history if Ripl.shell.respond_to? :write_history
     reset_irb.call
@@ -271,24 +273,24 @@ def clear
   system 'clear'
 end
 
-save_require 'active_support' unless defined? Rails    
+save_require 'active_support' unless defined? Rails
 
 save_require 'rubygems' unless defined? Gem
 
 begin
   save_require 'hirb'
-  Hirb.enable unless defined? Hirb 
-rescue => e 
+  Hirb.enable unless defined? Hirb
+rescue => e
   puts e
-end    
+end
 
 begin
   save_require 'wirb'
-  Wirb.start unless defined? Wirb       
-rescue => e 
+  Wirb.start unless defined? Wirb
+rescue => e
   puts e
-end   
+end
 
-if defined? Rails 
-  load File.join(File.dirname(__FILE__),".railsconsolerc")  
+if defined? Rails
+  load File.join(File.dirname(__FILE__),".railsconsolerc")
 end

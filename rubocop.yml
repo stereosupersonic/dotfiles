@@ -174,7 +174,7 @@ Syntax:
 
 # Preferred collection methods.
 CollectionMethods:
-  Enabled: true
+  Enabled: false
 
 # Prefer each over for.
 AvoidFor:
@@ -254,7 +254,7 @@ OpMethod:
 
 # Name reduce arguments |a, e| (accumulator, element)
 ReduceArguments:
-  Enabled: true
+  Enabled: false
 
 # Use %r only for regular expressions matching more than one '/' character.
 PercentR:

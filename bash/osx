@@ -3,29 +3,22 @@
 # osx only #
 #######################################################################
 
-if [ "$OS" = "darwin" ] ; then    
+if [ "$OS" = "darwin" ] ; then
   #######################################################################
   # TEXTMATE #
   #######################################################################
-  
-  alias e='subl . &'
- 
-  alias tbund='cd $HOME/Library/Application\ Support/TextMate/Bundles/' #todo cd bundle and git pull
 
+  alias e='subl .'
+
+  #alias tbund='cd $HOME/Library/Application\ Support/TextMate/Bundles/' #todo cd bundle and git pull
+
+  alias dsclean='find . -type f -name .DS_Store -print0 | xargs -0 rm'
+  alias dnsflush='dscacheutil -flushcache'
 
   alias top='top -u'
   alias login_photo='open /Library/Caches/com.apple.user501pictureCache.tiff'
-  # Open a new terminal tab in the same directory as the current
-  # SOURCE => http://pastie.caboo.se/188640
-  #    AND => http://justinfrench.com/index.php?id=231
-  function nt {
-    osascript -e 'tell application "Terminal"' \
-      -e 'tell application "System Events" to tell process "Terminal" to keystroke "t" using command down' \
-      -e "do script with command \"cd `pwd`;clear\" in selected tab of the front window" \
-      -e 'end tell' &> /dev/null
-  }
 
-  alias doc='cd $HOME/Documents' 
+  alias doc='cd $HOME/Documents'
   alias dow='cd $HOME/Downloads'
   alias down='cd $HOME/Downloads'
   alias desk='cd $HOME/Desktop'
@@ -36,16 +29,18 @@ if [ "$OS" = "darwin" ] ; then
   alias system_log='tail -f /var/log/system.log'
   alias kernel_log='tail -f /var/log/kernel.log'
   alias restart_finder='killall -KILL Finder'
-  alias restart_dock='killall -KILL Dock'  
-  
-  alias cwd="pwd | pbcopy && pwd"  # copy present working dir to clipboard          
+  alias restart_dock='killall -KILL Dock'
+
+  alias cwd="pwd | pbcopy && pwd"  # copy present working dir to clipboard
   alias ea="mate -w $DOTFILE/bash/aliases && reload" # Edit aliases
-  alias ee="mate $DOTFILE//bash/env"   
-  alias es="mate $HOME/entwicklung/scripts"    
-  alias o='open . &'  
+  alias ee="mate $DOTFILE//bash/env"
+  alias es="mate $HOME/entwicklung/scripts"
+  alias o='open . &'
   pdfman(){
-      man -t $1 | open -f -a /Applications/Preview.app/  
+      man -t $1 | open -f -a /Applications/Preview.app/
   }
 
-
+# Track who is listening to your iTunes music
+alias whotunes='lsof -r 2 -n -P -F n -c iTunes -a -i TCP@`hostname`:3689'
+function google() { open /Applications/Google\ Chrome.app/ "http://www.google.com/search?q= $1"; }
 fi
