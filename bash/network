@@ -16,6 +16,15 @@ function lookupip() {
     open http://www.maxmind.com/app/locate_demo_ip?ips=$1
 }
 
+function ip-remote() {
+    wget -qO- http://ipecho.net/plain ; echo
+}
+
+function ip-local() {
+    hostname --ip-address
+}
+
+
 
 # internetspeed
 #echo $(date +%s) > start-time; URL=http://www.google.com; while true; do echo $(curl -L --w %{speed_download} -o/dev/null -s $URL) >> bps; sleep 10; done &
