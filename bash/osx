@@ -5,7 +5,7 @@
 
 if [ "$OS" = "darwin" ] ; then
   #######################################################################
-  # TEXTMATE #
+  #  Editor #
   #######################################################################
 
   alias e='subl .'
@@ -22,8 +22,8 @@ if [ "$OS" = "darwin" ] ; then
   alias dow='cd $HOME/Downloads'
   alias down='cd $HOME/Downloads'
   alias desk='cd $HOME/Desktop'
-  alias vim='mvim -v'
-  alias vi='mvim -v'
+#  alias vim='mvim -v'
+ # alias vi='mvim -v'
   alias serial_number='system_profiler |grep "r (system)"'
 
   alias system_log='tail -f /var/log/system.log'
@@ -39,6 +39,8 @@ if [ "$OS" = "darwin" ] ; then
   pdfman(){
       man -t $1 | open -f -a /Applications/Preview.app/
   }
+
+  alias iphone_simulator="open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app"
 
 # Track who is listening to your iTunes music
 alias whotunes='lsof -r 2 -n -P -F n -c iTunes -a -i TCP@`hostname`:3689'

@@ -20,7 +20,7 @@ alias f='find . -iname'
 function ff () { find . -name "*$1*" -print; }
 
 alias k9="sudo killall -9"
-function killnamed () { 
+function killnamed () {
 ps ax | grep $1 |  grep -v grep | awk '{print $2}' | xargs kill -9
 }
 
@@ -55,7 +55,7 @@ extract () {
 
 #######################################################################
 #history
-############################################################################ 
+############################################################################
 alias h='history' # shortcut for history
 alias h?='history | grep -i $1'
 # Cool History Summerizer
@@ -66,9 +66,9 @@ historyawk(){ history|awk '{a[$2]++}END{for(i in a){printf"%5d\t%s\n",a[i],i}}'|
 
 
 
-logssh() 
-{ 
-  ssh $1 | tee $HOME/.ssh/log  ; 
+logssh()
+{
+  ssh $1 | tee $HOME/.ssh/log  ;
 }
 #######################################################################
 # SVN #
@@ -78,13 +78,16 @@ alias ssq='svn status -q'
 alias sup='svn up' # trust me 3 chars makes a different
 alias sst='svn st' # local file changes
 alias sstu='svn st -u' # remote repository changes
-alias svn_new='svn status | grep "^\?" | awk "{print \$2}"'  
+alias svn_new='svn status | grep "^\?" | awk "{print \$2}"'
 alias svnclear='rm -rf `find . -type d -name .svn`' # removes all .svn folders from directory recursively
 #alias svnaddall='svn status | grep "^\?" | awk "{print \$2}" | xargs svn add' # adds all unadded files
 alias svn_log='svn log --limit 10'
 alias svstatusremote='svn status --show-updates' # Show status here and on the server
 
-
+##########################
+# DOCKer
+#############
+alias dl='docker ps -l -q'
 
 
 
@@ -121,7 +124,7 @@ fi
 
 alias show='cat $HOME/.dirs'
 bookm (){
-    command sed "/!$/d" $HOME/.dirs > $HOME/.dirs1; \mv $HOME/.dirs1 $HOME/.dirs; echo "$@"=\"`pwd`\" >> $HOME/.dirs; source $HOME/.dirs ; 
+    command sed "/!$/d" $HOME/.dirs > $HOME/.dirs1; \mv $HOME/.dirs1 $HOME/.dirs; echo "$@"=\"`pwd`\" >> $HOME/.dirs; source $HOME/.dirs ;
 }
 source $HOME/.dirs  # Initialization for the above 'save' facility: source the .sdirs file
 shopt -s cdable_vars # set the bash option so that no '$' is required when using the above facility
@@ -134,7 +137,15 @@ alias cheat?="cheat sheets|grep $1"
 alias irc="irssi --connect=irc.freenode.net 8001 -n steresonix"
 
 #new from http://superuser.com/questions/7083/useful-command-line-aliases
-function pedia () { dig +short txt $1.wp.dg.cx; } 
+function pedia () { dig +short txt $1.wp.dg.cx; }
 
 
+#found here https://developer.atlassian.com/blog/2015/02/ten-tips-for-wonderful-bash-productivity/
+function col {
+  awk -v col=$1 '{print $col}'
+}
+
+function col {
+  awk -v col=$1 '{print $col}'
+}
 

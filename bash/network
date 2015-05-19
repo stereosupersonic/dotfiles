@@ -17,11 +17,15 @@ function lookupip() {
 }
 
 function ip-remote() {
-    wget -qO- http://ipecho.net/plain ; echo
+    curl http://meip.herokuapp.com/
 }
 
 function ip-local() {
      hostname --ip-address
+}
+
+function ifconfig-remote {
+  curl ifconfig.me/all
 }
 
 

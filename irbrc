@@ -165,13 +165,6 @@ end
 #http://blog.bogojoker.com/index.php?s=ssh
 # Awesome benchmarking function
 # Source: http://ozmm.org/posts/time_in_irb.html
-def time(times=1)
-  save_require "benchmark"
-  ret = nil
-  Benchmark.bm { |x| x.report { times.times { ret = yield } } }
-  ret
-end
-alias bench time
 
 # A cool way to index in a hash
 # h = { :alpha => 'bet', :beta => 'blocker' }

@@ -16,7 +16,7 @@ fi
 
 if [ -d $DOTFILE/bash/bin ]; then
  PATH="$PATH:$DOTFILE/bash/bin"
-fi   
+fi
 
 if [ -d $DOTFILE/bin ]; then
  PATH="$PATH:$DOTFILE/bin"
@@ -25,15 +25,19 @@ fi
 #shared scripts
 if [ -d $HOME/Dropbox/bash/bin ]; then
  PATH="$PATH:$HOME/Dropbox/bash/bin"
-fi    
+fi
 
 if [ "$OS" = "darwin" ] ; then
- alias mvim=/Applications/mvim
+# alias mvim=/Applications/mvim
  export EDITOR="subl"
-fi 
+fi
 
-PATH="/usr/local/sbin:$PATH" 
-PATH="/usr/local/bin:$PATH" 
+if [ "$OS" = "darwin" ] ; then
+  PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
+fi
+
+PATH="/usr/local/sbin:$PATH"
+PATH="/usr/local/bin:$PATH"
 export PATH
 
 #DIVERSE
@@ -55,17 +59,23 @@ export HISTTIMEFORMAT="%F %T " #anzeige der Zeit in der history
 # Color grep
 #export GREP_OPTIONS="--color=auto"
 #export GREP_COLOR="4;33"
-export CLICOLOR=auto   
- 
-if [ "$OS" = "darwin" ] ; then  
-  export LANG=de_DE.UTF-8    
-  export LC_ALL=de_DE.UTF-8 
+export CLICOLOR=auto
+
+if [ "$OS" = "darwin" ] ; then
+  export LANG=de_DE.UTF-8
+  export LC_ALL=de_DE.UTF-8
   export LSCOLORS=FxFxCxDxBxebedabagacad #siehe http://blog.sensibleopensource.com/changing_colors_in_the_osx_terminal_1.htm
 fi
 
 if [ "$OS" = "linux" ] ; then
     #anleitung für ubuntu colors hier #=> http://wiki.ubuntuusers.de/dircolors
-    #dircolors -p > $HOME/.dircolors 
+    #dircolors -p > $HOME/.dircolors
     #eval `dircolors -b $HOME/.dircolors`
    export EDITOR="vi"
 fi
+
+
+#Docker
+export DOCKER_TLS_VERIFY=1
+export DOCKER_HOST=tcp://192.168.59.103:2376
+export DOCKER_CERT_PATH=/Users/deimel/.boot2docker/certs/boot2docker-vm
