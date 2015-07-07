@@ -1,0 +1,1 @@
+{"context-menu":{"atom-text-editor":[{"label":"Toggle rails-open-rspec","command":"rails-open-rspec:toggle"}]},"menu":[{"label":"Packages","submenu":[{"label":"rails-open-rspec","submenu":[{"label":"Toggle","command":"rails-open-rspec:toggle"}]}]}]}
