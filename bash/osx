@@ -8,7 +8,7 @@ if [ "$OS" = "darwin" ] ; then
   #  Editor #
   #######################################################################
 
-  alias e='subl .'
+  alias e='$EDITOR .'
 
   #alias tbund='cd $HOME/Library/Application\ Support/TextMate/Bundles/' #todo cd bundle and git pull
 
@@ -45,4 +45,5 @@ if [ "$OS" = "darwin" ] ; then
 # Track who is listening to your iTunes music
 alias whotunes='lsof -r 2 -n -P -F n -c iTunes -a -i TCP@`hostname`:3689'
 function google() { open /Applications/Google\ Chrome.app/ "http://www.google.com/search?q= $1"; }
+
 fi

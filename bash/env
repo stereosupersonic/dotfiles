@@ -29,7 +29,7 @@ fi
 
 if [ "$OS" = "darwin" ] ; then
 # alias mvim=/Applications/mvim
- export EDITOR="subl"
+ export EDITOR="atom"
 fi
 
 if [ "$OS" = "darwin" ] ; then
