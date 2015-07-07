@@ -1,4 +1,3 @@
-#standard for rails new app  
-#Options rails new --help 
+#standard for rails new app
+#Options rails new --help
 -T
---database=mysql
