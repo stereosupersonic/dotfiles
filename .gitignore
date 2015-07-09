@@ -6,3 +6,4 @@ vim/dot_vim/.netrwhist
 .bashrc.swp
 DOTFILE
 atom/storage/*
+atom/compile-cache/*
