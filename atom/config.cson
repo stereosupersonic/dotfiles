@@ -21,12 +21,12 @@
       ".DS_Store"
     ]
     disabledPackages: [
-      "vim-mode"
       "minimap"
     ]
   "tree-view":
     hideIgnoredNames: true
-  "linter-rubocop": {}
+  "linter-rubocop":
+    executablePath: "/Users/deimel/.rvm/gems/ruby-1.9.3-p551/bin/rubocop"
   "git-diff":
     showIconsInEditorGutter: true
   "atom-beautify":
