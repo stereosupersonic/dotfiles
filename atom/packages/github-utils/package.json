@@ -1,7 +1,7 @@
 {
   "name": "github-utils",
   "main": "./lib/github-utils",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "description": "Use the GitHub API to view any pull request from your current git branch",
   "repository": {
     "type": "git",
@@ -20,10 +20,10 @@
     "url": "https://github.com/jonasws/github-utils/issues"
   },
   "homepage": "https://github.com/jonasws/github-utils",
-  "_id": "github-utils@0.1.0",
-  "_shasum": "c5536a84aaa3d6150405a87a9fc19232c58c5ea3",
-  "_resolved": "file:../d-11567-21867-4uosjf/package.tgz",
-  "_from": "../d-11567-21867-4uosjf/package.tgz",
+  "_id": "github-utils@0.5.0",
+  "_shasum": "208d5a35d204cbea57d1b04071c638fe1de5a0f9",
+  "_resolved": "file:../d-115614-85383-1spi55y/package.tgz",
+  "_from": "../d-115614-85383-1spi55y/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
@@ -39,18 +39,8 @@
       }
     ],
     "extensions": {
-      ".coffee": [
-        "lib/github-utils.coffee"
-      ],
-      ".json": [
-        "node_modules/github/api/v2.0.0/routes.json",
-        "node_modules/github/api/v3.0.0/routes.json",
-        "node_modules/github/node_modules/mime/package.json",
-        "node_modules/github/node_modules/mime/types.json",
-        "node_modules/github/package.json",
-        "package.json"
-      ],
       ".js": [
+        "lib/github-utils.js",
         "node_modules/github/api/v3.0.0/authorization.js",
         "node_modules/github/api/v3.0.0/authorizationTest.js",
         "node_modules/github/api/v3.0.0/events.js",
@@ -90,13 +80,22 @@
         "node_modules/github/node_modules/mime/cli.js",
         "node_modules/github/node_modules/mime/mime.js",
         "node_modules/github/util.js"
+      ],
+      ".json": [
+        "node_modules/github/api/v2.0.0/routes.json",
+        "node_modules/github/api/v3.0.0/routes.json",
+        "node_modules/github/node_modules/mime/package.json",
+        "node_modules/github/node_modules/mime/types.json",
+        "node_modules/github/package.json",
+        "package.json"
       ]
     },
     "folders": [
       {
         "paths": [
           "lib",
-          ""
+          "",
+          "spec"
         ],
         "dependencies": {
           "github": "~0.2.4"
