@@ -7,3 +7,4 @@ vim/dot_vim/.netrwhist
 DOTFILE
 atom/storage/*
 atom/compile-cache/*
+atom/.node-gyp/*
