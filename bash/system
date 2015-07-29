@@ -1,30 +1,11 @@
+alias path='echo $PATH | tr -s ":" "\n"'
+
 alias ducks='du -cksh * | sort -rn|head -11'
 alias du1='du -h -d 1'
 alias systail='tail -f /var/log/syslog'
 alias mestail='tail -f /var/log/messages'
 alias profileme="history | awk '{print \$2}' | awk 'BEGIN{FS=\"|\"}{print \$1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr"
 alias freedisk="df -h | grep /disk0"
-
-
-# disk usage per directory
-# in Mac OS X and Linux
-usage ()
-{
-  if [ $(uname) = "Darwin" ]; then
-    if [ -n $1 ]; then
-      du -hd $1
-    else
-      du -hd 1
-    fi
-
-  elif [ $(uname) = "Linux" ]; then
-    if [ -n $1 ]; then
-      du -h --max-depth=1 $1
-    else
-      du -h --max-depth=1
-    fi
-  fi
-}
 
 #######################################################################
 # Files
@@ -50,5 +31,6 @@ alias topten='top -orsize -FR -l1 | grep % | grep -v Load | grep -v COMMAND | cu
 
 #hardware
 alias cpu='cat /proc/cpuinfo'
+
 #logs
 alias lastlogs="sudo find /var/log/ -mmin -10"

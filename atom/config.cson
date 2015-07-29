@@ -22,6 +22,7 @@
     ]
     disabledPackages: [
       "minimap"
+      "linter-ruby"
       "vim-mode"
     ]
   "tree-view":

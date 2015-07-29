@@ -1,7 +1,7 @@
 {
   "name": "rails-open-rspec",
   "main": "./lib/rails-open-rspec",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "open rspec file by current file.",
   "activationCommands": {
     "atom-workspace": [
@@ -23,10 +23,10 @@
     "url": "https://github.com/harada4atsushi/rails-open-rspec/issues"
   },
   "homepage": "https://github.com/harada4atsushi/rails-open-rspec",
-  "_id": "rails-open-rspec@0.1.5",
-  "_shasum": "9ab2e4eb4221d5951718c012b660f119c8a20973",
-  "_resolved": "file:../d-115614-85389-pnefwh/package.tgz",
-  "_from": "../d-115614-85389-pnefwh/package.tgz",
+  "_id": "rails-open-rspec@0.1.6",
+  "_shasum": "e2b62e84d2d346982beed614aaf16a70fdca334a",
+  "_resolved": "file:../d-115621-83861-1kmiayg/package.tgz",
+  "_from": "../d-115621-83861-1kmiayg/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],
