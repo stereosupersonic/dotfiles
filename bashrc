@@ -1,21 +1,7 @@
 #Alias erzeugen $HOME/.bashrc
 #for shared with dropbox for private config
-
-#load miceportal settings
-if [ -f $HOME/entwicklung/miceportal/git/dotfiles/bash/env   ]; then
-  source $HOME/entwicklung/miceportal/git/dotfiles/bash/env
-fi
-
-if [ -f $HOME/entwicklung/miceportal/git/dotfiles/bash/config   ]; then
-  source $HOME/entwicklung/miceportal/git/dotfiles/bash/config
-fi
-
-if [ -f $HOME/entwicklung/miceportal/git/dotfiles/bash/aliases   ]; then
-  source $HOME/entwicklung/miceportal/git/dotfiles/bash/aliases
-fi
-
-if [ -d $HOME/entwicklung/miceportal/git/dotfiles/bin   ]; then
-  PATH=$PATH:$HOME/entwicklung/miceportal/git/dotfiles/bin
+if [ -f $HOME/Dropbox/bash/bashrc_local ]; then
+  source $HOME/Dropbox/bash/bashrc_local
 fi
 
 if [ -f "$HOME/.DOTFILE" ]; then
@@ -29,6 +15,11 @@ if [ -n "${DOTFILESPATH+x}" ]; then
 else
   echo "DOTFILESPATH not exits"
 fi
+
+if [ -f $DOTFILESPATH/bash/aliases   ]; then
+  source $DOTFILESPATH/bash/aliases
+fi
+
 
 FILES=$DOTFILE/bash/*
 for f in $FILES
@@ -50,4 +41,4 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
-export PATH="/Users/deimel/entwicklung/projects/prchecker/bin:$PATH"
+#export PATH="/Users/deimel/entwicklung/projects/prchecker/bin:$PATH"
