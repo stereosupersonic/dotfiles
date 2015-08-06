@@ -322,7 +322,8 @@ debug = () ->
 
   # Language
   language = beautifier.getLanguage(grammarName, filePath)
-  addInfo('Original File Language', language.name)
+
+  addInfo('Original File Language', language?.name)
 
   # Get current editor's text
   text = editor.getText()
@@ -347,7 +348,7 @@ debug = () ->
     ] = allOptions
     projectOptions = allOptions[4..]
 
-    finalOptions = beautifier.getOptionsForLanguage(allOptions, language)
+    finalOptions = beautifier.getOptionsForLanguage(allOptions, language?)
 
     # Show options
     addInfo('Editor Options', "\n" +
@@ -368,7 +369,7 @@ debug = () ->
     addInfo('Final Options', "\n" +
     "Final combined options that are used\n" +
     "```json\n#{JSON.stringify(finalOptions, undefined, 4)}\n```")
-    
+
     addInfo('Package Settings', "\n" +
     "The raw package settings options\n" +
     "```json\n#{JSON.stringify(atom.config.get('atom-beautify'), undefined, 4)}\n```")
@@ -430,8 +431,15 @@ handleSaveEvent = ->
         beautifyFilePath(filePath, ->
           buffer.reload()
           logger.verbose('restore editor positions', posArray,origScrollTop)
-          setCursors(editor, posArray)
-          editor.setScrollTop(origScrollTop)
+          # Let the scrollTop setting run after all the save related stuff is run,
+          # otherwise setScrollTop is not working, probably because the cursor
+          # addition happens asynchronously
+          setTimeout ( ->
+            setCursors(editor, posArray)
+            editor.setScrollTop(origScrollTop)
+            # console.log "setScrollTop"
+            return
+          ), 0
         )
       )
     plugin.subscribe disposable
@@ -445,4 +453,3 @@ plugin.activate = ->
   atom.commands.add "atom-workspace", "atom-beautify:help-debug-editor", debug
   atom.commands.add ".tree-view .file .name", "atom-beautify:beautify-file", beautifyFile
   atom.commands.add ".tree-view .directory .name", "atom-beautify:beautify-directory", beautifyDirectory
-

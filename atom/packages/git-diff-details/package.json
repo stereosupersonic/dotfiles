@@ -1,7 +1,7 @@
 {
   "name": "git-diff-details",
   "main": "./lib/main",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "description": "View git diffs directly in atom.",
   "keywords": [
     "git",
@@ -30,10 +30,10 @@
     "url": "https://github.com/samu/git-diff-details/issues"
   },
   "homepage": "https://github.com/samu/git-diff-details",
-  "_id": "git-diff-details@0.18.0",
-  "_shasum": "ae99f2e9ef65f2895f8e1d34943bfec506a4872a",
-  "_resolved": "file:../d-115526-42537-1az9jst/package.tgz",
-  "_from": "../d-115526-42537-1az9jst/package.tgz",
+  "_id": "git-diff-details@0.19.0",
+  "_shasum": "fb10ef2849c6bdbc2f8ca39badc3d56e259f48e2",
+  "_resolved": "file:../d-11576-31843-b2zdmv/package.tgz",
+  "_from": "../d-11576-31843-b2zdmv/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
@@ -79,7 +79,7 @@
       },
       {
         "name": "amdefine",
-        "version": "0.1.1",
+        "version": "1.0.0",
         "path": "node_modules/atom-space-pen-views/node_modules/space-pen/node_modules/grim/node_modules/coffeestack/node_modules/source-map/node_modules/amdefine/amdefine.js"
       },
       {
@@ -239,7 +239,7 @@
       },
       {
         "name": "amdefine",
-        "version": "0.1.1",
+        "version": "1.0.0",
         "path": "node_modules/highlights/node_modules/first-mate/node_modules/grim/node_modules/coffeestack/node_modules/source-map/node_modules/amdefine/amdefine.js"
       },
       {
