@@ -26,7 +26,7 @@ rm $HOME/.bash_profile
 mv $HOME/.gitconfig $HOME/.gitconfig.bak
 mv $HOME/.rubocop.yml $HOME/.rubocop.yml.bak
 mv $HOME/.pryrc.yml $HOME/.pryrc.yml.bak
-mv $HOME/.atom $HOME/.atom.bak
+
 
 ln -nfsv "$DOTFILE/DOTFILE" $HOME/.DOTFILE
 ln -nfsv "$DOTFILE/bashrc" $HOME/.bash_profile
@@ -34,7 +34,9 @@ ln -nfsv "$DOTFILE/bashrc" $HOME/.bashrc
 ln -nfsv "$DOTFILE/gitconfig" $HOME/.gitconfig
 ln -nfsv "$DOTFILE/rubocop.yml" $HOME/.rubocop.yml
 ln -nfsv "$DOTFILE/pryrc.yml" $HOME/.pryrc.yml
-ln -nfsv "$DOTFILE/atom" $HOME/.atom
+#Atom
+mv $HOME/.atom $HOME/.atom.bak
+ln -nfsv "$HOME/Dropbox/settings/atom" $HOME/.atom
 
 #ruby-rails
 mv $HOME/.irbrc $HOME/.irbrc.bak
