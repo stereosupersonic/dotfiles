@@ -16,20 +16,13 @@ function lookupip() {
     open http://www.maxmind.com/app/locate_demo_ip?ips=$1
 }
 
-function ip-remote() {
+function ipremote() {
     curl http://meip.herokuapp.com/
 }
 
-function ip-local() {
-     hostname --ip-address
+function iplocal() {
+  ipconfig getifaddr en0
 }
-
-function ifconfig-remote {
-  curl ifconfig.me/all
-}
-
-
 
 # internetspeed
 #echo $(date +%s) > start-time; URL=http://www.google.com; while true; do echo $(curl -L --w %{speed_download} -o/dev/null -s $URL) >> bps; sleep 10; done &
-

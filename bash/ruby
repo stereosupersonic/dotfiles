@@ -21,6 +21,6 @@ alias r="bundle exec rake"
 
 # search for pattern in the used gem
 # like bundle-search 'def help'
-function bundle-search () {
+function bundlesearch {
   ack "$@" `bundle show --paths`
 }
