@@ -31,6 +31,7 @@ mv $HOME/.pryrc.yml $HOME/.pryrc.yml.bak
 ln -nfsv "$DOTFILE/DOTFILE" $HOME/.DOTFILE
 ln -nfsv "$DOTFILE/bashrc" $HOME/.bash_profile
 ln -nfsv "$DOTFILE/bashrc" $HOME/.bashrc
+ln -nfsv "$DOTFILE/gemrc" $HOME/.gemrc
 ln -nfsv "$DOTFILE/gitconfig" $HOME/.gitconfig
 ln -nfsv "$DOTFILE/rubocop.yml" $HOME/.rubocop.yml
 ln -nfsv "$DOTFILE/pryrc.yml" $HOME/.pryrc.yml
