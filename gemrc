@@ -1,0 +1,6 @@
+gem: --no-ri --no-rdoc
+verbose: true
+update_sources: true
+backtrace: true
+
+# http://guides.rubygems.org/command-reference/#gem-environment

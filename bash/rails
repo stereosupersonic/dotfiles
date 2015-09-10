@@ -1,8 +1,8 @@
 #######################################################################
 #Rails#
 #######################################################################
-alias migrate="bundle exec rake db:migrate && bundle exec annotate -s && bundle exec rake db:test:clone"
-alias migrate_last='bundle exec  rake db:rollback && migrate'
+alias migrate="bundle exec rake db:migrate && bundle exec rake db:test:clone"
+alias migrate_last='bundle exec rake db:rollback && migrate'
 alias anno='bundle exec annotate -s'
 alias remigrate='migrate_last'
 #alias remigrate='rake db:migrate:reset && migrate'
