@@ -1,8 +1,8 @@
 #######################################################################
 #Rails#
 #######################################################################
-alias migrate="bundle exec rake db:migrate && bundle exec annotate -s && bundle exec rake db:test:clone"
-alias migrate_last='bundle exec  rake db:rollback && migrate'
+alias migrate="bundle exec rake db:migrate && bundle exec rake db:test:clone"
+alias migrate_last='bundle exec rake db:rollback && migrate'
 alias anno='bundle exec annotate -s'
 alias remigrate='migrate_last'
 #alias remigrate='rake db:migrate:reset && migrate'
@@ -11,8 +11,8 @@ alias remigrate='migrate_last'
 alias dbsync_last='bundle exec rake db:import_last --trace'
 
 function sc {
-  if [ -e script/rails ]; then
-    script/rails console $@
+  if [ -e bin/rails ]; then
+    bin/rails c
   else
     script/console $@
   fi
@@ -38,23 +38,10 @@ wait
 
 #startet den den server
 ss () {
-
-  for app in auftragsbuch reaktor katalysator ratefinder2 loginator
-  do
-    array[$app]=1
-  done
-
-  export dir="`basename $PWD`"
-  echo $dir
-
-  if [ -f ./vendor/plugins/konvenit_plugin_trunk/start_server.rb ]; then
-    ./vendor/plugins/konvenit_plugin_trunk/start_server.rb
-  elif [[ ${array[$dir ]} ]]; then
-    bundle exec rake start_server
-  elif [ -e script/rails ]; then
+  if [ -e script/rails ]; then
     script/rails server $@
   else
-    script/server $@
+    bin/rails s
   fi
 }
 
