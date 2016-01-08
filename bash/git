@@ -11,6 +11,8 @@ alias push="branch-push"
 alias commit="branch-commit"
 alias pullmerge="git pull && git fetch origin master && git merge origin master"
 
+alias grebase="git fetch origin && git rebase origin/master"
+
 alias github-diff-branch="branch-diff"
 alias github-diff-rev="current-diff"
 #function diffmaster() {

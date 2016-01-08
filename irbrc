@@ -57,17 +57,6 @@ IRB.conf[:AUTO_INDENT] = true
 
 #####################helpers
 
-
-def edit_obj( obj )
-  tempfile = File.join('/tmp',"yobj_#{ Time.now.to_i }")
-  File.open( tempfile, 'w' ) { |f| f << obj.to_yaml }
-  system( "#{ ENV['EDITOR'] || 'vi' } #{ tempfile }" )
-  return obj unless File.exists?( tempfile )
-  content = YAML::load( File.open( tempfile ) )
-  File.delete( tempfile )
-  content
-end
-
 def y(obj)
   puts obj.to_yaml
 end
@@ -78,34 +67,11 @@ end
 
 class Object
 
-  def edit
-    edit_obj(self)
-  end
-
-  #opens Textmate on an Methode
-  def show(method_name)
-     file, line = method(method_name).source_location
-     `mate '#{file}' -l #{line}`
-   end
-
   # list methods which aren't in superclass
   def local_methods(obj = self)
     (obj.methods - (obj.class.superclass || obj.class).send(:instance_methods)).sort
   end
 
-  # print documentation
-  #
-  #   ri 'Array#pop'
-  #   Array.ri
-  #   Array.ri :pop
-  #   arr.ri :pop
-  def ri(method = nil)
-    unless method && method =~ /^[A-Z]/ # if class isn't specified
-      klass = self.kind_of?(Class) ? name : self.class.name
-      method = [klass, method].compact.join('#')
-    end
-    puts `ri '#{method}'`
-  end
 end
 
 def copy(str)
@@ -136,43 +102,8 @@ class String
   end
 end
 
-class Array
-  def to_csv(file_name='output.csv')
-    require 'csv'
-    CSV.open(file_name, "w") do |csv|
-      self.each do |arr|
-        if arr.is_a?(Array)
-          csv << arr
-        else
-          csv << [arr]
-        end
-      end
-    end
-  end
-end
-
 def c
   system('clear')
-end
-
-# Open in TextMate
-def mate *args
-  flattened_args = args.map {|arg| "\"#{arg.to_s}\""}.join ' '
-  `mate #{flattened_args}`
-  nil
-end
-
-#http://blog.bogojoker.com/index.php?s=ssh
-# Awesome benchmarking function
-# Source: http://ozmm.org/posts/time_in_irb.html
-
-# A cool way to index in a hash
-# h = { :alpha => 'bet', :beta => 'blocker' }
-# h/:beta #=> 'blocker'
-class Hash
-  def /(key)
-    self[key]
-  end
 end
 
 # Simple regular expression helper
@@ -192,28 +123,6 @@ class Regexp
     show_regexp(a, self)
   end
 end
-
-def h
-  y([
-   "#{'#'*50}",
-  # "lp for looksee gem. Example: lp []",
-   "local_methods #=> zeigt nur Mithoden des Objects",
-   "ap #=> for pretty print objects",
-   "c #=> clear screen",
-   "ri #=> print documentation ri 'Array#pop' Array.ri, arr.ri :pop",
-   "Object.edit",
-   "String#to_file s",
-   "String#from_file",
-   "String#to_clipboard",
-   "paste #=>paste it from the clipboard x = paste ",
-   "mate #=> Opens Textmate",
-   "show_regexp #=> show_regexp('bla',/a/) => bl<<a>>",
-   "Regex.show_match #=> /an/.show_match('banana') # => 'b<<an>>ana'",
-   "time{} #=> Benchmarks",
-   "#{'#'*50}"
-  ])
-end
-
 
 def ls(path='.')
   Dir[ File.join( path, '*' )].map{|filename| File.basename filename }
@@ -261,11 +170,6 @@ def reset!
   end
 end
 
-# just clear the screen
-def clear
-  system 'clear'
-end
-
 save_require 'active_support' unless defined? Rails
 
 save_require 'rubygems' unless defined? Gem
@@ -280,6 +184,8 @@ end
 begin
   save_require 'wirb'
   Wirb.start unless defined? Wirb
+  require 'wirb/wp'
+
 rescue => e
   puts e
 end
