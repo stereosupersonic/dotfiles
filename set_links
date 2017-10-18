@@ -24,37 +24,24 @@ rm $HOME/.bashrc
 mv $HOME/.bash_profile $HOME/.bash_profile.bak
 rm $HOME/.bash_profile
 mv $HOME/.gitconfig $HOME/.gitconfig.bak
-mv $HOME/.rubocop.yml $HOME/.rubocop.yml.bak
-mv $HOME/.pryrc.yml $HOME/.pryrc.yml.bak
+
 
 
 ln -nfsv "$DOTFILE/DOTFILE" $HOME/.DOTFILE
 ln -nfsv "$DOTFILE/bashrc" $HOME/.bash_profile
 ln -nfsv "$DOTFILE/bashrc" $HOME/.bashrc
-ln -nfsv "$DOTFILE/gemrc" $HOME/.gemrc
 ln -nfsv "$DOTFILE/gitconfig" $HOME/.gitconfig
-ln -nfsv "$DOTFILE/rubocop.yml" $HOME/.rubocop.yml
 ln -nfsv "$DOTFILE/pryrc.yml" $HOME/.pryrc.yml
+
 #Atom
 mv $HOME/.atom $HOME/.atom.bak
 ln -nfsv "$HOME/Dropbox/settings/atom" $HOME/.atom
 
 #ruby-rails
-mv $HOME/.irbrc $HOME/.irbrc.bak
-mv $HOME/.railsconsolerc $HOME/.railsconsolerc.bak
-mv $HOME/.railsrc $HOME/.railsrc.bak
-mv $HOME/.autotest $HOME/.railsrc.bak
-mv $HOME/.rdebugrc  $HOME/.rdebugrc.bak
-mv $HOME/.tmux.conf  $HOME/.tmux_conf.bak
+mv $HOME/.pryrc $HOME/.pryrc.bak
+ln -nfsv "$DOTFILE/pryrc" $HOME/.pryrc
 
-ln -nfsv "$DOTFILE/irbrc" $HOME/.irbrc
-ln -nfsv "$DOTFILE/railsrc" $HOME/.railsrc
-ln -nfsv "$DOTFILE/railsconsolerc" $HOME/.railsconsolerc
-ln -nfsv "$DOTFILE/autotest" $HOME/.autotest
-ln -nfsv "$DOTFILE/rdebugrc" $HOME/.rdebugrc
-ln -nfsv "$DOTFILE/tmuxconf" $HOME/.tmux.conf
-
-#Install vim
+#vim
 mv $HOME/.vimrc $HOME/.vimrc.bak
 mv $HOME/.gvimrc $HOME/.gvimrc.bak
 

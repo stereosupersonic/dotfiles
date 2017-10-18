@@ -1,8 +1,11 @@
 #Alias erzeugen $HOME/.bashrc
 #for shared with dropbox for private config
-if [ -f $HOME/Dropbox/bash/bashrc_local ]; then
-  source $HOME/Dropbox/bash/bashrc_local
-fi
+
+# Identify OS and Machine -----------------------------------------
+export OS=`uname -s | sed -e 's/ *//g;y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/'`
+export OSVERSION=`uname -r`; OSVERSION=`expr "$OSVERSION" : '[^0-9]*\([0-9]*\.[0-9]*\)'`
+export MACHINE=`uname -m | sed -e 's/ *//g;y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/'`
+export PLATFORM="$MACHINE-$OS-$OSVERSION"
 
 if [ -f "$HOME/.DOTFILE" ]; then
   source "$HOME/.DOTFILE"
@@ -28,19 +31,41 @@ do
 done
 
 
+#PATH
+if [ -d $HOME/bin ]; then
+ PATH="$PATH:$HOME/bin"
+fi
+
+if [ -d $HOME/bin/scripts ]; then
+ PATH="$PATH:$HOME/bin/scripts"
+fi
+
+if [ -d $DOTFILE/bash/bin ]; then
+ PATH="$PATH:$DOTFILE/bash/bin"
+fi
+
+if [ -d $DOTFILE/bin ]; then
+ PATH="$PATH:$DOTFILE/bin"
+fi
+
+#shared scripts
+if [ -d $HOME/Dropbox/bash/bin ]; then
+ PATH="$PATH:$HOME/Dropbox/bash/bin"
+fi
+
+
+PATH="/usr/local/sbin:$PATH"
+PATH="/usr/local/bin:$PATH"
+export PATH
+
+# dropbox shared 
+if [ -f $HOME/Dropbox/bash/bashrc_local ]; then
+  source $HOME/Dropbox/bash/bashrc_local
+fi
+
 #for special alias path etc...
 if [ -f $HOME/.bashrc_local ]; then
   source $HOME/.bashrc_local
 else
   echo "not exits ' $HOME/.bashrc_local'"
 fi
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
-
-### Added by the Heroku Toolbelt
-#export PATH="/usr/local/heroku/bin:$PATH"
-#export PATH="/Users/deimel/entwicklung/projects/prchecker/bin:$PATH"
-if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi

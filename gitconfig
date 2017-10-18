@@ -57,18 +57,6 @@
   nb = !git push origin master:refs/heads/$1 && git fetch origin && git branch --track $1 origin/$1 && git checkout $1
   news = log -p HEAD@{1}..HEAD@{0} #http://chneukirchen.org/blog/archive/2013/01/a-grab-bag-of-git-tricks.html
 
-[merge]
-  tool = vimdiff
-  summary = true
-
-[mergetool "vimdiff"]
-  cmd = vimdiff "$LOCAL" "$REMOTE"
-  keepBackup = false
-  trustExitCode = false
-
-[difftool]
-  tool = vimdiff $LOCAL $REMOTE
-  prompt = true
 
 [gc]
   auto=1 #Automatic cleanup and compression of the repo
@@ -87,12 +75,27 @@
 [push]
 	default = simple
 [filter "lfs"]
-	clean = git lfs clean %f
-	smudge = git lfs smudge %f
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
 	required = true
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
+[diff]
+  tool = bcomp
+[difftool]
+  prompt = false
+[difftool "bcomp"]
+  trustExitCode = true
+  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
+[merge]
+  tool = bcomp
+[mergetool]
+  prompt = false
+[mergetool "bcomp"]
+  trustExitCode = true
+  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"

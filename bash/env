@@ -1,9 +1,3 @@
-#
-# Identify OS and Machine -----------------------------------------
-export OS=`uname -s | sed -e 's/ *//g;y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/'`
-export OSVERSION=`uname -r`; OSVERSION=`expr "$OSVERSION" : '[^0-9]*\([0-9]*\.[0-9]*\)'`
-export MACHINE=`uname -m | sed -e 's/ *//g;y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/'`
-export PLATFORM="$MACHINE-$OS-$OSVERSION"
 
 #PATH
 if [ -d $HOME/bin ]; then
@@ -27,14 +21,6 @@ if [ -d $HOME/Dropbox/bash/bin ]; then
  PATH="$PATH:$HOME/Dropbox/bash/bin"
 fi
 
-if [ "$OS" = "darwin" ] ; then
-# alias mvim=/Applications/mvim
- export EDITOR="atom"
-fi
-
-if [ "$OS" = "darwin" ] ; then
-  PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
-fi
 
 PATH="/usr/local/sbin:$PATH"
 PATH="/usr/local/bin:$PATH"
@@ -44,31 +30,20 @@ export PATH
 export PAGER=less
 export LESS="-M -I -N"
 
-#########
-#History#
-#########
-export HISTFILE=$HOME/.bash_history
-export HISTFILESIZE=20000
-export HISTSIZE=10000
-# Combine multiline commands into one in historty
-shopt -s histappend
-export HISTIGNORE='&:ls:lr:ll:[bf]g:pwd:exit:..:...:lla:cat'
-export HISTCONTROL='ignorespace:ignoredups:ignoreboth'
-export HISTTIMEFORMAT="%F %T " #anzeige der Zeit in der history
 
 # Colors
 ##grep
 #export GREP_OPTIONS="--color=auto"
 #export GREP_COLOR="4;33"
-export CLICOLOR=auto
+#export CLICOLOR=auto
 
 LS_COLORS="no=00:fi=00:di=00;34:ln=00;36:pi=40;33:so=00;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=00;31:*.cmd=00;32:*.exe=00;32:*.sh=00;32:*.gz=00;35:*.bz=00;35:*.tz=00;35:*.rpm=00;35:*.cpio=00;35:*.t=93:*.pm=00;36:*.pod=00;96:*.conf=00;33:*.off=00;9:*.jpg=00;94:*.png=00;94:*.xcf=00;94:*.JPG=00;94:*.gif=00;94:*.pdf=00;91"
-export LS_COLORS
+#export LS_COLORS
 
 if [ "$OS" = "darwin" ] ; then
   export LANG=de_DE.UTF-8
   export LC_ALL=de_DE.UTF-8
-  export LSCOLORS=FxFxCxDxBxebedabagacad #siehe http://blog.sensibleopensource.com/changing_colors_in_the_osx_terminal_1.htm
+#  export LSCOLORS=FxFxCxDxBxebedabagacad #siehe http://blog.sensibleopensource.com/changing_colors_in_the_osx_terminal_1.htm
 fi
 
 if [ "$OS" = "linux" ] ; then
@@ -77,9 +52,3 @@ if [ "$OS" = "linux" ] ; then
     #eval `dircolors -b $HOME/.dircolors`
    export EDITOR="vi"
 fi
-
-
-#Docker
-export DOCKER_TLS_VERIFY=1
-export DOCKER_HOST=tcp://192.168.59.103:2376
-export DOCKER_CERT_PATH=/Users/deimel/.boot2docker/certs/boot2docker-vm

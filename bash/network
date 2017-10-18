@@ -23,6 +23,3 @@ function ipremote() {
 function iplocal() {
   ipconfig getifaddr en0
 }
-
-# internetspeed
-#echo $(date +%s) > start-time; URL=http://www.google.com; while true; do echo $(curl -L --w %{speed_download} -o/dev/null -s $URL) >> bps; sleep 10; done &

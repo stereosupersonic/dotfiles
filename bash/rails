@@ -1,40 +1,8 @@
 #######################################################################
 #Rails#
 #######################################################################
-alias migrate="bundle exec rake db:migrate && bundle exec rake db:test:clone"
-alias migrate_last='bundle exec rake db:rollback && migrate'
-alias anno='bundle exec annotate -s'
-alias remigrate='migrate_last'
-#alias remigrate='rake db:migrate:reset && migrate'
-#alias remigrate="rake db:migrate && rake db:migrate:redo && rake db:schema:dump db:test:prepare"
-#alias dbsync='LIVEDUMP=true IGNORE=report_values,correspondences bundle exec rake db:sync_production_to_local_db --trace'
-alias dbsync_last='bundle exec rake db:import_last --trace'
+alias migrate="bundle exec rake db:migrate db:test:prepare"
 
-function sc {
-  if [ -e bin/rails ]; then
-    bin/rails c
-  else
-    script/console $@
-  fi
-}
-function sg {
-  if [ -e script/rails ]; then
-    script/rails generate $@
-  else
-    script/generate $@
-  fi
-}
-
-function cat_all {
-echo "ja"
-FILE=/srv/apps/katalysator/current/log/$1
-for box in '87.230.73.86 -p 2022' '87.230.73.88 -p 2022' '80.237.189.164 -p2022'; do
-      echo "***** try**"+ $box
-     ssh deploy@$box cat $FILE &
-done
-##
-wait
-}
 
 #startet den den server
 ss () {
@@ -45,59 +13,4 @@ ss () {
   fi
 }
 
-alias ssclean='bundle && fetch && branch-pull && bootstrap && bundle exec rake db:drop:all && bundle exec rake log:clear && dbsync && cleanup && ss'
-alias rp='touch tmp/restart.txt'
-
 alias tl='tail -f log/*.log'
-alias devlog='tail -f log/development.log'
-alias testlog='tail -f log/test.log'
-alias taildev='rake log:clear && clear && tail -F log/development.log'
-alias tailtest='rake log:clear && clear && tail -F log/test.log'
-#alias mysqllog='tail -F /var/log/mysql/mysqld.log'
-alias routes?="routes | grep -i $1 "
-
-
-#erzeugt ein digramm über alle Models in der Rails-App
-#muss im Root-Verzeichnis der Rails-App gestartet werden.
-modelstopdf() {
-  if [ -f models.svg ]
-    then
-    rm -f models.svg
-  fi
-  if [ -f models.pdf ]
-    then
-    rm -f models.pdf
-  fi
-  # railroad -M | dot -Tsvg > models.svg
-  railroad -a -i -M | dot -Tsvg > models.svg
-  inkscape -z models.svg --export-pdf=models.pdf
-  rm -f models.svg
-
-  if [ -f models.pdf ]
-    then
-    echo "models.pdf wurde erstell!"
-    #gleich öffnen
-    open models.pdf
-  else
-    echo "Fehler!!!"
-  fi
-}
-
-function find_in_rails {
-  find .  -path './spec' -prune -o -path '*.svn' -prune -o  -type f -name "*.rb" -exec egrep -qi "$1" {} \; -print | xargs mate
-}
-
-function ruby_grep {
-  find . -type f -name "*.rb"  -exec egrep -qi "$1" {} \; -print | xargs mate
-}
-
-function find_in_specs {
-  find . -name "spec" -type d -print | xargs find -name "*.rb" | xargs egrep -li "$1" | xargs mate
-}
-#######################################################################
-#Cucumber &RSpec#
-#########################################################################
-alias wip='rake cucumber:wip'
-
-
-alias redis='redis-server /usr/local/etc/redis.conf'

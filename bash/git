@@ -1,21 +1,11 @@
 #######################################################################
 # Git #
 #######################################################################
-alias ungit="find . -name '.git' -exec rm -rf {} \;"
 alias gs="git status -sb"
 alias gd="git df"
 alias gl='git log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"'
 
 alias pull="branch-pull"
 alias push="branch-push"
+alias forcepush="branch-force-push"
 alias commit="branch-commit"
-alias pullmerge="git pull && git fetch origin master && git merge origin master"
-
-alias grebase="git fetch origin && git rebase origin/master"
-
-alias github-diff-branch="branch-diff"
-alias github-diff-rev="current-diff"
-#function diffmaster() {
-#  git difftool master
-#}
-#
