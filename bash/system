@@ -25,12 +25,11 @@ fi
 if [ "$OS" = "linux" ] ; then
   alias topmem='ps -auxf | sort -nr -k 4| head -10'
   alias topcpu='ps -auxf | sort -nr -k 3| head -10'
+  #hardware
+  alias cpu='cat /proc/cpuinfo'
+
+  alias topten='top -orsize -FR -l1 | grep % | grep -v Load | grep -v COMMAND | cut -c 7-19,64-69 | head -n 10'
+
+   #logs
+   alias lastlogs="sudo find /var/log/ -mmin -10"
 fi
-alias topten='top -orsize -FR -l1 | grep % | grep -v Load | grep -v COMMAND | cut -c 7-19,64-69 | head -n 10'
-
-
-#hardware
-alias cpu='cat /proc/cpuinfo'
-
-#logs
-alias lastlogs="sudo find /var/log/ -mmin -10"

@@ -32,11 +32,6 @@ alias lsdirsizes='du -sch *'
 alias c='clear' # shortcut to clear your terminal auch mit CTRL-L
 alias x='exit'
 
-alias psa='ps wwwax'
-alias md='mkdir -p'
-
-alias filesize="stat -f \"%z bytes\""
-
 alias ..='cd ..' # move up 1 dir
 alias ...='cd ../..' # move up 2 dirs
 alias ....='cd ../../..' # move up 3 dirs

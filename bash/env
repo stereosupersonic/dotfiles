@@ -1,31 +1,4 @@
 
-#PATH
-if [ -d $HOME/bin ]; then
- PATH="$PATH:$HOME/bin"
-fi
-
-if [ -d $HOME/bin/scripts ]; then
- PATH="$PATH:$HOME/bin/scripts"
-fi
-
-if [ -d $DOTFILE/bash/bin ]; then
- PATH="$PATH:$DOTFILE/bash/bin"
-fi
-
-if [ -d $DOTFILE/bin ]; then
- PATH="$PATH:$DOTFILE/bin"
-fi
-
-#shared scripts
-if [ -d $HOME/Dropbox/bash/bin ]; then
- PATH="$PATH:$HOME/Dropbox/bash/bin"
-fi
-
-
-PATH="/usr/local/sbin:$PATH"
-PATH="/usr/local/bin:$PATH"
-export PATH
-
 #DIVERSE
 export PAGER=less
 export LESS="-M -I -N"

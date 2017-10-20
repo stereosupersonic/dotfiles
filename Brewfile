@@ -27,6 +27,7 @@ brew "pv"
 brew "tmux"
 brew "tree"
 brew "vim"
+brew "watch"
 
 ################################
 #  Desktop Apps                #
@@ -35,18 +36,19 @@ cask "atom"
 cask "bitbar" # Put anything in your Mac OS X menu bar
 cask "alfred"
 cask "bartender" # organize your Mac OS X menu bar apps
+cask "cafeine"
 cask "dropbox"
 cask "flux"   # it makes the color of your computer's display adapt to the time of day
 cask "libreoffice"
 cask "iconping" # check if online
+cask "macdown" # markdown editor
 cask "notational-velocity"
 cask "spotify"
 cask "vlc"
 cask "google-chrome"
 cask "firefox"
 cask "iterm2"
-cask "github"
-cask "list"
+cask "github-desktop"
 
 ################################
 #  AppStore Apps               #

@@ -11,15 +11,3 @@ alias show_blocked='sudo ipfw -a list'
 function tracert {
     mtr $1
 }
-
-function lookupip() {
-    open http://www.maxmind.com/app/locate_demo_ip?ips=$1
-}
-
-function ipremote() {
-    curl http://meip.herokuapp.com/
-}
-
-function iplocal() {
-  ipconfig getifaddr en0
-}
