@@ -58,7 +58,7 @@ PATH="/usr/local/sbin:$PATH"
 PATH="/usr/local/bin:$PATH"
 export PATH
 
-# dropbox shared 
+# dropbox shared
 if [ -f $HOME/Dropbox/bash/bashrc_local ]; then
   source $HOME/Dropbox/bash/bashrc_local
 fi

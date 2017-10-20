@@ -11,6 +11,7 @@ alias freedisk="df -h | grep /disk0"
 # Files
 #######################################################################
 alias topfiles="watch -d -n 2 'df; ls -FlAt;'"
+
 #######################################################################
 # Processes
 #######################################################################
@@ -21,7 +22,7 @@ if [ "$OS" = "darwin" ] ; then
   alias topmem='ps -o rss,command -waxc | sort -nr | head -10'
   alias topcpu='ps -o pcpu,command -waxc | sort -nr | head -10'
 fi
-#
+
 if [ "$OS" = "linux" ] ; then
   alias topmem='ps -auxf | sort -nr -k 4| head -10'
   alias topcpu='ps -auxf | sort -nr -k 3| head -10'
