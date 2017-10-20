@@ -23,6 +23,7 @@ brew "jq"  # JSON formatter
 brew "mas"  # commandline installation of appstore apps
 brew "mtr"
 brew "nmap"
+brew "ngrok" # https://ngrok.com/
 brew "pv"
 brew "tmux"
 brew "tree"
