@@ -39,7 +39,7 @@ cask "atom"
 cask "bitbar" # Put anything in your Mac OS X menu bar
 cask "alfred"
 cask "bartender" # organize your Mac OS X menu bar apps
-cask "cafeine"
+cask "caffeine"
 cask "dropbox"
 cask "flux"   # it makes the color of your computer's display adapt to the time of day
 cask "libreoffice"
