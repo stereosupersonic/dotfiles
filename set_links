@@ -24,7 +24,7 @@ rm $HOME/.bashrc
 mv $HOME/.bash_profile $HOME/.bash_profile.bak
 rm $HOME/.bash_profile
 mv $HOME/.gitconfig $HOME/.gitconfig.bak
-
+mv $HOME/Brewfile $HOME/Brewfile.bak
 
 
 ln -nfsv "$DOTFILE/DOTFILE" $HOME/.DOTFILE
@@ -32,6 +32,7 @@ ln -nfsv "$DOTFILE/bashrc" $HOME/.bash_profile
 ln -nfsv "$DOTFILE/bashrc" $HOME/.bashrc
 ln -nfsv "$DOTFILE/gitconfig" $HOME/.gitconfig
 ln -nfsv "$DOTFILE/pryrc.yml" $HOME/.pryrc.yml
+ln -nfsv "$DOTFILE/Brewfile" $HOME/Brewfile
 
 #Atom
 mv $HOME/.atom $HOME/.atom.bak
