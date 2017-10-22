@@ -33,15 +33,11 @@ ln -nfsv "$DOTFILE/bashrc" $HOME/.bashrc
 mv $HOME/.gitconfig $HOME/.gitconfig.bak
 ln -nfsv "$DOTFILE/config_files/gitconfig" $HOME/.gitconfig
 
-ln -nfsv "$DOTFILE/config_files/pryrc.yml" $HOME/.pryrc.yml
-# Brewfile for homebrew and cask
-mv $HOME/Brewfile $HOME/Brewfile.bak
-ln -nfsv "$DOTFILE/config_files/Brewfile" $HOME/Brewfile
 # tmux
 mv $HOME/.tmux.conf $HOME/.tmux.old
 ln -nfsv "$DOTFILE/config_files/tmux.conf" $HOME/.tmux.conf
 
-#ruby-rails
+# ruby and rails
 mv $HOME/.pryrc $HOME/.pryrc.bak
 ln -nfsv "$DOTFILE/pryrc" $HOME/.pryrc
 
@@ -51,5 +47,11 @@ mv $HOME/.gvimrc $HOME/.gvimrc.bak
 ln -nfsv "$DOTFILE/vim/vimrc" $HOME/.vimrc
 ln -nfsv "$DOTFILE/vim/gvimrc" $HOME/.gvimrc
 ln -nfsv "$DOTFILE/vim/dot_vim" $HOME/.vim
+
+# Brewfile for homebrew and cask
+if [ "$OS" = "darwin" ] ; then
+  mv $HOME/Brewfile $HOME/Brewfile.bak
+  ln -nfsv "$DOTFILE/config_files/Brewfile" $HOME/Brewfile
+fi
 
 echo "finish"
