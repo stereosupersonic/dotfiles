@@ -1,16 +1,7 @@
 #######################################################################
 # dir
 #######################################################################
-# Quicker cd
-# Common -- Some are from Damian Conway
-function cdc() {
-  cd $1; ls
-}
-
-
 alias ls='ls --color=always'
-
-alias a='ls -A' # -A all except literal . ..
 alias la="ls -A -l -G"
 alias l.='ls -ld .[^.]*'
 alias l='ls -lhGt'  # -l long listing, most recent first -G color

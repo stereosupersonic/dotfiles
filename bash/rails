@@ -4,7 +4,7 @@
 alias migrate="bundle exec rake db:migrate db:test:prepare"
 
 
-#startet den den server
+# start local server
 ss () {
   if [ -e script/rails ]; then
     script/rails server $@
@@ -13,4 +13,16 @@ ss () {
   fi
 }
 
+# start console
+sc () {
+  if [ -e script/rails ]; then
+    script/rails server $@
+  else
+    bin/rails c
+  fi
+}
+
+
 alias tl='tail -f log/*.log'
+
+alias bguard='bundle exec guard'

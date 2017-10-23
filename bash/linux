@@ -1,5 +1,12 @@
 if [ "$OS" = "linux" ] ; then
-    alias sys_upgrade='sudo apt-get update && sudo apt-get upgrade -y'
+    alias sys_update='sudo apt-get update && sudo apt-get upgrade -y'
+    alias ubuntu_version='cat /etc/lsb-release'
+
+    #anleitung für ubuntu colors hier #=> http://wiki.ubuntuusers.de/dircolors
+    #dircolors -p > $HOME/.dircolors
+    #eval `dircolors -b $HOME/.dircolors`
+
+    export EDITOR="vi"
 
     if [ -f /etc/bash_completion ]; then
         . /etc/bash_completion

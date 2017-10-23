@@ -54,4 +54,6 @@ if [ "$OS" = "darwin" ] ; then
   ln -nfsv "$DOTFILE/config_files/Brewfile" $HOME/Brewfile
 fi
 
+touch $HOME/.bashrc_local
+
 echo "finish"

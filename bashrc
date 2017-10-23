@@ -30,7 +30,6 @@ do
    source $f
 done
 
-
 #PATH
 if [ -d $HOME/bin ]; then
  PATH="$PATH:$HOME/bin"
@@ -46,6 +45,10 @@ fi
 
 if [ -d $DOTFILE/bin ]; then
  PATH="$PATH:$DOTFILE/bin"
+fi
+
+if [ -d $DOTFILE/scripts ]; then
+ PATH="$PATH:$DOTFILE/scripts"
 fi
 
 #shared scripts

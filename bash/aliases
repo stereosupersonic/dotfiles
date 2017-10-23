@@ -4,9 +4,11 @@
 alias rld="source $HOME/.bashrc"
 alias dev="cd $HOME/entwicklung/"
 alias ent="cd $HOME/entwicklung/"
+alias dotfiles="cd $DOTFILESPATH"
 
 alias platform="echo $PLATFORM"
 
+alias e='$EDITOR .'
 #######################################################################
 #history
 ############################################################################

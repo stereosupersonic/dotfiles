@@ -1,0 +1,24 @@
+PROJECT=radiologger
+PROJECT_PATH='~/entwicklung/projects/radio-logger'
+
+tmux has-session -t $PROJECT
+if [ $? != 0 ]
+then
+  tmux new-session -s $PROJECT -n editor -d
+  tmux send-keys -t $PROJECT "cd $PROJECT_PATH" C-m
+  tmux send-keys -t $PROJECT 'vim .' C-m
+  tmux split-window -v -t $PROJECT
+  tmux select-layout -t $PROJECT main-horizontal
+  tmux send-keys -t $PROJECT:1.2 "cd $PROJECT_PATH" C-m
+
+  tmux new-window -n console -t radiologger
+  tmux send-keys -t $PROJECT:2 "cd $PROJECT_PATH" C-m
+  tmux send-keys -t $PROJECT:2 "bin/rails c" C-m
+
+  tmux new-window -n logs -t radiologger
+  tmux send-keys -t $PROJECT:3 "cd $PROJECT_PATH" C-m
+  tmux send-keys -t $PROJECT:3 "tail -F log/*.log" C-m
+
+  tmux select-window -t $PROJECT:1
+fi
+tmux attach -t $PROJECT
