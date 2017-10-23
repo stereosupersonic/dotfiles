@@ -3,6 +3,10 @@
 # === EDITOR ===
 Pry.editor = 'atom'
 
+# === History ===
+Pry.config.history.file = File.expand_path('~/.history/ruby')
+
+# == Pry-Nav - Using pry as a debugger ==
 if defined?(PryDebugger)
   Pry.commands.alias_command 'c', 'continue' #Continue program execution and end the Pry session
   Pry.commands.alias_command 's', 'step'  # Step execution into the next line or method
