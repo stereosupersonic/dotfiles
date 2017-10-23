@@ -12,9 +12,11 @@ tap "homebrew/services"
 #  Commandline                 #
 ################################
 brew "coreutils"
+brew "bash"
 brew "archey" # shows system info with apple logo
 brew "bash"
-brew "bash-completion"
+brew "bash-completion2"
+brew "findutils" # Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed.
 brew "git"
 brew "grep"
 brew "htop"

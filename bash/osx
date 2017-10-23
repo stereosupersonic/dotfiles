@@ -38,6 +38,9 @@ if [ "$OS" = "darwin" ] ; then
 
   alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew cask cleanup; brew doctor'
 
+  # Recursively delete `.DS_Store` files
+  alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
+  alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
 #this is only for osx mavericks
   if [[ -s /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh ]]; then
     source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh

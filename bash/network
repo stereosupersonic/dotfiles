@@ -1,6 +1,10 @@
 #######################################################################
 #network
 ############################################################################
+# IP addresses
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ipconfig getifaddr en0"
+
 alias last3='last -n 3'
 alias open_intern_pro="lsof -i"
 alias live_tcp='sudo tcpdump -i en0 -n -s 0 -w - | grep -a -o -E "Host\: .*|GET \/.*"'
