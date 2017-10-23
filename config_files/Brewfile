@@ -23,7 +23,7 @@ brew "jq"  # JSON formatter
 brew "mas"  # commandline installation of appstore apps
 brew "mtr"
 brew "nmap"
-brew "pip"
+brew "python" # also adds pip
 brew "pv"
 brew "tmux"
 brew "tree"
@@ -58,3 +58,10 @@ cask "github-desktop"
 #  AppStore Apps               #
 ################################
 mas "Slack", id: 803453959
+
+
+###############################
+# python                      #
+###############################
+
+# pip "speedtest-cli"
