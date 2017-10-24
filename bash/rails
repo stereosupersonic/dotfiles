@@ -3,7 +3,6 @@
 #######################################################################
 alias migrate="bundle exec rake db:migrate db:test:prepare"
 
-
 # start local server
 ss () {
   if [ -e script/rails ]; then
@@ -22,7 +21,8 @@ sc () {
   fi
 }
 
-
 alias tl='tail -f log/*.log'
 
+# bundler
 alias bguard='bundle exec guard'
+alias be='bundle exec'
