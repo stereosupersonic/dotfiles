@@ -4,11 +4,9 @@
 :set paste                        " Pasting From GUI
 
 set nocompatible                  " Must come first because it changes other options.
-call pathogen#infect()
+
 syntax enable                     " Turn on syntax highlighting.
 filetype plugin indent on         " Turn on file type detection.
-
-runtime macros/matchit.vim        " Load the matchit plugin.
 
 set showcmd                       " Display incomplete commands.
 set showmode                      " Display the mode you're in.
@@ -46,22 +44,18 @@ set shiftwidth=2                 " And again, related.
 set expandtab                    " Use spaces instead of tabs
 
 set laststatus=2                  " Show the status line all the time
+
+" split navigation
+
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+
 " Useful status information at bottom of screen
 set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
 
-" Or use vividchalk
-colorscheme vividchalk "oder tm oder vividchalk
-
-" Tab mappings.
-map <leader>tt :tabnew<cr>
-map <leader>te :tabedit
-map <leader>tc :tabclose<cr>
-map <leader>to :tabonly<cr>
-map <leader>tn :tabnext<cr>
-map <leader>tp :tabprevious<cr>
-map <leader>tf :tabfirst<cr>
-map <leader>tl :tablast<cr>
-map <leader>tm :tabmove
 
 " Uncomment to use Jamis Buck's file opening plugin
 "map <Leader>t :FuzzyFinderTextMate<Enter>
@@ -77,6 +71,3 @@ map <leader>tm :tabmove
 " autocmd FileType ruby set foldmethod=syntax
 
 " autocmd FileType css  setlocal foldmethod=indent shiftwidth=2 tabstop=2
-
-let mapleader = "\<Space>"
-set runtimepath^=~/.vim/bundle/ctrlp.vim

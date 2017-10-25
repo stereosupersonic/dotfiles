@@ -46,7 +46,11 @@ mv $HOME/.vimrc $HOME/.vimrc.bak
 mv $HOME/.gvimrc $HOME/.gvimrc.bak
 ln -nfsv "$DOTFILE/vim/vimrc" $HOME/.vimrc
 ln -nfsv "$DOTFILE/vim/gvimrc" $HOME/.gvimrc
-ln -nfsv "$DOTFILE/vim/dot_vim" $HOME/.vim
+#ln -nfsv "$DOTFILE/vim/dot_vim" $HOME/.vim
+
+# git rubocop
+mv $HOME/.rubocop.yml $HOME/.rubocop.bak
+ln -nfsv "$DOTFILE/config_files/rubocop.yml" $HOME/.rubocop.yml
 
 # Brewfile for homebrew and cask
 if [ "$OS" = "darwin" ] ; then
