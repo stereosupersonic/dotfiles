@@ -1,0 +1,4 @@
+#kubernetes stuff
+kshell() {
+  kubectl exec -it "$@" -- env TERM=$TERM COLUMNS=$COLUMNS LINES=$LINES bash -il
+}

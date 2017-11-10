@@ -8,14 +8,14 @@ ss () {
   if [ -e script/rails ]; then
     script/rails server $@
   else
-    bin/rails s
+    bin/rails s $@
   fi
 }
 
 # start console
 sc () {
   if [ -e script/rails ]; then
-    script/rails server $@
+    script/rails c
   else
     bin/rails c
   fi
