@@ -26,4 +26,7 @@ alias tl='tail -f log/*.log'
 # bundler
 alias bguard='bundle exec guard'
 alias be='bundle exec'
+alias bo='bundle open'
+alias bu='bundle update'
+alias bspec='bundle rspec'
 alias r='bundle exec rake'
