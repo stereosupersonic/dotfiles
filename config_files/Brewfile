@@ -1,6 +1,9 @@
 # install with
 # brew bundle install
 
+# create a Brewfile from the current enviroment
+# brew bundle dump
+
 cask_args appdir: "/Applications"
 
 tap "caskroom/cask"
