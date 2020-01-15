@@ -24,7 +24,6 @@ brew "findutils" # Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-pr
 brew "git"
 brew "grep"
 brew "htop"
-brew "oniguruma" # regex http://brewformulas.org/oniguruma
 brew "jq"  # JSON formatter
 brew "mas"  # commandline installation of appstore apps
 brew "mtr"
@@ -39,6 +38,7 @@ brew "vim"
 brew "watch"
 brew "heroku/brew/heroku"
 brew "jesseduffield/lazydocker/lazydocker"
+brew "ncdu" # Show disk usage 
 # ruby
 brew "rbenv"
 brew "ruby-build"
