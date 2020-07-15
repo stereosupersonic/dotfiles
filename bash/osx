@@ -4,15 +4,16 @@
 #######################################################################
 
 if [ "$OS" = "darwin" ] ; then
-  #######################################################################
-  #  Editor #
-  #######################################################################
-  export EDITOR="atom"
+  alias remoteip="dig +short myip.opendns.com @resolver1.opendns.com"
+  alias localip="ipconfig getifaddr en0"
+  export LOCALIP=$(localip)
+  export REMOTEIP=$(remoteip)
+  
+  export EDITOR="code"
 
   export LANG=de_DE.UTF-8
   export LC_ALL=de_DE.UTF-8
-  export LOCALIP=$(localip)
-  export REMOTEIP=$(remoteip)
+
 
   PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
 
