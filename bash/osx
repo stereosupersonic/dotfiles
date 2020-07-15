@@ -11,6 +11,8 @@ if [ "$OS" = "darwin" ] ; then
 
   export LANG=de_DE.UTF-8
   export LC_ALL=de_DE.UTF-8
+  export LOCALIP=$(localip)
+  export REMOTEIP=$(remoteip)
 
   PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
 
@@ -61,7 +63,7 @@ if [ "$OS" = "darwin" ] ; then
     GIT_PS1_SHOWDIRTYSTATE=true
     GIT_PS1_SHOWUNTRACKEDFILES=true
   	GIT_PS1_SHOWSTASHSTATE=true
-    PS1='\e[1;32m[\u:\e[1;33m\w\e[1;32m]:\[\e[1;31m\]$(__git_ps1)\033[00m\] \n→ '
+    PS1='\e[1;32m[\u@$LOCALIP:\e[1;33m\w\e[1;32m]:\[\e[1;31m\]$(__git_ps1)\033[00m\] \n→ '
   fi
 
 fi

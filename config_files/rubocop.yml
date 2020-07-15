@@ -100,7 +100,7 @@ Naming/VariableNumber:
   Enabled: false
 
 # Lint
-Lint/EndAlignment:
+Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
 
 Lint/AmbiguousBlockAssociation:

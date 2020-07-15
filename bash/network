@@ -3,6 +3,7 @@
 ############################################################################
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias remoteip=ip
 alias localip="ipconfig getifaddr en0"
 
 alias last3='last -n 3'
