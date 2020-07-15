@@ -1,13 +1,17 @@
 # install with
 # brew bundle install
 
+# create a Brewfile from the current enviroment
+# brew bundle dump
+
 cask_args appdir: "/Applications"
 
 tap "caskroom/cask"
 tap "homebrew/bundle"
 tap "homebrew/core"
 tap "homebrew/services"
-
+tap "homebrew/bundle"
+tap "jesseduffield/lazydocker/lazydocker"
 ################################
 #  Commandline                 #
 ################################
@@ -20,17 +24,21 @@ brew "findutils" # Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-pr
 brew "git"
 brew "grep"
 brew "htop"
-brew "oniguruma" # regex http://brewformulas.org/oniguruma
 brew "jq"  # JSON formatter
 brew "mas"  # commandline installation of appstore apps
 brew "mtr"
 brew "nmap"
+brew "netcat"
 brew "python" # also adds pip
 brew "pv"
 brew "tmux"
+brew "tldr"
 brew "tree"
 brew "vim"
 brew "watch"
+brew "heroku/brew/heroku"
+brew "jesseduffield/lazydocker/lazydocker"
+brew "ncdu" # Show disk usage 
 # ruby
 brew "rbenv"
 brew "ruby-build"
@@ -45,7 +53,7 @@ cask "bartender" # organize your Mac OS X menu bar apps
 cask "caffeine"
 cask "dropbox"
 cask "flux"   # it makes the color of your computer's display adapt to the time of day
-cask "libreoffice"
+#cask "libreoffice"
 cask "iconping" # check if online
 cask "macdown" # markdown editor
 cask "notational-velocity"
@@ -55,6 +63,16 @@ cask "google-chrome"
 cask "firefox"
 cask "iterm2"
 cask "github-desktop"
+cask "bitbar"
+cask "firefox"
+cask "font-fira-code"
+cask "github"
+cask "google-chrome"
+cask "iterm2"
+cask "sequel-pro"
+cask "skitch"
+cask "spectacle"
+cask "tunnelblick"
 
 ################################
 #  AppStore Apps               #

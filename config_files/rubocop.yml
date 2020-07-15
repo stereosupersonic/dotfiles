@@ -1,108 +1,112 @@
 # basic
-AllCops:
-  Exclude:
-    - "db/schema.rb"
-    - "bin/*"
-    - "vendor/**/*"
-  TargetRubyVersion: 2.4
-
-# Rails
-Rails:
-  Enabled: true
-
-Rails/Delegate:
-  Enabled: false
-
-Rails/Output:
-  Enabled: false
-
-Rails/SkipsModelValidations:
-  Enabled: false
-
-Documentation:
-  Enabled: false
-
-# Style
-Style/StringLiterals:
-  EnforcedStyle: double_quotes
-
-Style/ClassAndModuleChildren:
-  EnforcedStyle: compact
-  Exclude:
-    - "config/application.rb"
-    - "app/channels/application_cable/channel.rb"
-    - "app/channels/application_cable/connection.rb"
-
-Style/SignalException:
-  EnforcedStyle: only_raise
-
-Style/GuardClause:
-  Enabled: false
-
-Style/MutableConstant:
-  Enabled: false
-
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
-Style/FormatStringToken:
-  Enabled: false
-
-# Layout
-Layout/ExtraSpacing:
-  AllowForAlignment: true
-
-Layout/SpaceInsideHashLiteralBraces:
-  EnforcedStyle: no_space
-
-Layout/CaseIndentation:
-  Enabled: false
-
-Layout/MultilineOperationIndentation:
-  EnforcedStyle: indented
-
-Layout/AlignParameters:
-  EnforcedStyle: with_fixed_indentation
-
-Layout/IndentArray:
-  Enabled: false
-
-Layout/MultilineMethodCallIndentation:
-  Enabled: false
-
-# Metrics
-Metrics/LineLength:
-  Max: 120
-
-Metrics/AbcSize:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
-
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/ModuleLength:
-  Enabled: false
-
-Metrics/BlockLength:
-  Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Enabled: false
-
-Metrics/PerceivedComplexity:
-  Enabled: false
-
-# Naming
-Naming/VariableNumber:
-  Enabled: false
-
-# Lint
-Layout/EndAlignment:
-  EnforcedStyleAlignWith: variable
-
-Lint/AmbiguousBlockAssociation:
-  Exclude:
-    - "spec/**/*"
+#AllCops:
+#  Exclude:
+#    - "db/schema.rb"
+#    - "bin/*"
+#    - "vendor/**/*"
+#  TargetRubyVersion: 2.4
+#
+## Rails
+#Rails:
+#  Enabled: true
+#
+#Rails/Delegate:
+#  Enabled: false
+#
+#Rails/Output:
+#  Enabled: false
+#
+#Rails/SkipsModelValidations:
+#  Enabled: false
+#
+#Documentation:
+#  Enabled: false
+#
+## Style
+#Style/StringLiterals:
+#  #Enabled: false
+#  EnforcedStyle: double_quotes
+#
+##Style/HashSyntax:
+##  Enabled: false
+#
+#Style/ClassAndModuleChildren:
+#  EnforcedStyle: compact
+#  Exclude:
+#    - "config/application.rb"
+#    - "app/channels/application_cable/channel.rb"
+#    - "app/channels/application_cable/connection.rb"
+#
+#Style/SignalException:
+#  EnforcedStyle: only_raise
+#
+#Style/GuardClause:
+#  Enabled: false
+#
+#Style/MutableConstant:
+#  Enabled: false
+#
+#Style/FrozenStringLiteralComment:
+#  Enabled: false
+#
+#Style/FormatStringToken:
+#  Enabled: false
+#
+## Layout
+#Layout/ExtraSpacing:
+#  AllowForAlignment: true
+#
+#Layout/SpaceInsideHashLiteralBraces:
+#  EnforcedStyle: no_space
+#
+#Layout/CaseIndentation:
+#  Enabled: false
+#
+#Layout/MultilineOperationIndentation:
+#  EnforcedStyle: indented
+#
+#Layout/AlignParameters:
+#  EnforcedStyle: with_fixed_indentation
+#
+#Layout/IndentArray:
+#  Enabled: false
+#
+#Layout/MultilineMethodCallIndentation:
+#  Enabled: false
+#
+## Metrics
+#Metrics/LineLength:
+#  Max: 120
+#
+#Metrics/AbcSize:
+#  Enabled: false
+#
+#Metrics/MethodLength:
+#  Enabled: false
+#
+#Metrics/ClassLength:
+#  Enabled: false
+#
+#Metrics/ModuleLength:
+#  Enabled: false
+#
+#Metrics/BlockLength:
+#  Enabled: false
+#
+#Metrics/CyclomaticComplexity:
+#  Enabled: false
+#
+#Metrics/PerceivedComplexity:
+#  Enabled: false
+#
+## Naming
+#Naming/VariableNumber:
+#  Enabled: false
+#
+## Lint
+#Lint/EndAlignment:
+#  EnforcedStyleAlignWith: variable
+#
+#Lint/AmbiguousBlockAssociation:
+#  Exclude:
+#    - "spec/**/*"
