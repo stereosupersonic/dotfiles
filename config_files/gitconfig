@@ -1,6 +1,6 @@
 [user]
-	name = Michael Deimel
-	email = michael@deimel.de
+	name = michael
+	email = m.deimel@miceportal.com
 
 [github]
   user = $GITHUB_USER
@@ -11,7 +11,7 @@
   status = auto
   branch = auto
   interactive = auto
-  ui = true
+	ui = true
   pager = true
 
 [color "branch"]
@@ -38,6 +38,8 @@
 	excludesfile = /Users/michaeldeimel/.gitignore_global
 
 [alias]
+  p = pull origin
+  la = "!git config -l | grep alias | cut -c 7-"
   b = branch -v
   r = remote -v
   t = tag -l
@@ -93,9 +95,9 @@
   trustExitCode = true
   cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
 [merge]
-  tool = bcomp
+	tool = bcomp
 [mergetool]
   prompt = false
 [mergetool "bcomp"]
   trustExitCode = true
-  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+	cmd = /usr/local/bin/bcomp $LOCAL $REMOTE $BASE $MERGED
