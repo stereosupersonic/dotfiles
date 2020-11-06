@@ -6,12 +6,12 @@
 
 cask_args appdir: "/Applications"
 
-tap "caskroom/cask"
+tap "homebrew/cask"
 tap "homebrew/bundle"
 tap "homebrew/core"
 tap "homebrew/services"
 tap "homebrew/bundle"
-tap "jesseduffield/lazydocker/lazydocker"
+# tap "jesseduffield/lazydocker/lazydocker"
 ################################
 #  Commandline                 #
 ################################
