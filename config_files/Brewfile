@@ -69,16 +69,15 @@ cask "font-fira-code"
 cask "github"
 cask "google-chrome"
 cask "iterm2"
-cask "sequel-pro"
+cask "sequel-pro" # mysql client gui
 cask "skitch"
-cask "spectacle"
-cask "tunnelblick"
+cask "spectacle" # Move and resize windows https://www.spectacleapp.com/
+cask "tunnelblick" # VPN Tunnel
 
 ################################
 #  AppStore Apps               #
 ################################
 mas "Slack", id: 803453959
-
 
 ###############################
 # python                      #
