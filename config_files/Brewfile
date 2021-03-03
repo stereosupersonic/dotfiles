@@ -12,7 +12,8 @@ tap "homebrew/core"
 tap "homebrew/services"
 tap "homebrew/bundle"
 #  Cask-Update tool that works with brew cask to update all of your Mac apps.
-tap "buo/cask-upgrade" 
+tap "buo/cask-upgrade"
+tap "homebrew/cask-fonts"
 ################################
 #  Commandline                 #
 ################################
@@ -63,7 +64,7 @@ cask "vlc"
 cask "google-chrome"
 cask "firefox"
 cask "iterm2"
-cask "github-desktop"
+cask "github"
 cask "bitbar"
 cask "firefox"
 cask "font-fira-code"
