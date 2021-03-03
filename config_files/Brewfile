@@ -11,7 +11,6 @@ tap "homebrew/bundle"
 tap "homebrew/core"
 tap "homebrew/services"
 tap "homebrew/bundle"
-# tap "jesseduffield/lazydocker/lazydocker"
 ################################
 #  Commandline                 #
 ################################
@@ -37,12 +36,12 @@ brew "tree"
 brew "vim"
 brew "watch"
 brew "heroku/brew/heroku"
-brew "jesseduffield/lazydocker/lazydocker"
 brew "ncdu" # Show disk usage 
 # ruby
 brew "rbenv"
 brew "ruby-build"
-
+# docker 
+brew "ctop" # https://github.com/bcicen/ctop
 ################################
 #  Desktop Apps                #
 ################################
