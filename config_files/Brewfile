@@ -41,9 +41,15 @@ brew "vim"
 brew "watch"
 brew "heroku/brew/heroku"
 brew "ncdu" # Show disk usage 
+### development
+# js runtime to compile rails assets
+brew "nodejs"
 # ruby
 brew "rbenv"
 brew "ruby-build"
+# database libs 
+brew "mysql"
+brew "postgres"
 # docker 
 brew "ctop" # https://github.com/bcicen/ctop
 ################################
