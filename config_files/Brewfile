@@ -65,7 +65,7 @@ cask "flux"   # it makes the color of your computer's display adapt to the time 
 #cask "libreoffice"
 cask "iconping" # check if online
 cask "macdown" # markdown editor
-cask "notational-velocity"
+cask "nvalt" # notational-velocity
 cask "spotify"
 cask "vlc"
 cask "google-chrome"
