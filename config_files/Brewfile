@@ -82,6 +82,7 @@ cask "sequel-pro" # mysql client gui
 cask "skitch"
 cask "spectacle" # Move and resize windows https://www.spectacleapp.com/
 cask "tunnelblick" # VPN Tunnel
+cask "virtualbox" # VM's 
 
 ################################
 #  AppStore Apps               #
