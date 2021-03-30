@@ -83,7 +83,7 @@ cask "skitch"
 cask "spectacle" # Move and resize windows https://www.spectacleapp.com/
 cask "tunnelblick" # VPN Tunnel
 cask "virtualbox" # VM's 
-
+cask "balenaetcher" # Flash OS images to SD cards & USB drives, safely and easily. https://www.balena.io/etcher/
 ################################
 #  AppStore Apps               #
 ################################
