@@ -1,54 +1,37 @@
-# basic
-#AllCops:
-#  Exclude:
+AllCops:
+  Exclude:
+    - "db/schema.rb"
 #    - "db/schema.rb"
 #    - "bin/*"
 #    - "vendor/**/*"
 #  TargetRubyVersion: 2.4
-#
-## Rails
-#Rails:
-#  Enabled: true
-#
-#Rails/Delegate:
-#  Enabled: false
-#
-#Rails/Output:
-#  Enabled: false
-#
-#Rails/SkipsModelValidations:
-#  Enabled: false
-#
-#Documentation:
-#  Enabled: false
-#
-## Style
-#Style/StringLiterals:
-#  #Enabled: false
-#  EnforcedStyle: double_quotes
-#
-##Style/HashSyntax:
-##  Enabled: false
-#
-#Style/ClassAndModuleChildren:
-#  EnforcedStyle: compact
-#  Exclude:
-#    - "config/application.rb"
-#    - "app/channels/application_cable/channel.rb"
-#    - "app/channels/application_cable/connection.rb"
-#
-#Style/SignalException:
-#  EnforcedStyle: only_raise
-#
-#Style/GuardClause:
-#  Enabled: false
-#
-#Style/MutableConstant:
-#  Enabled: false
-#
-#Style/FrozenStringLiteralComment:
-#  Enabled: false
-#
+
+Style/MutableConstant:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Layout/LineLength:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Layout/HashAlignment:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+
+# Group together all attr_accessor attributes.
+Style/AccessorGrouping:
+  Enabled: false
+
+#  Favor modifier if usage when having a single-line body. Another good alternative is the usage of control flow &&/||.
+Style/IfUnlessModifier:
+  Enabled: false
 #Style/FormatStringToken:
 #  Enabled: false
 #
