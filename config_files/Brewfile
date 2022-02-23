@@ -11,7 +11,8 @@ tap "homebrew/bundle"
 tap "homebrew/core"
 tap "homebrew/services"
 tap "homebrew/bundle"
-#  Cask-Update tool that works with brew cask to update all of your Mac apps.
+# Cask-Update tool that works with brew cask to update all of your Mac apps.
+# brew cu
 tap "buo/cask-upgrade"
 tap "homebrew/cask-fonts"
 ################################
@@ -40,9 +41,15 @@ brew "vim"
 brew "watch"
 brew "heroku/brew/heroku"
 brew "ncdu" # Show disk usage 
+### development
+# js runtime to compile rails assets
+brew "nodejs"
 # ruby
 brew "rbenv"
 brew "ruby-build"
+# database libs 
+brew "mysql"
+brew "postgres"
 # docker 
 brew "ctop" # https://github.com/bcicen/ctop
 ################################
@@ -58,7 +65,7 @@ cask "flux"   # it makes the color of your computer's display adapt to the time 
 #cask "libreoffice"
 cask "iconping" # check if online
 cask "macdown" # markdown editor
-cask "notational-velocity"
+cask "nvalt" # notational-velocity
 cask "spotify"
 cask "vlc"
 cask "google-chrome"
@@ -75,7 +82,8 @@ cask "sequel-pro" # mysql client gui
 cask "skitch"
 cask "spectacle" # Move and resize windows https://www.spectacleapp.com/
 cask "tunnelblick" # VPN Tunnel
-
+cask "virtualbox" # VM's 
+cask "balenaetcher" # Flash OS images to SD cards & USB drives, safely and easily. https://www.balena.io/etcher/
 ################################
 #  AppStore Apps               #
 ################################
