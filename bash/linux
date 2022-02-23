@@ -3,15 +3,12 @@ if [ "$OS" = "linux" ] ; then
   # alias localip='ifconfig eth0 | grep -w "inet" | tr -s " " | cut -f3 -d" "'
   alias localip="hostname -I | cut -d' ' -f1"
 
-  export LOCALIP=$(localip)
-  export REMOTEIP=$(remoteip)
-
   export EDITOR="vim"
 
   export LANG=de_DE.UTF-8
   export LC_ALL=de_DE.UTF-8
-  export LOCALIP=$(localip)
-  export REMOTEIP=$(remoteip)
+  export LOCALIP=$(hostname -I | cut -d' ' -f1)
+  #export REMOTEIP=$(remoteip)
 
   alias sys_update='sudo apt-get update && sudo apt-get upgrade -y'
   alias ubuntu_version='cat /etc/lsb-release'
