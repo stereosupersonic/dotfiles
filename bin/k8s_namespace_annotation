@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/k8s_helper'
+
+@namespace = ARGV[0]
+
+checking_namespace File.basename($0)
+
+cmd = "KUBECONFIG=#{kubeconfig} kubectl get namespace #{@namespace} -o=jsonpath='{.metadata}'"
+
+puts `#{cmd}`.strip

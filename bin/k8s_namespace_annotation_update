@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/k8s_helper'
+
+@namespace = ARGV[0]
+value = ARGV[1]
+checking_namespace File.basename($0)
+
+cmd = "KUBECONFIG=#{kubeconfig} kubectl annotate --overwrite ns #{@namespace} e2e-test-state='test-ann-3'"
+
+puts `#{cmd}`.strip

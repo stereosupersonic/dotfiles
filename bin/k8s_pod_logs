@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/k8s_helper'
+
+@pod = ARGV[1]
+@namespace = ARGV[0] || ENV["K8S_NAMESPACE"]
+
+if @namespace.nil? || @pod.nil?
+ puts "Usage: k8s_pod_logs <namespace> <pod>"
+ exit 1
+end
+
+run_kubectl "logs #{@pod}"

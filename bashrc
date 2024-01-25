@@ -72,3 +72,7 @@ if [ -f $HOME/.bashrc_local ]; then
 else
   echo "not exits ' $HOME/.bashrc_local'"
 fi
+
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+export PATH="/usr/local/opt/node@18/bin:$PATH"

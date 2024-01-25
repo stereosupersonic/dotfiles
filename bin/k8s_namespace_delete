@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/k8s_helper'
+
+@namespace = ARGV[0]
+
+checking_namespace File.basename($0)
+
+
+cmd = "KUBECONFIG=#{kubeconfig} kubectl delete namespace #{@namespace}"
+
+puts `#{cmd}`.strip

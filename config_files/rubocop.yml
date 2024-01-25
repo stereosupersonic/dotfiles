@@ -5,6 +5,12 @@ AllCops:
 #    - "bin/*"
 #    - "vendor/**/*"
 #  TargetRubyVersion: 2.4
+  ExtraDetails: true
+  NewCops: enable
+
+require:
+  - rubocop-performance
+  - rubocop-rails
 
 Style/MutableConstant:
   Enabled: false
@@ -27,6 +33,9 @@ Layout/HashAlignment:
 
 # Group together all attr_accessor attributes.
 Style/AccessorGrouping:
+  Enabled: false
+
+Style/Documentation:
   Enabled: false
 
 #  Favor modifier if usage when having a single-line body. Another good alternative is the usage of control flow &&/||.

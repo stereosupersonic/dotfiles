@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/k8s_helper'
+
+@namespace = ENV["K8S_NAMESPACE"] || ARGV[0]
+
+@pod = ARGV.size == 1 ? ARGV[0] : ARGV[1]
+if @namespace.nil? || @pod.nil?
+ puts "Usage: k8s_console <namespace> <pod>"
+ exit 1
+end
+
+podname = `KUBECONFIG=#{kubeconfig} kubectl get pods -n #{k8s_namespace} | grep Running | grep #{@pod} | head -1 | awk '{print $1}'`.strip
+# export PATH="/app/bin:$PATH"
+cmd = "KUBECONFIG=#{kubeconfig} kubectl #{cmd} -n #{k8s_namespace} exec -it #{podname} -- env TERM=$TERM COLUMNS=$COLUMNS LINES=$LINES /bin/bash -il"
+puts cmd
+system cmd.strip

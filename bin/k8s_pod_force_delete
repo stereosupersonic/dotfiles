@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+require_relative '../lib/k8s_helper'
+
+@namespace = ENV["K8S_NAMESPACE"] || ARGV[0]
+@pod = ARGV.size == 1 ? ARGV[0] : ARGV[1]
+if @namespace.nil? || @pod.nil?
+ puts "Usage: k8s_pod_force_delete <namespace> <pod>"
+ exit 1
+end
+
+cmd = "KUBECONFIG=#{kubeconfig} kubectl delete pod #{@pod} --force --grace-period=0 -n #{@namespace} "
+
+puts `#{cmd}`.strip

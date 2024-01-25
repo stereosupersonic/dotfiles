@@ -50,7 +50,6 @@
   df = diff
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
   who = shortlog -n -s --no-merges
-  revertall = checkout .
   unstage = reset HEAD
   uncommit = reset --soft HEAD^
   up = !git fetch origin && git rebase origin/master
@@ -58,7 +57,7 @@
   cleanup = !git remote prune origin && git gc && git clean -dfx && git stash clear
   nb = !git push origin master:refs/heads/$1 && git fetch origin && git branch --track $1 origin/$1 && git checkout $1
   news = log -p HEAD@{1}..HEAD@{0} #http://chneukirchen.org/blog/archive/2013/01/a-grab-bag-of-git-tricks.html
-
+  gone = ! "git fetch -p && git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '$2 == \"[gone]\" {print $1}' | xargs -r git branch -D"
 
 [gc]
   auto=1 #Automatic cleanup and compression of the repo

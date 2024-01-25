@@ -16,9 +16,12 @@ alias e='$EDITOR .'
 alias h='history' # shortcut for history
 alias h?='history | grep -i $1'
 
+# Get week number
+alias week='date +%V'
+
 export HISTFILE=$HOME/.bash_history
-export HISTFILESIZE=20000
-export HISTSIZE=10000
+export HISTFILESIZE=200000
+export HISTSIZE=100000
 # Combine multiline commands into one in historty
 shopt -s histappend
 export HISTIGNORE='&:ls:lr:ll:[bf]g:pwd:exit:..:...:lla:cat'

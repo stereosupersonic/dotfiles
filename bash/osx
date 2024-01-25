@@ -2,14 +2,18 @@
 #######################################################################
 # osx only #
 #######################################################################
+# https://github.com/mathiasbynens/dotfiles/blob/main/.macos
 
 if [ "$OS" = "darwin" ] ; then
   alias remoteip="dig +short myip.opendns.com @resolver1.opendns.com"
   alias localip="ipconfig getifaddr en0"
+  alias myip="curl https://ipinfo.io/json" # or /ip for plain-text ip
+  alias speedtest="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -"
+
   export LOCALIP=$(localip)
   export REMOTEIP=$(remoteip)
-  
-  export EDITOR="code"
+
+  export EDITOR="/usr/local/bin/code-insiders"
 
   export LANG=de_DE.UTF-8
   export LC_ALL=de_DE.UTF-8
@@ -63,11 +67,11 @@ if [ "$OS" = "darwin" ] ; then
     # show branch commandline
     GIT_PS1_SHOWDIRTYSTATE=true
     GIT_PS1_SHOWUNTRACKEDFILES=true
-  	GIT_PS1_SHOWSTASHSTATE=true
+    GIT_PS1_SHOWSTASHSTATE=true
     PS1='\e[1;32m[\u@$LOCALIP:\e[1;33m\w\e[1;32m]:\[\e[1;31m\]$(__git_ps1)\033[00m\] \n→ '
   fi
 
-  # iTerm 
+  # iTerm
   ## set the titel of a tab
   export PROMPT_COMMAND='echo -ne "\033]0;${PWD##*/}\007"'
 fi
