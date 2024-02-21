@@ -96,7 +96,8 @@ setup_homebrew() {
 
 setup_shell() {
     title "Configuring shell"
-    # TODO setuo bash
+    # Default login shell to bash.
+    chsh -s /bin/bash
 }
 
 setup_macos() {
@@ -152,7 +153,7 @@ setup_macos() {
 
         for app in Safari Finder Dock Mail SystemUIServer; do killall "$app" >/dev/null 2>&1; done
 
-        sudo softwareupdate --background-critical
+        softwareupdate --background-critical
     else
         warning "macOS not detected. Skipping."
     fi

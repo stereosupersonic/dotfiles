@@ -16,7 +16,12 @@ tap "homebrew/cask-fonts"
 ################################
 #  Commandline                 #
 ################################
+brew "openssl"
+brew "libyaml" # should come after openssl
 brew "ffmpeg"
+
+# GitHub
+brew "gh"
 brew "hub"
 brew "coreutils"
 brew "bash"
@@ -51,9 +56,10 @@ brew "nodejs"
 # ruby
 brew "rbenv"
 brew "ruby-build"
+
 # database libs
-#brew "mysql"
-brew "postgres"
+# brew "mysql"
+# brew "postgres"
 
 # docker
 brew "ctop" # https://github.com/bcicen/ctop
