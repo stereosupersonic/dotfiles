@@ -72,7 +72,7 @@ cask "visual-studio-code"
 cask "bitbar" # Put anything in your Mac OS X menu bar
 cask "alfred"
 cask "bartender" # organize your Mac OS X menu bar apps
-cask "caffeine"
+# cask "caffeine" use Amphetamine instead
 cask "cyberduck"
 cask "dropbox"
 cask "flux"   # it makes the color of your computer's display adapt to the time of day
@@ -99,6 +99,12 @@ cask "tunnelblick" # VPN Tunnel
 cask "virtualbox" # VM's
 cask "balenaetcher" # Flash OS images to SD cards & USB drives, safely and easily. https://www.balena.io/etcher/
 cask "dbeaver-community" # SQL
+
+# The Unarchiver
+cask "the-unarchiver"
+cask "zoom"
+cask "istat-menus" # see lisece key
+
 ################################
 #  AppStore Apps               #
 ################################
@@ -115,7 +121,8 @@ mas "Skitch", id: 425955336
 mas "Slack", id: 8034539591
 mas "Time Out", id: 402592703
 mas "WhatsApp", id: 1147396723
-
+# Amphetamine
+mas install 937984704
 ###############################
 # python                      #
 ###############################
