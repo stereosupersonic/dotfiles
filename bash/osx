@@ -5,6 +5,8 @@
 # https://github.com/mathiasbynens/dotfiles/blob/main/.macos
 
 if [ "$OS" = "darwin" ] ; then
+
+
   alias remoteip="dig +short myip.opendns.com @resolver1.opendns.com"
   alias localip="ipconfig getifaddr en0"
   alias myip="curl https://ipinfo.io/json" # or /ip for plain-text ip
@@ -18,6 +20,7 @@ if [ "$OS" = "darwin" ] ; then
   export LANG=de_DE.UTF-8
   export LC_ALL=de_DE.UTF-8
   export BASH_SILENCE_DEPRECATION_WARNING=1
+  export HOMEBREW_PREFIX="/opt/homebrew"
   export PATH="$HOMEBREW_PREFIX/bin:$PATH"
 
   PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
