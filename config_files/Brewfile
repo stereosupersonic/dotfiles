@@ -18,6 +18,8 @@ tap "homebrew/cask-fonts"
 ################################
 brew "openssl"
 brew "libyaml" # should come after openssl
+brew "readline"
+brew "zlib"
 brew "ffmpeg"
 
 # GitHub
@@ -103,6 +105,7 @@ cask "dbeaver-community" # SQL
 cask "the-unarchiver"
 cask "zoom"
 cask "istat-menus" # see lisece key
+cask "postman" # see lisece key
 
 ################################
 #  AppStore Apps               #
