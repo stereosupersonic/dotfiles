@@ -151,6 +151,8 @@ setup_macos() {
         echo "Kill affected applications"
 
         for app in Safari Finder Dock Mail SystemUIServer; do killall "$app" >/dev/null 2>&1; done
+
+        sudo softwareupdate --background-critical
     else
         warning "macOS not detected. Skipping."
     fi
