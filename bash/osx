@@ -5,8 +5,6 @@
 # https://github.com/mathiasbynens/dotfiles/blob/main/.macos
 
 if [ "$OS" = "darwin" ] ; then
-
-
   alias remoteip="dig +short myip.opendns.com @resolver1.opendns.com"
   alias localip="ipconfig getifaddr en0"
   alias myip="curl https://ipinfo.io/json" # or /ip for plain-text ip
