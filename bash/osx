@@ -18,6 +18,7 @@ if [ "$OS" = "darwin" ] ; then
   export LANG=de_DE.UTF-8
   export LC_ALL=de_DE.UTF-8
   export BASH_SILENCE_DEPRECATION_WARNING=1
+  export PATH="$HOMEBREW_PREFIX/bin:$PATH"
 
   PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
 
