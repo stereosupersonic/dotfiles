@@ -23,7 +23,7 @@ brew "ffmpeg"
 brew "hub"
 brew "coreutils"
 brew "bash"
-brew "archey" # shows system info with apple logo
+brew "archey4" # shows system info with apple logo
 brew "bash"
 brew "bash-completion"
 brew "findutils" # Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed.
