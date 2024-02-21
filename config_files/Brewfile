@@ -103,7 +103,7 @@ cask "dbeaver-community" # SQL
 cask "the-unarchiver"
 cask "zoom"
 cask "istat-menus" # see lisece key
-
+cask "visual-studio-code-insiders"
 ################################
 #  AppStore Apps               #
 ################################
