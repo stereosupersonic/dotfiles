@@ -105,7 +105,9 @@ cask "dbeaver-community" # SQL
 cask "the-unarchiver"
 cask "zoom"
 cask "istat-menus" # see lisece key
-cask "postman" # see lisece key
+cask "postman"
+cask "tor-browser"
+cask "beyond-compare"
 
 ################################
 #  AppStore Apps               #
