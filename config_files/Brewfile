@@ -11,6 +11,7 @@ tap "homebrew/bundle"
 tap "homebrew/core"
 tap "homebrew/services"
 tap "homebrew/bundle"
+tap "heroku/brew"
 # Cask-Update tool that works with brew cask to update all of your Mac apps.
 # brew cu
 tap "buo/cask-upgrade"
@@ -18,6 +19,8 @@ tap "homebrew/cask-fonts"
 ################################
 #  Commandline                 #
 ################################
+brew "ffmpeg"
+brew "hub"
 brew "coreutils"
 brew "bash"
 brew "archey" # shows system info with apple logo
@@ -30,6 +33,7 @@ brew "htop"
 brew "jq"  # JSON formatter
 brew "mas"  # commandline installation of appstore apps
 brew "mtr"
+brew "telnet"
 brew "nmap"
 brew "netcat"
 brew "python" # also adds pip
@@ -40,18 +44,21 @@ brew "tree"
 brew "vim"
 brew "watch"
 brew "heroku/brew/heroku"
-brew "ncdu" # Show disk usage 
+brew "ncdu" # Show disk usage
 ### development
 # js runtime to compile rails assets
 brew "nodejs"
 # ruby
 brew "rbenv"
 brew "ruby-build"
-# database libs 
-brew "mysql"
+# database libs
+#brew "mysql"
 brew "postgres"
-# docker 
+
+# docker
 brew "ctop" # https://github.com/bcicen/ctop
+brew "speedtest-cli" # https://github.com/bcicen/ctop
+brew "heroku/brew/heroku"
 ################################
 #  Desktop Apps                #
 ################################
@@ -60,6 +67,7 @@ cask "bitbar" # Put anything in your Mac OS X menu bar
 cask "alfred"
 cask "bartender" # organize your Mac OS X menu bar apps
 cask "caffeine"
+cask "cyberduck"
 cask "dropbox"
 cask "flux"   # it makes the color of your computer's display adapt to the time of day
 #cask "libreoffice"
@@ -82,12 +90,25 @@ cask "sequel-pro" # mysql client gui
 cask "skitch"
 cask "spectacle" # Move and resize windows https://www.spectacleapp.com/
 cask "tunnelblick" # VPN Tunnel
-cask "virtualbox" # VM's 
+cask "virtualbox" # VM's
 cask "balenaetcher" # Flash OS images to SD cards & USB drives, safely and easily. https://www.balena.io/etcher/
+cask "dbeaver-community" # SQL
 ################################
 #  AppStore Apps               #
 ################################
 mas "Slack", id: 803453959
+mas "DaisyDisk", id: 411643860
+mas "DevUtils", id: 1533756032
+mas "Kindle", id: 405399194
+mas "MindNode", id: 992076693
+mas "New File Menu", id: 1064959555
+mas "NordVPN IKE", id: 1116599239
+mas "Pixelmator", id: 407963104
+mas "Podcast Chapters", id: 1070963477
+mas "Skitch", id: 425955336
+mas "Slack", id: 8034539591
+mas "Time Out", id: 402592703
+mas "WhatsApp", id: 1147396723
 
 ###############################
 # python                      #
