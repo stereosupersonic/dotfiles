@@ -1,5 +1,5 @@
 # install with
-# brew bundle install
+# brew bundle install --file ~/.dotfiles/config_files/Brewfile
 
 # create a Brewfile from the current enviroment
 # brew bundle dump
@@ -8,7 +8,6 @@ cask_args appdir: "/Applications"
 
 tap "homebrew/cask"
 tap "homebrew/bundle"
-tap "homebrew/core"
 tap "homebrew/services"
 tap "homebrew/bundle"
 tap "heroku/brew"
@@ -40,9 +39,12 @@ brew "python" # also adds pip
 brew "pv"
 brew "tmux"
 brew "tldr"
+brew "fzf" # fzf is a general-purpose command-line fuzzy finder.
 brew "tree"
 brew "vim"
 brew "watch"
+brew "wget"
+brew "youtube-dl"
 brew "heroku/brew/heroku"
 brew "ncdu" # Show disk usage
 ### development
