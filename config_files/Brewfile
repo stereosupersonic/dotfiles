@@ -76,8 +76,7 @@ cask "bartender" # organize your Mac OS X menu bar apps
 cask "cyberduck"
 cask "dropbox"
 cask "flux"   # it makes the color of your computer's display adapt to the time of day
-#cask "libreoffice"
-cask "iconping" # check if online
+#cask "libreoffice"#
 cask "macdown" # markdown editor
 cask "nvalt" # notational-velocity
 cask "spotify"
@@ -96,7 +95,7 @@ cask "sequel-pro" # mysql client gui
 cask "skitch"
 cask "spectacle" # Move and resize windows https://www.spectacleapp.com/
 cask "tunnelblick" # VPN Tunnel
-cask "virtualbox" # VM's
+# cask "virtualbox" # VM's doesn't work with M3
 cask "balenaetcher" # Flash OS images to SD cards & USB drives, safely and easily. https://www.balena.io/etcher/
 cask "dbeaver-community" # SQL
 
@@ -118,7 +117,7 @@ mas "NordVPN IKE", id: 1116599239
 mas "Pixelmator", id: 407963104
 mas "Podcast Chapters", id: 1070963477
 mas "Skitch", id: 425955336
-mas "Slack", id: 8034539591
+# mas "Slack", id: 8034539591 doesn't work
 mas "Time Out", id: 402592703
 mas "WhatsApp", id: 1147396723
 # Amphetamine
