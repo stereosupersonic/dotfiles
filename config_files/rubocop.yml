@@ -1,27 +1,21 @@
+# rails-omakase rules
+# https://github.com/rails/rubocop-rails-omakase/blob/d5066bd4c0bf96771b6b60db0304a881945ca103/rubocop.yml
 AllCops:
   Exclude:
     - "db/schema.rb"
-#    - "db/schema.rb"
-#    - "bin/*"
-#    - "vendor/**/*"
-#  TargetRubyVersion: 2.4
+  # TargetRubyVersion: 3.0
   ExtraDetails: true
   NewCops: enable
+  DisabledByDefault: false
 
 require:
   - rubocop-performance
   - rubocop-rails
 
-Style/MutableConstant:
-  Enabled: false
-
-Style/StringLiterals:
-  EnforcedStyle: double_quotes
-
 Layout/LineLength:
   Enabled: false
 
-Style/ClassAndModuleChildren:
+Rails/Output:
   Enabled: false
 
 Style/FrozenStringLiteralComment:
@@ -31,74 +25,25 @@ Layout/HashAlignment:
   EnforcedHashRocketStyle: table
   EnforcedColonStyle: table
 
-# Group together all attr_accessor attributes.
-Style/AccessorGrouping:
-  Enabled: false
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
 
-Style/Documentation:
-  Enabled: false
+Style/HashSyntax:
+  EnforcedShorthandSyntax: never # Omit the hash value.
 
-#  Favor modifier if usage when having a single-line body. Another good alternative is the usage of control flow &&/||.
-Style/IfUnlessModifier:
-  Enabled: false
-#Style/FormatStringToken:
-#  Enabled: false
-#
-## Layout
-#Layout/ExtraSpacing:
-#  AllowForAlignment: true
-#
-#Layout/SpaceInsideHashLiteralBraces:
-#  EnforcedStyle: no_space
-#
-#Layout/CaseIndentation:
-#  Enabled: false
-#
-#Layout/MultilineOperationIndentation:
-#  EnforcedStyle: indented
-#
-#Layout/AlignParameters:
-#  EnforcedStyle: with_fixed_indentation
-#
-#Layout/IndentArray:
-#  Enabled: false
-#
-#Layout/MultilineMethodCallIndentation:
-#  Enabled: false
-#
-## Metrics
-#Metrics/LineLength:
-#  Max: 120
-#
-#Metrics/AbcSize:
-#  Enabled: false
-#
-#Metrics/MethodLength:
-#  Enabled: false
-#
-#Metrics/ClassLength:
-#  Enabled: false
-#
-#Metrics/ModuleLength:
-#  Enabled: false
-#
-#Metrics/BlockLength:
-#  Enabled: false
-#
-#Metrics/CyclomaticComplexity:
-#  Enabled: false
-#
-#Metrics/PerceivedComplexity:
-#  Enabled: false
-#
-## Naming
-#Naming/VariableNumber:
-#  Enabled: false
-#
-## Lint
-#Lint/EndAlignment:
-#  EnforcedStyleAlignWith: variable
-#
-#Lint/AmbiguousBlockAssociation:
-#  Exclude:
-#    - "spec/**/*"
+# Align `end` with the matching keyword or starting expression except for
+# assignments, where it should be aligned with the LHS.
+# Layout/EndAlignment:
+#   Enabled: true
+#   EnforcedStyleAlignWith: variable
+
+Style/PercentLiteralDelimiters:
+  Enabled: true
+  PreferredDelimiters:
+    default: "()"
+    "%i": "[]"
+    "%I": "[]"
+    "%r": "{}"
+    "%w": "[]"
+    "%W": "[]"
