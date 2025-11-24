@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+mail = ARGV[0]
+`rm -rf decrypted_mail.eml` if File.exist? 'decrypted_mail.eml'
+`openssl smime -decrypt -in #{mail} -inkey /Users/michaeldeimel/entwicklung/miceportal/datev_mail.pem -out decrypted_mail.eml`
+`munpack -tf decrypted_mail.eml`

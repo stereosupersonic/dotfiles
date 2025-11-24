@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/k8s_helper'
+
+@pod = ARGV[1]
+@namespace = ARGV[0] || ENV["K8S_NAMESPACE"]
+
+if @namespace.nil? || @pod.nil?
+ puts "Usage: k8s_pod_events <namespace> <pod>"
+ exit 1
+end
+checking_namespace File.basename($0)
+
+run_kubectl "get events --field-selector involvedObject.name=#{@pod} --sort-by='.lastTimestamp'"

@@ -10,8 +10,8 @@ if [ "$OS" = "darwin" ] ; then
   alias myip="curl https://ipinfo.io/json" # or /ip for plain-text ip
   alias speedtest="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -"
 
-  export LOCALIP=$(localip)
-  export REMOTEIP=$(remoteip)
+  export LOCALIP=$(ipconfig getifaddr en0)
+  export REMOTEIP=$(dig +short myip.opendns.com @resolver1.opendns.com)
 
   export EDITOR="/usr/local/bin/code-insiders"
 

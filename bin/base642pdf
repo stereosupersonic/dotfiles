@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+base64_file= ARGV[0]
+require 'base64'
+
+def base64_to_pdf(base64_string, output_path)
+  # Dekodiere den Base64-String
+  pdf_data = Base64.decode64(base64_string)
+  # Schreibe die binären Daten in eine PDF-Datei
+  File.open(output_path, 'wb') do |file|
+    file.write(pdf_data)
+  end
+end
+
+base64_string = File.read(base64_file)
+output_path = 'output.pdf'          # Der Pfad, wo die PDF gespeichert werden soll
+base64_to_pdf(base64_string, output_path)

@@ -1,6 +1,6 @@
 [user]
-	name = michael
-	email = m.deimel@miceportal.com
+	name = MICE Portal
+	email = michael@deimel.de
 
 [github]
   user = $GITHUB_USER
@@ -102,3 +102,9 @@
 	cmd = /usr/local/bin/bcomp $LOCAL $REMOTE $BASE $MERGED
 [pull]
 	rebase = false
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential

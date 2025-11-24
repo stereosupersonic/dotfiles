@@ -1,0 +1,90 @@
+#!/usr/bin/env ruby
+
+require 'bundler/inline'
+
+gemfile do
+  source 'https://rubygems.org'
+  gem 'activesupport', "~> 7.1"
+end
+require 'active_support/core_ext/string'
+
+def log(msg)
+  puts "*************************"
+  puts msg
+  puts "*************************"
+end
+
+if ARGV.empty?
+  puts "Usage: ticket start|finish|pr <ticket_number>"
+  exit 1
+end
+
+def branch_name
+  "#{@ticket_number.upcase}_#{@title.parameterize.slice(0, 70)}"
+end
+
+# use jira-cli https://github.com/ankitpokhrel/jira-cli
+# brew tap ankitpokhrel/jira-cli
+# brew install jira-cli
+def fetch_jira_title
+  `jira issue view #{@ticket_number} --raw | jq .fields.summary`.strip.gsub(/[^0-9a-z ]/i, '')
+end
+
+def ticket_url
+  "https://miceportal.atlassian.net/browse/#{@ticket_number}"
+end
+
+if ARGV[0] == "start"
+  @ticket_number = ARGV[1]
+  if @ticket_number.nil?
+    puts "Usage: ticket start <ticket_number>"
+    exit 1
+  end
+
+  puts "Starting ticket #{@ticket_number}"
+  @title = fetch_jira_title
+  `master && git checkout -b #{branch_name}`
+  # jira
+  `jira issue move #{@ticket_number} 'In Arbeit'`
+elsif ARGV[0] == "finish"
+  # get current branch name
+  current_branch = `git rev-parse --abbrev-ref HEAD`.strip
+  @ticket_number = current_branch[/MP-\d+/i]
+  title = fetch_jira_title
+  if @ticket_number.nil?
+    puts "Not a ticket branch in current_branch #{current_branch}"
+    exit 1
+  end
+
+  puts "Finishing ticket #{@ticket_number} => #{ticket_url} #{title}"
+  # add all new files
+  `git add -A`
+
+  # commit
+  final_commit_message = "fix #{@ticket_number} #{title}"
+  log "commit with message '#{final_commit_message}'"
+  `git commit -am '#{final_commit_message}'`
+
+  # push
+  log "push branch #{current_branch}"
+  `branch-push`
+
+  # create PR
+  log "create Pullrequest"
+  pr_url = `GH_TOKEN=aeb5d4a890d81f2064d55a20aac24505b60221aa gh pr create --title '#{@ticket_number} #{title}' -b 'https://miceportal.atlassian.net/browse/#{@ticket_number}'`
+  log "PR: #{pr_url}"
+
+
+  # add comment to jira
+  log "add comment to jira"
+  `echo "#{pr_url}" | jira issue comment add #{@ticket_number}`
+
+  # mv to QA
+  log "move ticket to QA"
+  `jira issue move #{@ticket_number} 'Qualitätssicherung' `
+
+  `open #{pr_url}`
+else
+  puts "Usage: ticket start <ticket_number>"
+  exit 1
+end

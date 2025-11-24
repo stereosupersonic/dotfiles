@@ -75,4 +75,8 @@ fi
 
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-export PATH="/usr/local/opt/node@18/bin:$PATH"
+# export PATH="/usr/local/opt/node@18/bin:$PATH"
+# export PATH="/opt/homebrew/opt/icu4c/bin:$PATH"
+
+# Added by `rbenv init` on Mi Okt 15 16:18:49 CEST 2025
+eval "$(rbenv init - --no-rehash bash)"

@@ -12,7 +12,19 @@ require:
   - rubocop-performance
   - rubocop-rails
 
+Style/ClassAndModuleChildren:
+  Enabled: false
+
 Layout/LineLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Naming/PredicateName:
+  Enabled: false
+
+Style/Documentation:
   Enabled: false
 
 Rails/Output:

@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+pdf_path = ARGV[0]
+require 'base64'
+
+def pdf_to_base64(pdf_path)
+  # Read the PDF file as binary
+  pdf_data = File.read(pdf_path, mode: 'rb')
+  # Encode the PDF data to Base64
+  base64_pdf = Base64.encode64(pdf_data)
+  return base64_pdf
+end
+
+# Example usage
+base64_string = pdf_to_base64(pdf_path)
+puts base64_string

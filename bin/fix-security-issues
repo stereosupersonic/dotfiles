@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+# -*- coding: UTF-8 -*-
+
+   gem = Dir.pwd.split("/").last
+
+    puts "fixing security issues in #{gem}"
+    #system "git co ."
+    system "git fetch --all"
+    system "master"
+    system "bundle update --patch"
+    changed_files = `git status -s`.split("\n")
+    if changed_files.any?
+      system "export"
+      puts "changed files:"
+      puts changed_files
+      timestamp = Time.now.strftime("%Y-%m-%d-%H-%M")
+      branch_name = "#{timestamp}_security-fix"
+      system "git co -b #{branch_name}"
+      system "git add ."
+      system "git commit -m '#{timestamp} fix security issues'"
+      system "push"
+      system " GH_TOKEN=aeb5d4a890d81f2064d55a20aac24505b60221aa gh pr create --title '#{branch_name}' --body 'fix security issues' --web --base master"
+
+    end
