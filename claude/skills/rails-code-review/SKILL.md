@@ -47,6 +47,42 @@ Perform thorough code reviews following Konvenit's Rails development standards.
 - [ ] Check if **unique indexes** make sense
 - [ ] Check if **foreign keys** make sense
 
+### Gemfile & Dependencies
+- [ ] New gems are necessary and well-maintained
+- [ ] Gem versions are pinned appropriately (`~>` for patch updates)
+- [ ] No duplicate or overlapping gems
+- [ ] Security vulnerabilities checked (`bundle audit`)
+- [ ] License compatibility verified for commercial projects
+- [ ] Gemfile organized by purpose (authentication, testing, assets, etc.)
+
+### Configuration & Environment
+- [ ] Sensitive config uses Rails credentials or ENV vars
+- [ ] No environment-specific code outside `config/environments/`
+- [ ] Feature flags properly implemented (if used)
+- [ ] Database configuration uses sensible pool sizes
+- [ ] Timezone handling is explicit (`Time.zone`, not `Time.now`)
+- [ ] No hardcoded URLs or domain names
+
+### Internationalization
+- [ ] User-facing strings use I18n keys, not hardcoded text
+- [ ] I18n keys are namespaced logically (`en.controllers.users.create.success`)
+- [ ] Pluralization rules defined where needed
+- [ ] Date/time formatting uses I18n helpers
+
+### Logging & Observability
+- [ ] Appropriate log levels used (debug, info, warn, error)
+- [ ] No sensitive data logged (passwords, tokens, PII)
+- [ ] Key business events logged for analytics
+- [ ] Performance-critical operations instrumented
+- [ ] Structured logging used for searchability
+
+### Data Privacy & Compliance
+- [ ] PII (Personally Identifiable Information) handling documented
+- [ ] Data retention policies implemented where needed
+- [ ] User data export capability (if required by law)
+- [ ] User data deletion capability (if required by law)
+- [ ] Audit trails for sensitive operations
+
 ## Review Process
 
 1. Read the code carefully
@@ -166,6 +202,49 @@ class UserPresenter < ApplicationPresenter
 end
 ```
 
+### Form Objects
+- [ ] Place in `app/forms/` (if used)
+- [ ] Name with noun + `Form` format (`UserRegistrationForm`)
+- [ ] Include `ActiveModel::Model` or inherit from `BaseForm`
+- [ ] Handle validation logic for complex forms
+- [ ] Return a result indicating success/failure
+
+```ruby
+# ✅ Form object pattern
+class UserRegistrationForm
+  include ActiveModel::Model
+
+  attr_accessor :email, :password, :terms_accepted
+
+  validates :email, :password, presence: true
+  validates :terms_accepted, acceptance: true
+
+  def save
+    return false unless valid?
+    # Create user and related records
+  end
+end
+```
+
+### Query Objects
+- [ ] Place in `app/queries/` (if used)
+- [ ] Name descriptively (`ActiveUsersQuery`, `RecentOrdersQuery`)
+- [ ] Return an `ActiveRecord::Relation` for chaining
+- [ ] Single public method (`.call` or `.all`)
+- [ ] Properly scoped and indexed
+
+```ruby
+# ✅ Query object pattern
+class ActiveUsersQuery
+  def self.call(scope = User.all)
+    scope
+      .where(active: true)
+      .where("last_login_at > ?", 30.days.ago)
+      .order(last_login_at: :desc)
+  end
+end
+```
+
 ### Models
 - [ ] Keep models focused on data and simple validations
 - [ ] **No business logic in models** — extract to service objects
@@ -198,6 +277,14 @@ end
 - [ ] Extract complex views into presenters
 - [ ] No database queries in views
 - [ ] Use `data-testid` attributes for test selectors
+
+### Accessibility (A11y)
+- [ ] Semantic HTML tags used (`<nav>`, `<main>`, `<article>`)
+- [ ] Form labels properly associated with inputs
+- [ ] ARIA attributes used appropriately
+- [ ] Color contrast meets WCAG standards
+- [ ] Keyboard navigation works correctly
+- [ ] Alt text for images
 
 ---
 
@@ -300,6 +387,37 @@ class Api::V1::BaseController < ApplicationController
 end
 ```
 
+### Serialization
+- [ ] Jbuilder templates cached where appropriate
+- [ ] Only expose necessary attributes (no over-fetching)
+- [ ] Use partial templates for reusable JSON structures
+- [ ] Consistent date/time formatting across API
+- [ ] Enum values serialized as human-readable strings, not integers
+
+---
+
+## Mailers & Notifications
+
+- [ ] Mailers inherit from `ApplicationMailer`
+- [ ] Email templates exist for both HTML and plain text
+- [ ] Subject lines use I18n keys
+- [ ] Mailers tested with email previews (`test/mailers/previews/`)
+- [ ] Background jobs used for email delivery (`deliver_later`)
+- [ ] Unsubscribe links included where required
+
+```ruby
+# ✅ Correct mailer pattern
+class UserMailer < ApplicationMailer
+  def welcome(user)
+    @user = user
+    mail(
+      to: @user.email,
+      subject: I18n.t("mailers.user_mailer.welcome.subject")
+    )
+  end
+end
+```
+
 ---
 
 ## Security
@@ -375,6 +493,27 @@ params.require(:user).permit(:name, :email)
 
 ---
 
+## Rails Version Compatibility
+
+- [ ] No deprecated Rails methods used
+- [ ] Check for breaking changes in target Rails version
+- [ ] Gems compatible with current/target Rails version
+- [ ] No monkey patches that could break on upgrade
+
+---
+
+## Common Code Smells to Flag
+
+- [ ] **God objects**: Classes with too many responsibilities (>200 lines)
+- [ ] **Long methods**: Methods over 10-15 lines
+- [ ] **Long parameter lists**: More than 3-4 parameters
+- [ ] **Feature envy**: Method using another object's data more than its own
+- [ ] **Primitive obsession**: Using primitives instead of small objects
+- [ ] **Data clumps**: Same group of variables appearing together repeatedly
+- [ ] **Shotgun surgery**: Single change requires edits across many files
+
+---
+
 also consider the review ruby code See: [../review-ruby-code/skill.md](../review-ruby-code/skill.md)
 
 ## Output Format
@@ -384,6 +523,12 @@ also consider the review ruby code See: [../review-ruby-code/skill.md](../review
 
 ### Summary
 Brief overview of code quality and main concerns.
+
+### Metrics Summary
+- Total issues: X
+- Critical: X | Warnings: X | Suggestions: X
+- Files reviewed: X
+- Test coverage: X% (if available)
 
 ### Issues Found
 
@@ -404,8 +549,18 @@ Brief overview of code quality and main concerns.
 ### What's Good
 - Highlight positive patterns found
 
+### Dependencies Changed (if applicable)
+- Added: [list]
+- Updated: [list]
+- Removed: [list]
+- Security concerns: [list]
+
 ### Recommended Changes
 Prioritized list of changes to make.
+
+### Next Steps
+1. [Prioritized action items]
+2. ...
 ```
 
 ---
@@ -416,6 +571,7 @@ Prioritized list of changes to make.
 |---------|--------|-------------|
 | Code without specs | 🔴 | Add corresponding specs |
 | Single quotes for strings | 🔴 | Use double quotes |
+| `Time.now` | 🟡 | Use `Time.zone.now` |
 | ERB templates | 🟡 | Prefer HAML |
 | Business logic in controller | 🔴 | Use service object |
 | Business logic in model | 🔴 | Use service object |
@@ -436,3 +592,15 @@ Prioritized list of changes to make.
 | Missing foreign keys | 🟡 | Add foreign key constraints |
 | Unused columns | 🟡 | Remove or document |
 | Personal preference changes | 🟡 | Create Rubocop issue instead |
+| Hardcoded strings in views | 🟡 | Use I18n keys |
+| God objects (>200 lines) | 🔴 | Split responsibilities |
+| Methods >15 lines | 🟡 | Extract smaller methods |
+| Logging sensitive data | 🔴 | Filter or exclude PII |
+| Missing email plain text template | 🟡 | Add text version |
+| Enums as integers in API | 🟡 | Serialize as strings |
+| No audit trail for sensitive ops | 🟡 | Add logging/tracking |
+| Deprecated Rails methods | 🔴 | Update to current API |
+| Primitive obsession | 🟡 | Use value objects |
+| Hardcoded URLs/domains | 🟡 | Use config/ENV vars |
+| Environment-specific code outside config | 🔴 | Move to `config/environments/` |
+| Insecure gem versions | 🔴 | Update and run `bundle audit` |
