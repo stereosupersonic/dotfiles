@@ -37,6 +37,10 @@ Perform thorough code reviews following Konvenit's Rails development standards.
   - Use `content_tag` helpers instead
   - If needed, start with empty SafeBuffer: `"".html_safe` and concatenate
 - [ ] **No production credentials/keys/certificates in commits** (dev/test data is allowed)
+- [ ] Check for **thread safety issues**:
+  - No class-level instance variables (`@var` at class level)
+  - No unsynchronized shared mutable state
+  - Service objects don't rely on class-level state
 
 ### Migration Review
 - [ ] For large data manipulations, consider moving to a **rake task** for more control
@@ -514,6 +518,248 @@ params.require(:user).permit(:name, :email)
 
 ---
 
+## Thread Safety & Concurrency
+
+Rails applications run in multi-threaded environments (Puma, Sidekiq). Thread-unsafe code can cause race conditions, data corruption, and intermittent bugs.
+
+### Class-Level Instance Variables (Most Common Issue)
+- [ ] **Never use class-level instance variables** (`@variable` at class level)
+- [ ] Use class variables (`@@variable`) or class instance variables carefully
+- [ ] Prefer `thread_mattr_accessor` or `class_attribute` for thread-safe class-level state
+- [ ] Use `RequestStore` or `Current` attributes for request-scoped data
+
+```ruby
+# ❌ CRITICAL: Not thread-safe - will cause race conditions
+class UserService
+  @current_user = nil  # Class instance variable - DANGEROUS
+
+  def self.process(user)
+    @current_user = user  # Race condition! Multiple threads will overwrite this
+    # ... logic using @current_user
+  end
+end
+
+# ❌ CRITICAL: Not thread-safe - shared mutable state
+class CacheManager
+  @@cache = {}  # Class variable - shared across threads, not thread-safe
+
+  def self.store(key, value)
+    @@cache[key] = value  # Race condition!
+  end
+end
+
+# ✅ Good: Use Rails thread-safe alternatives
+class UserService
+  thread_mattr_accessor :current_user  # Thread-safe storage
+
+  def self.process(user)
+    self.current_user = user
+    # ... logic
+  ensure
+    self.current_user = nil  # Clean up
+  end
+end
+
+# ✅ Good: Use RequestStore for request-scoped data
+class UserService
+  def self.process(user)
+    RequestStore.store[:current_user] = user
+    # ... logic
+  end
+end
+
+# ✅ Good: Use Rails Current attributes
+class Current < ActiveSupport::CurrentAttributes
+  attribute :user, :request_id
+end
+
+class UserService
+  def self.process(user)
+    Current.user = user
+    # ... logic
+  end
+end
+
+# ✅ Good: Pass as parameter (best approach)
+class UserService
+  def self.process(user)
+    new(user).call
+  end
+
+  def initialize(user)
+    @user = user  # Instance variable - safe
+  end
+
+  def call
+    # ... logic using @user
+  end
+end
+```
+
+### Common Thread Safety Issues
+
+#### 1. Memoization Without Synchronization
+```ruby
+# ❌ Bad: Race condition in memoization
+def config
+  @config ||= load_config  # Multiple threads can call load_config
+end
+
+# ✅ Good: Thread-safe memoization
+def config
+  @config ||= Concurrent::LazyRegister.new { load_config }
+end
+
+# ✅ Good: Use Rails.cache for shared data
+def config
+  Rails.cache.fetch("app_config", expires_in: 1.hour) do
+    load_config
+  end
+end
+```
+
+#### 2. Shared Mutable Collections
+```ruby
+# ❌ Bad: Shared array modified by multiple threads
+class EventTracker
+  @@events = []  # Not thread-safe
+
+  def self.track(event)
+    @@events << event  # Race condition!
+  end
+end
+
+# ✅ Good: Use thread-safe data structures
+require "concurrent"
+
+class EventTracker
+  @events = Concurrent::Array.new
+
+  def self.track(event)
+    @events << event  # Thread-safe
+  end
+end
+
+# ✅ Better: Use proper logging/event system
+class EventTracker
+  def self.track(event)
+    Rails.logger.info("Event: #{event}")
+    # or use proper event tracking service
+  end
+end
+```
+
+#### 3. Lazy Initialization in Class Methods
+```ruby
+# ❌ Bad: Not thread-safe initialization
+class ApiClient
+  def self.instance
+    @instance ||= new  # Race condition!
+  end
+end
+
+# ✅ Good: Use Rails' thread-safe class_attribute
+class ApiClient
+  class_attribute :_instance
+
+  def self.instance
+    self._instance ||= new
+  end
+end
+
+# ✅ Better: Use proper singleton pattern
+class ApiClient
+  include Singleton
+
+  def call
+    # ... API logic
+  end
+end
+```
+
+#### 4. Global State Modification
+```ruby
+# ❌ Bad: Modifying global/class state
+class FeatureFlag
+  @@enabled_features = Set.new
+
+  def self.enable(feature)
+    @@enabled_features << feature  # Not thread-safe
+  end
+
+  def self.enabled?(feature)
+    @@enabled_features.include?(feature)
+  end
+end
+
+# ✅ Good: Use database or Rails.cache
+class FeatureFlag
+  def self.enable(feature)
+    Rails.cache.write("feature:#{feature}", true)
+  end
+
+  def self.enabled?(feature)
+    Rails.cache.read("feature:#{feature}") || false
+  end
+end
+```
+
+### Thread Safety Checklist
+- [ ] No class-level instance variables (`@var` at class level)
+- [ ] No unsynchronized class variables (`@@var`)
+- [ ] No shared mutable state between requests
+- [ ] Memoization uses thread-safe approaches
+- [ ] Class methods don't rely on shared state
+- [ ] Use `thread_mattr_accessor` or `class_attribute` for class-level storage
+- [ ] Use `Current` attributes or `RequestStore` for request-scoped data
+- [ ] Background jobs don't share state across instances
+- [ ] Service objects receive dependencies as parameters
+- [ ] Singleton patterns use proper synchronization
+
+### When Thread Safety Matters Most
+- Background job processors (Sidekiq runs multi-threaded)
+- Service objects called from multiple threads
+- Class-level caching or memoization
+- API clients and external service wrappers
+- Any code that modifies class-level state
+- Concern modules included in multiple classes
+
+### Safe Patterns Summary
+```ruby
+# ✅ SAFE: Instance variables in instance methods
+class UserService
+  def initialize(user)
+    @user = user  # Safe - each instance has its own
+  end
+end
+
+# ✅ SAFE: Local variables
+def process
+  user = User.find(params[:id])  # Safe - method scope
+end
+
+# ✅ SAFE: Constants
+class Config
+  API_ENDPOINT = "https://api.example.com"  # Safe - immutable
+end
+
+# ✅ SAFE: Database/cache for shared state
+def config
+  Rails.cache.fetch("config") { load_config }
+end
+
+# ✅ SAFE: Thread-local storage
+Thread.current[:user] = user
+
+# ✅ SAFE: RequestStore (request-scoped)
+RequestStore.store[:user] = user
+
+# ✅ SAFE: Current attributes (request-scoped)
+Current.user = user
+```
+
+---
+
 also consider the review ruby code See: [../review-ruby-code/skill.md](../review-ruby-code/skill.md)
 
 ## Output Format
@@ -604,3 +850,8 @@ Prioritized list of changes to make.
 | Hardcoded URLs/domains | 🟡 | Use config/ENV vars |
 | Environment-specific code outside config | 🔴 | Move to `config/environments/` |
 | Insecure gem versions | 🔴 | Update and run `bundle audit` |
+| Class-level instance variables (`@var` at class level) | 🔴 | Use `thread_mattr_accessor`, `Current`, or pass as parameter |
+| Unsynchronized class variables (`@@var`) | 🔴 | Use thread-safe alternatives or database |
+| Shared mutable state | 🔴 | Use `RequestStore`, `Current`, or Rails.cache |
+| Unsafe memoization in class methods | 🔴 | Use thread-safe memoization or cache |
+| Global state modification | 🔴 | Use database or proper state management |
