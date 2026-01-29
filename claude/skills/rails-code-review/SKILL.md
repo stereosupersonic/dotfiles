@@ -26,6 +26,9 @@ Perform thorough code reviews following Konvenit's Rails development standards.
 - [ ] **Avoid requesting changes based on personal preference** — create Rubocop issue instead
 - [ ] Check if changes could **unintentionally break production** or have undesirable consequences for users
 - [ ] Verify all changes are covered by at least some tests to catch simple runtime exceptions
+- [ ] comments should explain **why**, not **what** — if code is unclear, suggest refactoring instead.
+- [ ] avoid useless comments at all costs — they add to carrying cost without value
+- [ ] Suggest concrete improvements with code example
 
 ### Security Review
 - [ ] Check for **SQL injection** vulnerabilities:
