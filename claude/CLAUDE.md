@@ -25,6 +25,78 @@ You are an expert Ruby on Rails developer. Your goal is to write sustainable, ma
 - Follow Ruby/Rails conventions (Rubocop Rails Omakase with customizations)
 - All files must end with a newline
 
+### Method Naming
+
+**Bang methods (`!`):** Only use `!` when a non-bang counterpart exists. Don't use `!` merely to indicate destructive actions—many Ruby/Rails methods are destructive without `!`.
+
+```ruby
+# Good - bang has non-bang counterpart
+user.save    # Returns true/false
+user.save!   # Raises exception
+
+# Good - no bang needed for naturally destructive methods
+user.destroy      # Not destroy!
+array.clear       # Not clear!
+hash.delete(:key) # Not delete!
+
+# Bad - bang without counterpart
+def process_payment!  # Don't do this unless process_payment exists
+  # ...
+end
+```
+
+### Method Ordering
+
+Order methods in classes for readability:
+
+1. **Class methods** (`self.` methods)
+2. **Public instance methods** (`initialize` first)
+3. **Private methods** (in invocation order)
+
+**Invocation order:** Arrange private methods vertically based on when they're called. This helps readers follow the code flow.
+
+```ruby
+class OrderProcessor
+  def self.for(user)
+    new(user)
+  end
+
+  def initialize(user)
+    @user = user
+  end
+
+  def process
+    validate_order
+    charge_payment
+    send_confirmation
+  end
+
+  private
+
+  # Ordered by invocation in process method
+  def validate_order
+    check_inventory
+    check_address
+  end
+
+  def check_inventory
+    # called by validate_order
+  end
+
+  def check_address
+    # called by validate_order
+  end
+
+  def charge_payment
+    # called second in process
+  end
+
+  def send_confirmation
+    # called last in process
+  end
+end
+```
+
 ### Conditionals & Control Flow
 - Use guard clauses to reduce nesting and improve early returns
 - Use modifier conditionals (`return unless valid?`) for simple one-liners
@@ -535,10 +607,68 @@ def user_params
 end
 ```
 
+### CRUD Resource Modeling
+
+Model endpoints as CRUD operations on resources (REST). When an action doesn't map cleanly to a standard CRUD verb, introduce a new resource rather than adding custom actions.
+
+```ruby
+# Bad - custom actions
+resources :cards do
+  post :close
+  post :reopen
+  post :archive
+end
+
+# Good - new resources for state changes
+resources :cards do
+  resource :closure, only: [:create, :destroy]  # close/reopen
+  resource :archival, only: [:create, :destroy] # archive/unarchive
+end
+
+# Good - nested resource for related action
+resources :orders do
+  resource :cancellation, only: [:create]
+end
+```
+
+### Vanilla Rails Approach
+
+For simple operations, direct Active Record calls in controllers are fine. Don't over-abstract with services when plain Rails suffices.
+
+```ruby
+# Fine for simple CRUD - no service needed
+class CommentsController < ApplicationController
+  def create
+    @comment = @post.comments.create!(comment_params)
+    redirect_to @post
+  end
+
+  def destroy
+    @comment = @post.comments.find(params[:id])
+    @comment.destroy
+    redirect_to @post
+  end
+end
+
+# Use services for complex multi-step operations
+class RegistrationsController < ApplicationController
+  def create
+    result = Users::CreateUser.new(user_params).call
+    # ...
+  end
+end
+```
+
+**When to use services:**
+- Multi-step transactions spanning multiple models
+- External API interactions
+- Complex business logic with multiple outcomes
+- Operations that need to be tested in isolation
+
 ### Best Practices
-- Keep controllers thin—delegate to service objects, query objects, or models
+- Keep controllers thin—delegate to services only when complexity warrants it
 - Use `params.expect` (Rails 8+) for strong parameters
-- Follow REST conventions—prefer resourceful routes
+- Follow REST conventions—model actions as resources
 - Use standard CRUD actions when possible (index, show, new, create, edit, update, destroy)
 - Handle errors gracefully with proper HTTP status codes
 - Use before_actions for authentication, authorization, and common setup
@@ -1059,9 +1189,47 @@ end
 
 ## Background Jobs
 
+### Async Naming Convention
+
+Use `_later` suffix for methods that enqueue jobs, and `_now` for synchronous counterparts. Keep job classes shallow—delegate logic to domain models.
+
+```ruby
+# app/models/concerns/event/relaying.rb
+module Event::Relaying
+  extend ActiveSupport::Concern
+
+  included do
+    after_create_commit :relay_later
+  end
+
+  # Enqueues the job
+  def relay_later
+    Event::RelayJob.perform_later(self)
+  end
+
+  # Synchronous version - called by the job
+  def relay_now
+    EventRelayService.new(self).broadcast
+  end
+end
+
+# app/jobs/event/relay_job.rb - keep it shallow
+class Event::RelayJob < ApplicationJob
+  def perform(event)
+    event.relay_now
+  end
+end
+```
+
+This pattern:
+- Makes async behavior explicit at call sites
+- Keeps job classes simple (just delegation)
+- Puts business logic in testable domain objects
+- Allows easy sync/async switching
+
 ### Sidekiq/ActiveJob Best Practices
 - Make jobs idempotent (safe to retry)
-- Use explicit job classes instead of inline jobs
+- Write shallow job classes that delegate to a service object or  domain models
 - Use meaningful queue names
 - Set appropriate retry strategies
 - Handle failures gracefully
