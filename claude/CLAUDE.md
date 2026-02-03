@@ -263,7 +263,9 @@ module Users
     private
 
     def user_params
-      params.require(:user).permit(:email, :name, :password)
+      # Note: In Rails 8+, prefer params.expect in the controller
+      # and pass clean params to the service
+      params.expect(user: [:email, :name, :password])
     end
 
     def create_default_preferences(user)
@@ -359,7 +361,22 @@ end
 = @user.status_badge
 ```
 
-### Query Objects
+### finder Objects
+
+
+Finders are Plain Old Ruby Objects (PORO) that are used for searching. It is a design pattern that lets us extract query logic from Controllers and Models into reusable classes.
+
+Problems to solve
+Fat models
+Fat controllers
+Place code which only supports very specific interaction
+Separation of concerns
+Located
+---app/
+-----finders/
+-------app/finders/
+---------user_events_finder.rb
+
 
 **When to Use:**
 - Complex database queries
@@ -367,52 +384,78 @@ end
 - Queries with multiple optional filters
 - Keeping models and controllers clean
 
+#### Example
+
 ```ruby
-# app/queries/users/search_query.rb
-module Users
-  class SearchQuery
-    def initialize(relation = User.all)
-      @relation = relation
+class UserEventsFinder
+  include ActiveModel::Model
+
+  FILTERS = %i[user_id event start_date end_date shop_id source done_by_id]
+  attr_accessor :per_page, :page
+  attr_accessor(*FILTERS)
+
+  def call
+    UserEvent
+      .order("done_at DESC")
+      .merge(start_date_filter)
+      .merge(end_date_filter)
+      .merge(event_filter)
+      .merge(user_id_filter)
+      .merge(shop_filter)
+      .merge(source_filter)
+      .merge(done_by_id_filter)
+      .paginate(page: page, per_page: per_page)
+  end
+
+  private
+
+  def shop_filter
+    if shop_id.present?
+      UserEvent.where(shop_id: shop_id)
+    else
+      UserEvent.all
     end
+  end
 
-    def call(params = {})
-      @relation
-        .then { |r| by_status(r, params[:status]) }
-        .then { |r| by_role(r, params[:role]) }
-        .then { |r| by_search_term(r, params[:q]) }
-        .then { |r| by_date_range(r, params[:from], params[:to]) }
+  def source_filter
+    if source.present?
+      UserEvent.where(source: source)
+    else
+      UserEvent.all
     end
+  end
 
-    private
-
-    def by_status(relation, status)
-      return relation if status.blank?
-
-      relation.where(status: status)
+  def start_date_filter
+    if start_date.present?
+      UserEvent.where("done_at >= ?", start_date.to_datetime.beginning_of_day)
+    else
+      UserEvent.all
     end
+  end
 
-    def by_role(relation, role)
-      return relation if role.blank?
-
-      relation.where(role: role)
+  def end_date_filter
+    if end_date.present?
+      UserEvent.where("done_at <= ?", end_date.to_datetime.end_of_day)
+    else
+      UserEvent.all
     end
+  end
 
-    def by_search_term(relation, query)
-      return relation if query.blank?
+  def event_filter
+    event.present? ? UserEvent.where(name: event) : UserEvent.all
+  end
 
-      relation.where("name ILIKE ? OR email ILIKE ?", "%#{query}%", "%#{query}%")
-    end
+  def user_id_filter
+    user_id.present? ? UserEvent.where(user_id: user_id) : UserEvent.all
+  end
 
-    def by_date_range(relation, from, to)
-      relation = relation.where("created_at >= ?", from) if from.present?
-      relation = relation.where("created_at <= ?", to) if to.present?
-      relation
-    end
+  def done_by_id_filter
+    done_by_id.present? ? UserEvent.where(done_by_id: done_by_id) : UserEvent.all
   end
 end
 
-# Usage
-@users = Users::SearchQuery.new.call(params)
+# usage:
+@user_events = UserEventsFinder.new(search_params).call
 ```
 
 ### Form Objects
@@ -471,9 +514,30 @@ end
 
 ## Controller Guidelines
 
+### Strong Parameters
+
+Use the Rails 8+ `params.expect` syntax for cleaner, more explicit parameter handling:
+
+```ruby
+# Rails 8+ preferred - explicit and clear
+def user_params
+  params.expect(user: [:email, :name, :password])
+end
+
+# For nested attributes
+def order_params
+  params.expect(order: [:status, :total, items: [[:name, :quantity, :price]]])
+end
+
+# Legacy syntax - still works but prefer expect
+def user_params
+  params.require(:user).permit(:email, :name, :password)
+end
+```
+
 ### Best Practices
 - Keep controllers thin—delegate to service objects, query objects, or models
-- Use strong parameters consistently
+- Use `params.expect` (Rails 8+) for strong parameters
 - Follow REST conventions—prefer resourceful routes
 - Use standard CRUD actions when possible (index, show, new, create, edit, update, destroy)
 - Handle errors gracefully with proper HTTP status codes
@@ -530,7 +594,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:email, :name, :role)
+    params.expect(user: [:email, :name, :role])
   end
 
   def search_params
@@ -615,6 +679,32 @@ end
 
 ## Database & ActiveRecord
 
+### Column Type Conventions
+
+**Prefer `text` over `string` for text fields:**
+- PostgreSQL treats `text` and `string` (varchar) identically for performance
+- `string` has an arbitrary 255 character limit that causes silent truncation
+- `text` avoids limit-related bugs and migration headaches
+
+```ruby
+# Good - use text for flexibility
+create_table :users do |t|
+  t.text :name                    # No arbitrary length limit
+  t.text :bio                     # Obviously text
+  t.text :email                   # Even short fields benefit
+end
+
+# Avoid - arbitrary 255 char limit
+create_table :users do |t|
+  t.string :name                  # May truncate unexpectedly
+end
+```
+
+**Other column type guidelines:**
+- Use `datetime` instead of `timestamp` for consistency
+- Boolean columns should be nullable unless business logic requires a default
+- Use `decimal` for money (with precision and scale), never `float`
+
 ### Migration Best Practices
 - Use meaningful, descriptive migration names with timestamps
 - Always add database indexes for foreign keys
@@ -630,9 +720,9 @@ class CreateOrders < ActiveRecord::Migration[7.1]
   def change
     create_table :orders do |t|
       t.references :user, null: false, foreign_key: true, index: true
-      t.string :status, null: false, default: "pending"
+      t.text :status, null: false, default: "pending"  # Use text, not string
       t.decimal :total_amount, precision: 10, scale: 2, null: false
-      t.datetime :completed_at
+      t.datetime :completed_at  # Use datetime, not timestamp
 
       t.timestamps
     end
@@ -754,7 +844,93 @@ end
   Submit Order
 ```
 
+## Internationalization (I18n)
+
+### Translation Key Conventions
+
+**Use relative translation keys in views:**
+```ruby
+# Good - relative keys (Rails resolves based on view path)
+# In app/views/users/show.html.haml
+= t(".title")           # Looks up "users.show.title"
+= t(".welcome_message") # Looks up "users.show.welcome_message"
+
+# Avoid - absolute keys are verbose and repetitive
+= t("users.show.title")
+= t("users.show.welcome_message")
+```
+
+**Use `_html` or `_md` suffix for rich content:**
+```yaml
+# config/locales/en.yml
+en:
+  users:
+    show:
+      title: "User Profile"
+      bio_html: "<strong>About:</strong> %{content}"
+      welcome_md: "Welcome to **your dashboard**!"
+```
+
+```ruby
+# In view - automatically marks as html_safe
+= t(".bio_html", content: @user.bio)
+
+# For markdown content (if using a markdown renderer)
+= render_markdown(t(".welcome_md"))
+```
+
+### I18n Best Practices
+- Translate all user-facing content
+- Use YAML anchors for shared translations
+- Keep translation files organized by feature/namespace
+- Use interpolation for dynamic values: `t(".greeting", name: @user.name)`
+- For forms, use `include_blank: t(".select_option")` instead of hardcoded strings
+- Test translations exist in your test suite
+
+```ruby
+# Form with translated blank option
+= f.select :category, @categories, include_blank: t(".select_category")
+
+# Pluralization
+= t(".items_count", count: @items.size)
+# en.yml: items_count:
+#   one: "1 item"
+#   other: "%{count} items"
+```
+
 ## Testing
+
+### Testing Philosophy
+- **Prefer real objects over mocks/stubs** - Use actual model instances and database records
+- Only mock external dependencies (APIs, email services, third-party integrations)
+- Test behavioral outcomes (status codes, data changes, rendered content)
+- Don't mock internal classes or methods—this couples tests to implementation
+
+```ruby
+# Good - real objects
+it "creates a user" do
+  user = create(:user)
+  post = create(:post, user: user)
+
+  expect(post.author).to eq(user)
+end
+
+# Avoid - excessive mocking of internal code
+it "creates a user" do
+  user = instance_double(User, id: 1)
+  allow(User).to receive(:find).and_return(user)
+  # ...this couples the test to implementation details
+end
+
+# Good - mock external services
+it "sends notification to Slack" do
+  slack_client = instance_double(SlackClient)
+  allow(SlackClient).to receive(:new).and_return(slack_client)
+  expect(slack_client).to receive(:post_message)
+
+  NotificationService.new.notify("Hello")
+end
+```
 
 ### RSpec Best Practices
 - Follow Arrange-Act-Assert (AAA) pattern
@@ -764,7 +940,7 @@ end
 - Keep tests focused and isolated
 - Use let and let! appropriately
 - Use contexts for different scenarios
-- Mock external dependencies
+- Only mock external dependencies
 
 ```ruby
 # spec/services/users/create_user_spec.rb
@@ -832,6 +1008,26 @@ end
 - **Model tests**: Test validations, scopes, associations
 - **Don't over-test**: Focus on behavior, not implementation details
 
+### System Test Selectors
+
+Use Rails DOM helpers instead of string interpolation for cleaner, more maintainable tests:
+
+```ruby
+# Good - use Rails helpers
+find(css_id(@user))                    # => "#user_123"
+find(css_id(@user, :edit))             # => "#edit_user_123"
+click_on css_id(@post, :delete)        # => "#delete_post_456"
+within(css_id(@comment)) { ... }
+
+# Avoid - string interpolation
+find("#user_#{@user.id}")              # Harder to read, error-prone
+find("#edit_user_#{@user.id}")
+
+# For class-based selectors
+find(css_class("active"))              # => ".active"
+find(css_class("user", "premium"))     # => ".user.premium"
+```
+
 ```ruby
 # System test example
 require "rails_helper"
@@ -848,6 +1044,15 @@ RSpec.describe "User Registration", type: :system do
 
     expect(page).to have_content("Welcome!")
     expect(page).to have_current_path(dashboard_path)
+  end
+
+  it "shows user profile after creation" do
+    user = create(:user)
+    visit user_path(user)
+
+    within(css_id(user)) do
+      expect(page).to have_content(user.name)
+    end
   end
 end
 ```
@@ -966,7 +1171,7 @@ module Api
       private
 
       def user_params
-        params.require(:user).permit(:email, :name)
+        params.expect(user: [:email, :name])
       end
     end
   end
@@ -997,9 +1202,9 @@ SecureHeaders::Configuration.default do |config|
   config.hsts = "max-age=31536000; includeSubDomains"
 end
 
-# Strong parameters
+# Strong parameters (Rails 8+)
 def user_params
-  params.require(:user).permit(:email, :name, :role)
+  params.expect(user: [:email, :name, :role])
 end
 
 # Authorization with CanCanCan
@@ -1303,7 +1508,8 @@ div.container > .user-card > h2 {
 
 ### Git Best Practices
 - Branch from `main` or `master`
-- Use descriptive branch names: `feature/add-user-search`, `bugfix/fix-login-error`
+- Use descriptive branch names: `add-user-search`, `fix-login-error`
+- use the github issue number as part of the branch name if exitst
 - Write clear, descriptive commit messages
 - Keep commits focused and atomic
 - Pull requests must include: clear title, description, linked tickets
@@ -1313,10 +1519,10 @@ div.container > .user-card > h2 {
 
 ```bash
 # Good branch names
-feature/user-authentication
-bugfix/fix-payment-calculation
-refactor/extract-user-service
-hotfix/security-patch
+16_user-authentication
+fix-payment-calculation
+extract-user-service
+11_security-patch
 
 # Good commit messages
 feat: add user search functionality
