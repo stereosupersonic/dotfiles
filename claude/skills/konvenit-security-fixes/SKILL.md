@@ -33,10 +33,12 @@ scripts/fix_security_deps.sh <TICKET-NUMBER>
 
 The script will:
 1. Create a new branch: `<TICKET-NUMBER>-security-fix` from the latest master
-2. Run `bundle update --patch` to update Ruby gems
-3. Run `yarn upgrade` to update JavaScript packages (if package.json exists)
-4. Commit changes with message: `<TICKET-NUMBER> security fix`
-5. Push the branch to remote
+2. Bump Ruby gems to patch versions (if Gemfile exists) - this needs to run bundle that the version updates the Gemfile.lock
+3. Run `bundle update --patch` to update Ruby gems
+4. Run `yarn upgrade` to update JavaScript packages (if package.json exists)
+5. Run tests to ensure updates do not break the build, only on Gems not Apps because they run to long
+6. Commit changes with message: `<TICKET-NUMBER> security fix`
+7. Push the branch to remote
 
 ### 4. Verify Dependabot Alerts Are Fixed
 

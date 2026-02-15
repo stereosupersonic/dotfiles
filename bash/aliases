@@ -9,7 +9,7 @@ alias dots="cd $DOTFILESPATH"
 
 alias platform="echo $PLATFORM"
 
-alias e='$EDITOR .'
+#alias e='$EDITOR .'
 #######################################################################
 #history
 ############################################################################

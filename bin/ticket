@@ -71,7 +71,8 @@ elsif ARGV[0] == "finish"
 
   # create PR
   log "create Pullrequest"
-  pr_url = `GH_TOKEN=aeb5d4a890d81f2064d55a20aac24505b60221aa gh pr create --title '#{@ticket_number} #{title}' -b 'https://miceportal.atlassian.net/browse/#{@ticket_number}'`
+  # NEED github token set in env GH_TOKEN
+  pr_url = `gh pr create --title '#{@ticket_number} #{title}' -b 'https://miceportal.atlassian.net/browse/#{@ticket_number}'`
   log "PR: #{pr_url}"
 
 

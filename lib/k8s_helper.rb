@@ -1,8 +1,9 @@
 def kubeconfig
+  return ENV["KUBECONFIG"] if ENV["KUBECONFIG"]
   if %w[miceportal-production miceportal-beta].include?(k8s_namespace)
-    "/Users/michaeldeimel/entwicklung/miceportal/composator/config/kubeconfig_bcp-miceportal-prod.yaml"
+    "/Users/michaeldeimel/.kube/boreus-miceportal-production.yml"
   else
-    "/Users/michaeldeimel/entwicklung/miceportal/composator/config/kubeconfig_miceportal-staging.yaml"
+    "/Users/michaeldeimel/.kube/boreus-miceportal-stage.yml"
   end
 end
 
