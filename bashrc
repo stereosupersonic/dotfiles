@@ -79,4 +79,6 @@ fi
 # export PATH="/opt/homebrew/opt/icu4c/bin:$PATH"
 
 # Added by `rbenv init` on Mi Okt 15 16:18:49 CEST 2025
-eval "$(rbenv init - --no-rehash bash)"
+if command -v rbenv &> /dev/null; then
+  eval "$(rbenv init - --no-rehash bash)"
+fi
