@@ -140,6 +140,259 @@ Perform thorough code reviews following Konvenit's Rails development standards.
 
 ---
 
+## SOLID Principles
+
+Check code against all five SOLID principles during review.
+
+### Single Responsibility Principle (SRP)
+- [ ] Each class has **one, and only one, reason to change**
+- [ ] Class name clearly describes its single purpose
+- [ ] No class names containing "And", "Manager", or "Handler" (smell for multiple responsibilities)
+- [ ] Methods within a class operate on the same data/concern
+
+```ruby
+# ❌ Bad: Multiple responsibilities in one class
+class User < ApplicationRecord
+  validates :email, presence: true
+
+  def send_welcome_email       # Notification concern
+    UserMailer.welcome_email(self).deliver_now
+  end
+
+  def generate_activity_report  # Reporting concern
+    activities.map { |a| "#{a.created_at}: #{a.description}" }.join("\n")
+  end
+
+  def sync_to_crm               # External integration concern
+    CrmApi.create_contact(email: email, name: name)
+  end
+end
+
+# ✅ Good: Each class has one responsibility
+class User < ApplicationRecord
+  validates :email, presence: true
+end
+
+class UserNotifier
+  def initialize(user)
+    @user = user
+  end
+
+  def send_welcome_email
+    UserMailer.welcome_email(@user).deliver_now
+  end
+end
+
+class UserCrmSync
+  def initialize(user)
+    @user = user
+  end
+
+  def sync
+    CrmApi.create_contact(email: @user.email, name: @user.name)
+  end
+end
+```
+
+### Open/Closed Principle (OCP)
+- [ ] Code is **open for extension, closed for modification**
+- [ ] No long `case`/`if-elsif` chains that grow with new types
+- [ ] Use polymorphism or strategy pattern where behavior varies by type
+
+```ruby
+# ❌ Bad: Must modify existing code for each new format
+class ReportGenerator
+  def generate(report_type, data)
+    case report_type
+    when :pdf then generate_pdf(data)
+    when :csv then generate_csv(data)
+    # Adding new format requires modifying this class
+    end
+  end
+end
+
+# ✅ Good: New formats added without modifying existing code
+class ReportService
+  def initialize(generator)
+    @generator = generator
+  end
+
+  def create_report(data)
+    @generator.generate(data)
+  end
+end
+
+class PdfReportGenerator
+  def generate(data)
+    # PDF logic
+  end
+end
+
+# Adding XML doesn't touch existing code
+class XmlReportGenerator
+  def generate(data)
+    # XML logic
+  end
+end
+```
+
+### Liskov Substitution Principle (LSP)
+- [ ] Subclasses are **substitutable** for their parent class without breaking behavior
+- [ ] No type checking (`is_a?`, `kind_of?`) before calling methods
+- [ ] Subclasses don't remove or restrict parent functionality
+- [ ] Subclasses don't throw exceptions the parent doesn't throw
+
+```ruby
+# ❌ Bad: Subclass breaks the parent contract
+class Bird
+  def fly
+    "Flying high!"
+  end
+end
+
+class Penguin < Bird
+  def fly
+    raise "Penguins can't fly!"  # LSP violation
+  end
+end
+
+# ✅ Good: Better abstraction hierarchy
+class Bird
+  def move
+    raise NotImplementedError
+  end
+end
+
+class FlyingBird < Bird
+  def move
+    "Flying high!"
+  end
+end
+
+class Penguin < Bird
+  def move
+    "Swimming fast!"
+  end
+end
+```
+
+### Interface Segregation Principle (ISP)
+- [ ] No class is forced to implement methods it doesn't use
+- [ ] Concerns/modules are **small and focused** on a single behavior
+- [ ] No empty or no-op method implementations to satisfy an interface
+
+```ruby
+# ❌ Bad: Fat concern forces unrelated behavior
+module Publishable
+  extend ActiveSupport::Concern
+
+  def publish; end
+  def unpublish; end
+  def schedule_publication(time); end
+  def generate_social_media_post; end  # Not all publishable things need this
+end
+
+# ✅ Good: Segregated concerns — include only what you need
+module Publishable
+  extend ActiveSupport::Concern
+
+  def publish
+    update!(published: true, published_at: Time.zone.now)
+  end
+
+  def unpublish
+    update!(published: false)
+  end
+end
+
+module Schedulable
+  extend ActiveSupport::Concern
+
+  def schedule_publication(time)
+    update!(scheduled_for: time)
+  end
+end
+
+class BlogPost < ApplicationRecord
+  include Publishable
+  include Schedulable
+end
+
+class Comment < ApplicationRecord
+  include Publishable
+  # No scheduling needed for comments
+end
+```
+
+### Dependency Inversion Principle (DIP)
+- [ ] High-level modules **don't depend on low-level modules** — both depend on abstractions
+- [ ] No direct instantiation of hard-coded dependencies
+- [ ] Dependencies are injected, making code testable and swappable
+
+```ruby
+# ❌ Bad: Tightly coupled to concrete implementations
+class OrderProcessor
+  def process(order)
+    payment = StripePaymentGateway.new
+    payment.charge(order.amount)
+
+    email = SmtpEmailService.new
+    email.send_confirmation(order.user.email)
+  end
+end
+
+# ✅ Good: Dependencies injected
+class OrderProcessor
+  def initialize(payment_gateway:, email_service:)
+    @payment_gateway = payment_gateway
+    @email_service = email_service
+  end
+
+  def process(order)
+    @payment_gateway.charge(order.amount)
+    @email_service.send_confirmation(order.user.email)
+  end
+end
+
+# Easy to swap and test
+processor = OrderProcessor.new(
+  payment_gateway: StripePaymentGateway.new,
+  email_service: SendgridEmailService.new
+)
+```
+
+---
+
+## Law of Demeter
+
+**"Only talk to your immediate friends"** — an object should only call methods on itself, its parameters, objects it creates, or its direct instance variables.
+
+- [ ] No **train wrecks** (chained method calls through multiple objects)
+- [ ] Use `delegate` or wrapper methods to hide navigation
+
+```ruby
+# ❌ Bad: Train wreck — reaching through objects
+order.user.shipping_address.city.tax_rate
+@post.author.profile.avatar_url
+
+# ✅ Good: Delegation hides the chain
+class Order
+  delegate :tax_rate, to: :user
+end
+
+class User
+  delegate :tax_rate, to: :shipping_address
+end
+
+# ✅ Good: Rails delegate with prefix
+class Post < ApplicationRecord
+  delegate :avatar_url, to: :author, prefix: true
+  # Generates: post.author_avatar_url
+end
+```
+
+---
+
 ## Architecture Patterns
 
 ### Controllers
@@ -182,6 +435,66 @@ class CreateUser < BaseService
 
   def call
     # Business logic here
+  end
+end
+```
+
+### Result Object Pattern
+
+When services return result objects, use a consistent pattern across the project:
+
+```ruby
+# app/services/result.rb
+class Result
+  attr_reader :value, :error
+
+  def initialize(success:, value: nil, error: nil)
+    @success = success
+    @value = value
+    @error = error
+  end
+
+  def success?
+    @success
+  end
+
+  def failure?
+    !@success
+  end
+
+  def self.success(value = nil)
+    new(success: true, value: value)
+  end
+
+  def self.failure(error)
+    new(success: false, error: error)
+  end
+end
+
+# ✅ Service using Result
+class ProcessOrder < BaseService
+  attr_accessor :order_params
+
+  def call
+    order = Order.create(order_params)
+    return Result.failure(order.errors) unless order.persisted?
+
+    charge = PaymentService.charge(order)
+    return Result.failure(charge.error) if charge.failure?
+
+    Result.success(order)
+  end
+end
+
+# ✅ Controller usage
+def create
+  result = ProcessOrder.call(order_params: order_params)
+
+  if result.success?
+    redirect_to result.value
+  else
+    @errors = result.error
+    render :new
   end
 end
 ```
@@ -242,15 +555,32 @@ end
 - [ ] Properly scoped and indexed
 
 ```ruby
-# ✅ Query object pattern
-class ActiveUsersQuery
-  def self.call(scope = User.all)
-    scope
-      .where(active: true)
-      .where("last_login_at > ?", 30.days.ago)
-      .order(last_login_at: :desc)
+# ✅ Query object pattern — chainable
+class PostQuery
+  def initialize(relation = Post.all)
+    @relation = relation
+  end
+
+  def recent
+    @relation.where("created_at > ?", 1.week.ago)
+  end
+
+  def popular
+    @relation.where("views_count > ?", 1000)
+  end
+
+  def by_author(author)
+    @relation.where(author: author)
+  end
+
+  def trending
+    recent.popular.order(views_count: :desc)
   end
 end
+
+# Usage
+PostQuery.new.trending
+PostQuery.new.by_author(current_user).recent
 ```
 
 ### Models
@@ -260,10 +590,48 @@ end
 - [ ] **Avoid callbacks** (`before_*`, `after_*`) unless absolutely necessary
 - [ ] Prefer explicit orchestration over callbacks
 
+### Callback Rules
+
+**Acceptable callbacks** (data normalization within the same record):
 ```ruby
-# ❌ Bad: Callback with side effects
+# ✅ OK: Normalizing data before validation
 class User < ApplicationRecord
-  after_create :send_welcome_email, :create_default_settings
+  before_validation :normalize_email
+
+  private
+
+  def normalize_email
+    self.email = email.downcase.strip if email.present?
+  end
+end
+
+# ✅ OK: Setting calculated fields on the same record
+class Post < ApplicationRecord
+  before_save :generate_slug
+
+  private
+
+  def generate_slug
+    self.slug = title.parameterize if slug.blank?
+  end
+end
+```
+
+**Unacceptable callbacks** (side effects, external calls, other models):
+```ruby
+# ❌ Bad: Email sending in callback — breaks seed scripts, bulk imports
+class User < ApplicationRecord
+  after_create :send_welcome_email
+end
+
+# ❌ Bad: External API calls in callback — slows every save
+class Order < ApplicationRecord
+  after_save :sync_to_crm
+end
+
+# ❌ Bad: Updating other models in callback — hidden dependencies
+class Comment < ApplicationRecord
+  after_create :update_post_stats
 end
 
 # ✅ Good: Explicit orchestration in service
@@ -277,6 +645,8 @@ class CreateUser < BaseService
 end
 ```
 
+**If you must use callbacks for side effects, prefer `after_commit`** (transaction-aware, won't fire on rollback).
+
 ### Concerns & Modules
 - [ ] Concerns should be **small and focused** on a single behavior
 - [ ] Avoid "junk drawer" concerns that collect unrelated methods
@@ -285,7 +655,7 @@ end
 - [ ] Name concerns after the behavior they provide (`Archivable`, `Searchable`)
 
 ```ruby
-# ❌ Bad: Junk drawer concern
+# ❌ Bad: Junk drawer concern — unrelated methods lumped together
 module UserHelpers
   extend ActiveSupport::Concern
 
@@ -295,7 +665,7 @@ module UserHelpers
   def export_to_csv; end
 end
 
-# ✅ Good: Focused concern
+# ✅ Good: Focused concern, reused by multiple models
 module Archivable
   extend ActiveSupport::Concern
 
@@ -335,7 +705,6 @@ resources :companies do
       member do
         post :activate
         post :deactivate
-        get :export
       end
     end
   end
@@ -380,6 +749,9 @@ resources :employee_activations, only: %i[create destroy]
 - [ ] Define rules in `Authorization::Ability`
 - [ ] Use `web_access` block for authentication
 - [ ] Use `check_authorization` and `authorize_resource`
+- [ ] **Authorization checks on ALL actions** that modify data — not just some
+- [ ] **Server-side authorization always** — never rely on client-side hiding alone
+- [ ] Scope queries to current user where appropriate
 
 ```ruby
 # ✅ Correct auth pattern
@@ -391,6 +763,27 @@ class InvitationsController < ApplicationController
 
   check_authorization
   authorize_resource :invitation
+end
+```
+
+```ruby
+# ❌ Bad: Authorization only in view — server is unprotected
+<% if current_user.admin? %>
+  <%= link_to "Delete", post_path(@post), method: :delete %>
+<% end %>
+
+# Controller has no check — anyone can send DELETE request
+def destroy
+  @post = Post.find(params[:id])
+  @post.destroy
+end
+
+# ✅ Good: Server-side authorization
+def destroy
+  @post = Post.find(params[:id])
+  authorize! :destroy, @post  # cancancan check
+  @post.destroy
+  redirect_to posts_path
 end
 ```
 
@@ -440,6 +833,28 @@ class User < ApplicationRecord
 end
 ```
 
+### Input Validation
+- [ ] **Validate all user inputs** at model level
+- [ ] Use format validations for emails, URLs, etc.
+- [ ] Sanitize inputs before persistence
+
+```ruby
+class User < ApplicationRecord
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :age, numericality: { only_integer: true, greater_than: 0 }
+  validates :website, format: { with: /\Ahttps?:\/\// }, allow_blank: true
+
+  before_validation :sanitize_inputs
+
+  private
+
+  def sanitize_inputs
+    self.name = name.strip if name.present?
+    self.bio = ActionController::Base.helpers.sanitize(bio) if bio.present?
+  end
+end
+```
+
 ---
 
 ## ActiveRecord Query Safety
@@ -473,6 +888,69 @@ User.where(role: "guest").delete_all  # Could delete millions
 User.where(role: "guest").where("created_at < ?", 1.year.ago).in_batches.delete_all
 ```
 
+### N+1 Query Detection & Prevention
+
+- [ ] Check for **association access in loops** — the most common N+1 pattern
+- [ ] Use **Bullet gem** in development to detect N+1s automatically
+- [ ] Understand when to use `includes`, `preload`, `eager_load`, and `joins`
+
+```ruby
+# ❌ RED FLAG: Accessing associations in loops
+@posts.each do |post|
+  post.author.name       # N+1 — queries author for EACH post
+  post.comments.count    # N+1 — queries comments for EACH post
+end
+
+# ✅ includes — Rails picks preload or eager_load automatically
+@posts = Post.includes(:author)
+
+# ✅ preload — separate queries (better for large datasets)
+Post.preload(:author, :comments)
+
+# ✅ eager_load — LEFT OUTER JOIN (needed when filtering on association)
+Post.eager_load(:author).where(authors: { active: true })
+
+# ✅ joins — for filtering only, does NOT load association data
+Post.joins(:author).where(authors: { country: "US" })
+# Still need includes if you access the association after:
+Post.joins(:author).includes(:author).where(authors: { country: "US" })
+
+# ✅ Nested eager loading
+Post.includes(comments: :author)
+```
+
+### Counter Caches
+```ruby
+# ❌ Bad: Count query per post in a loop
+@posts.each { |post| post.comments.count }  # N+1
+
+# ✅ Good: Counter cache — zero queries for count
+class Comment < ApplicationRecord
+  belongs_to :post, counter_cache: true
+end
+
+# Migration
+add_column :posts, :comments_count, :integer, default: 0
+Post.find_each { |post| Post.reset_counters(post.id, :comments) }
+
+# Now free:
+@posts.each { |post| post.comments_count }  # No query!
+```
+
+### Bullet Gem Setup
+```ruby
+# Gemfile
+gem "bullet", group: :development
+
+# config/environments/development.rb
+config.after_initialize do
+  Bullet.enable = true
+  Bullet.alert = true
+  Bullet.bullet_logger = true
+  Bullet.console = true
+end
+```
+
 ---
 
 ## Performance
@@ -482,15 +960,6 @@ User.where(role: "guest").where("created_at < ?", 1.year.ago).in_batches.delete_
 - [ ] Use counter caches when appropriate
 - [ ] Implement pagination for large datasets
 - [ ] Cache expensive operations
-
-```ruby
-# ❌ Bad: N+1 query
-@posts = Post.all
-# In view: post.author.name
-
-# ✅ Good: Eager loading
-@posts = Post.includes(:author)
-```
 
 ### Caching
 - [ ] Use fragment caching for expensive view partials
@@ -612,6 +1081,23 @@ rescue JSON::ParserError => e
 end
 ```
 
+### API Rate Limiting
+- [ ] Rate limiting implemented for API endpoints
+- [ ] Per-IP and per-token limits configured
+
+```ruby
+# Use Rack::Attack for rate limiting
+class Rack::Attack
+  throttle("api/ip", limit: 300, period: 5.minutes) do |req|
+    req.ip if req.path.start_with?("/api/")
+  end
+
+  throttle("api/token", limit: 100, period: 1.minute) do |req|
+    req.env["HTTP_AUTHORIZATION"] if req.path.start_with?("/api/")
+  end
+end
+```
+
 ---
 
 ## Mailers & Notifications
@@ -653,6 +1139,142 @@ params.require(:user).permit!
 
 # ✅ Good: Explicit whitelist
 params.require(:user).permit(:name, :email)
+```
+
+### SQL Injection — Detection Patterns
+
+Look for these red flags during review:
+
+```ruby
+# ❌ String interpolation in SQL
+User.where("email = '#{params[:email]}'")
+User.find_by_sql("SELECT * FROM users WHERE id = #{params[:id]}")
+ActiveRecord::Base.connection.execute("DELETE FROM posts WHERE id = #{params[:id]}")
+
+# ✅ Safe alternatives
+User.where("email = ?", params[:email])            # Parameterized
+User.where(email: params[:email])                   # Hash conditions
+User.where("email = :email", email: params[:email]) # Named placeholders
+User.find_by_sql(["SELECT * FROM users WHERE email = ?", params[:email]])
+```
+
+### XSS — Detection Patterns
+
+```ruby
+# ❌ Dangerous
+<%= params[:message].html_safe %>
+<%= raw @comment.body %>
+<script>var msg = "<%= @message %>";</script>
+
+# ✅ Safe
+<%= @user.bio %>                                          # Rails auto-escapes
+<%= sanitize @comment.body, tags: %w(strong em a) %>      # Controlled allowlist
+<script>var msg = <%= @message.to_json %>;</script>        # JSON-escaped
+
+# ✅ Use data attributes instead of inline JS
+<div data-message="<%= @message %>"></div>
+<script>
+  const message = document.querySelector("[data-message]").dataset.message;
+</script>
+```
+
+### Mass Assignment — Detection Patterns
+
+```ruby
+# ❌ Red flags to catch
+params.require(:user).permit!                                    # Permits everything
+User.create(params[:user])                                       # No strong params
+current_user.attributes = params[:user]                          # Direct assignment
+params[:product].each { |k, v| product.send("#{k}=", v) }       # Dynamic assignment
+
+# ✅ Conditional permissions for role-based access
+def user_params
+  if current_user.admin?
+    params.require(:user).permit(:name, :email, :role, :status)
+  else
+    params.require(:user).permit(:name, :email)
+  end
+end
+```
+
+### CSRF Protection
+- [ ] `protect_from_forgery` enabled (default in Rails)
+- [ ] Not disabled without good reason
+- [ ] State-changing actions use POST/PUT/DELETE, never GET
+
+```ruby
+# ❌ Bad: State change via GET
+get "/users/:id/delete", to: "users#destroy"
+
+# ✅ Good: Proper HTTP verb
+delete "/users/:id", to: "users#destroy"
+
+# ❌ Bad: Disabling CSRF without alternative auth
+class ApiController < ApplicationController
+  skip_before_action :verify_authenticity_token  # Only acceptable for token-authed APIs
+end
+```
+
+### Session Management
+- [ ] Secure cookie settings in production
+- [ ] Session reset on login (prevent session fixation)
+- [ ] Session timeout implemented
+
+```ruby
+# config/initializers/session_store.rb
+Rails.application.config.session_store :cookie_store,
+  key: "_app_session",
+  secure: Rails.env.production?,  # HTTPS only in production
+  httponly: true,                  # Not accessible via JavaScript
+  same_site: :lax                 # CSRF protection
+
+# Session fixation prevention
+def create
+  user = User.find_by(email: params[:email])
+  if user&.authenticate(params[:password])
+    reset_session  # Important: prevent session fixation
+    session[:user_id] = user.id
+    redirect_to root_path
+  end
+end
+```
+
+### Content Security Policy
+- [ ] CSP configured to restrict script/style sources
+
+```ruby
+# config/initializers/content_security_policy.rb
+Rails.application.config.content_security_policy do |policy|
+  policy.default_src :self
+  policy.script_src  :self, :https
+  policy.style_src   :self, :https
+end
+```
+
+### File Upload Security
+- [ ] **Validate file types** by actual content, not just client-provided content type
+- [ ] Limit file sizes
+- [ ] Store uploads outside web root (use cloud storage)
+- [ ] Scan uploaded files for malware if handling sensitive documents
+
+```ruby
+# ❌ Bad: Trusts client-provided content type
+if params[:file].content_type == "image/jpeg"
+  # Client can lie!
+end
+
+# ✅ Good: Validate extensions and content type, limit size
+class AvatarUploader < CarrierWave::Uploader::Base
+  storage :fog  # S3, not public/
+
+  def extension_whitelist
+    %w[jpg jpeg gif png]
+  end
+
+  def size_range
+    1..5.megabytes
+  end
+end
 ```
 
 ---
@@ -720,6 +1342,7 @@ params.require(:user).permit(:name, :email)
 - [ ] Log errors appropriately (Rollbar)
 - [ ] Provide meaningful error messages
 - [ ] **Never swallow exceptions or fail silently**
+- [ ] Don't leak internal details in error responses (stack traces, DB schema)
 
 ---
 
@@ -815,11 +1438,12 @@ end
 
 - [ ] **God objects**: Classes with too many responsibilities (>200 lines)
 - [ ] **Long methods**: Methods over 10-15 lines
-- [ ] **Long parameter lists**: More than 3-4 parameters
+- [ ] **Long parameter lists**: More than 3-4 parameters — introduce parameter object
 - [ ] **Feature envy**: Method using another object's data more than its own
 - [ ] **Primitive obsession**: Using primitives instead of small objects
 - [ ] **Data clumps**: Same group of variables appearing together repeatedly
 - [ ] **Shotgun surgery**: Single change requires edits across many files
+- [ ] **Train wrecks**: Chained method calls violating Law of Demeter
 
 ---
 
@@ -1130,14 +1754,14 @@ Prioritized list of changes to make.
 | Callbacks with side effects | 🔴 | Explicit orchestration |
 | Multiple instance variables | 🟡 | One per action |
 | `unless` with `else` | 🔴 | Use `if` |
-| N+1 queries | 🔴 | Use `includes` |
+| N+1 queries | 🔴 | Use `includes` / `preload` / `eager_load` |
 | Missing indexes | 🔴 | Add index |
 | Fat controller | 🔴 | Extract to service |
 | Inline JS/complex frameworks | 🟡 | Use Hotwire |
 | Swallowed exceptions | 🔴 | Handle explicitly |
 | `permit!` | 🔴 | Explicit whitelist |
 | SQL string interpolation | 🔴 | Use parameterized queries |
-| `html_safe` / `raw` in views | 🔴 | Use `content_tag` helpers |
+| `html_safe` / `raw` in views | 🔴 | Use `content_tag` / `sanitize` |
 | Production credentials in code | 🔴 | Use env vars / credentials |
 | Large data changes in migration | 🟡 | Move to rake task |
 | Missing foreign keys | 🟡 | Add foreign key constraints |
@@ -1173,3 +1797,24 @@ Prioritized list of changes to make.
 | Commented-out dead code | 🟡 | Remove — use version control |
 | Unbounded `delete_all` / `update_all` | 🔴 | Add proper `where` scope |
 | Missing `strong_migrations` gem | 🟢 | Add for migration safety checks |
+| Train wreck (chained dots) | 🟡 | Use `delegate` or wrapper methods (Law of Demeter) |
+| Long `case`/`if-elsif` by type | 🟡 | Use polymorphism (Open/Closed) |
+| Type checking before method call | 🟡 | Fix abstraction (Liskov Substitution) |
+| Hard-coded dependency instantiation | 🟡 | Inject dependencies (Dependency Inversion) |
+| No-op methods to satisfy interface | 🟡 | Segregate interfaces (ISP) |
+| Class with multiple responsibilities | 🔴 | Extract classes (Single Responsibility) |
+| State-changing action via GET | 🔴 | Use POST/PUT/DELETE |
+| Missing CSRF protection | 🔴 | Enable `protect_from_forgery` |
+| No session fixation prevention | 🔴 | Call `reset_session` on login |
+| File upload without type validation | 🔴 | Validate extensions and content |
+| Missing API rate limiting | 🟡 | Add Rack::Attack |
+| Missing Content Security Policy | 🟡 | Configure CSP headers |
+| Client-side-only authorization | 🔴 | Add server-side checks |
+| Missing counter cache for counts in loops | 🟡 | Add `counter_cache: true` |
+| Missing Bullet gem in development | 🟢 | Add for N+1 detection |
+| Direct `params[:model]` without strong params | 🔴 | Use `params.require().permit()` |
+| Dynamic attribute assignment with `send` | 🔴 | Use strong parameters |
+| `>4` method parameters | 🟡 | Introduce parameter object |
+| User input in `<script>` tags | 🔴 | Use `to_json` or data attributes |
+| Trusting client content type for uploads | 🔴 | Validate actual file content |
+| Leaking stack traces in error responses | 🟡 | Return generic error messages |
