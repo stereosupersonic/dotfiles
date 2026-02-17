@@ -173,6 +173,7 @@ end
 - [ ] Single public `call` method
 - [ ] Return a result object
 - [ ] Inherit from `BaseService`
+- [ ] **Establish a convention**: services either raise on failure OR return result objects — pick one and enforce it consistently across the project
 
 ```ruby
 # ✅ Correct service object pattern
@@ -276,6 +277,83 @@ class CreateUser < BaseService
 end
 ```
 
+### Concerns & Modules
+- [ ] Concerns should be **small and focused** on a single behavior
+- [ ] Avoid "junk drawer" concerns that collect unrelated methods
+- [ ] Prefer composition (service objects) over deep concern hierarchies
+- [ ] Concerns should not depend on specific model implementation details
+- [ ] Name concerns after the behavior they provide (`Archivable`, `Searchable`)
+
+```ruby
+# ❌ Bad: Junk drawer concern
+module UserHelpers
+  extend ActiveSupport::Concern
+
+  def full_name; end
+  def send_notification; end
+  def calculate_discount; end
+  def export_to_csv; end
+end
+
+# ✅ Good: Focused concern
+module Archivable
+  extend ActiveSupport::Concern
+
+  included do
+    scope :archived, -> { where.not(archived_at: nil) }
+    scope :active, -> { where(archived_at: nil) }
+  end
+
+  def archive!
+    update!(archived_at: Time.zone.now)
+  end
+
+  def archived?
+    archived_at.present?
+  end
+end
+```
+
+---
+
+## Routing
+
+- [ ] **RESTful routes preferred** over custom routes
+- [ ] Avoid deeply nested routes (max 1 level of nesting)
+- [ ] No unused/dead routes
+- [ ] Use `resources` over individual `get`/`post` definitions
+- [ ] Route constraints for parameter validation where applicable
+- [ ] API routes namespaced properly (`namespace :api do namespace :v1 do`)
+- [ ] Use `only:` or `except:` to limit generated routes to what's actually used
+- [ ] Member and collection routes should be rare — prefer new controllers instead
+
+```ruby
+# ❌ Bad: Deeply nested and custom routes
+resources :companies do
+  resources :departments do
+    resources :employees do
+      member do
+        post :activate
+        post :deactivate
+        get :export
+      end
+    end
+  end
+end
+
+# ✅ Good: Shallow nesting, separate controllers for actions
+resources :companies, only: %i[index show] do
+  resources :departments, only: %i[index show], shallow: true
+end
+
+resources :departments do
+  resources :employees, only: %i[index create], shallow: true
+end
+
+# Separate controller for activation
+resources :employee_activations, only: %i[create destroy]
+```
+
 ---
 
 ## Views & Templates
@@ -327,6 +405,74 @@ end
 - [ ] Use database constraints for data integrity
 - [ ] Use transactions for multi-step operations
 
+### Enums
+- [ ] **Always use explicit hash syntax** for enums to avoid reordering bugs
+- [ ] Be aware of auto-generated scopes and bang methods
+- [ ] Use `_prefix` or `_suffix` options when enum names could clash
+
+```ruby
+# ❌ Bad: Array syntax — reordering will break existing data
+enum status: [:draft, :published, :archived]
+
+# ✅ Good: Explicit hash — values are stable
+enum status: { draft: 0, published: 1, archived: 2 }
+
+# ✅ Good: With prefix to avoid method name clashes
+enum status: { active: 0, inactive: 1 }, _prefix: true
+# Generates: status_active?, status_inactive?
+```
+
+### Model Validations & DB Constraints
+- [ ] `presence:` ↔ `NOT NULL` constraint in DB
+- [ ] `uniqueness:` ↔ unique index in DB (note: `validates_uniqueness_of` alone is **not race-condition safe** — always back with a unique index)
+- [ ] Length constraints in both model and DB layers
+- [ ] Numeric constraints (`numericality:`) matched by DB check constraints where critical
+
+```ruby
+# ✅ Good: Both layers
+# Migration
+add_column :users, :email, :string, null: false
+add_index :users, :email, unique: true
+
+# Model
+class User < ApplicationRecord
+  validates :email, presence: true, uniqueness: true
+end
+```
+
+---
+
+## ActiveRecord Query Safety
+
+- [ ] **Use `find_each` / `in_batches`** for bulk processing instead of `.each` on large sets
+- [ ] Avoid `.all` without pagination on large tables
+- [ ] Be aware of `pluck` vs `select` trade-offs (`pluck` loads into memory immediately)
+- [ ] Check for missing `limit` on unbounded queries
+- [ ] Avoid `update_all` / `delete_all` without adequate `where` clauses
+- [ ] Use `exists?` instead of `present?` or `any?` for existence checks (avoids loading records)
+
+```ruby
+# ❌ Bad: Loads all records into memory
+User.all.each { |u| u.update(synced: true) }
+
+# ✅ Good: Processes in batches
+User.where(synced: false).find_each(batch_size: 500) do |user|
+  user.update(synced: true)
+end
+
+# ❌ Bad: Loads records just to check existence
+if User.where(email: email).present?
+
+# ✅ Good: SQL-level existence check
+if User.where(email: email).exists?
+
+# ❌ Bad: Unbounded delete
+User.where(role: "guest").delete_all  # Could delete millions
+
+# ✅ Good: Scoped and controlled
+User.where(role: "guest").where("created_at < ?", 1.year.ago).in_batches.delete_all
+```
+
 ---
 
 ## Performance
@@ -346,6 +492,33 @@ end
 @posts = Post.includes(:author)
 ```
 
+### Caching
+- [ ] Use fragment caching for expensive view partials
+- [ ] Use Russian doll caching for nested associations
+- [ ] Cache keys include version/timestamp for automatic expiration
+- [ ] Avoid caching user-specific content in shared caches
+- [ ] Use `Rails.cache.fetch` with explicit `expires_in` for data caching
+- [ ] Low-level caching for expensive computations or API calls
+
+```ruby
+# ✅ Good: Fragment caching with touch
+# Model
+class Comment < ApplicationRecord
+  belongs_to :post, touch: true
+end
+
+# View (HAML)
+- cache @post do
+  = render @post.comments
+
+# ✅ Good: Low-level caching
+def expensive_stats
+  Rails.cache.fetch("user_stats:#{id}", expires_in: 1.hour) do
+    calculate_stats
+  end
+end
+```
+
 ---
 
 ## Background Jobs
@@ -355,15 +528,30 @@ end
 - [ ] Use explicit job classes, not inline jobs
 - [ ] Place in `app/jobs/` organized by domain
 - [ ] Delegate to service objects
+- [ ] **Accept primitive arguments only** (IDs, strings) — not full objects (objects can change between enqueue and execution)
+- [ ] Set proper retry counts and dead-set handling
+- [ ] Avoid long-running jobs blocking queues
+- [ ] Consider unique job constraints if duplicate prevention matters
 
 ```ruby
+# ❌ Bad: Passing full object — can be stale when executed
+class ProcessPaymentJob < ApplicationJob
+  def perform(payment)
+    payment.process!
+  end
+end
+
 # ✅ Correct job pattern
 class ProcessPaymentJob < ApplicationJob
   queue_as :payments
+  sidekiq_options retry: 3
 
   def perform(payment_id)
     payment = Payment.find(payment_id)
     PaymentProcessor.new(payment).call
+  rescue ActiveRecord::RecordNotFound
+    # Record deleted between enqueue and execution — safe to skip
+    Rails.logger.warn("Payment #{payment_id} not found, skipping")
   end
 end
 ```
@@ -400,6 +588,29 @@ end
 - [ ] Use partial templates for reusable JSON structures
 - [ ] Consistent date/time formatting across API
 - [ ] Enum values serialized as human-readable strings, not integers
+
+### Serialization Safety
+- [ ] **Never use `Marshal.load`** on untrusted data (security risk — allows arbitrary code execution)
+- [ ] Use `YAML.safe_load` instead of `YAML.load` (prevents object deserialization attacks)
+- [ ] JSON parsing should handle malformed input gracefully with rescue
+
+```ruby
+# ❌ CRITICAL: Remote code execution risk
+data = Marshal.load(params[:data])
+
+# ❌ CRITICAL: Arbitrary object instantiation
+config = YAML.load(user_input)
+
+# ✅ Good: Safe deserialization
+config = YAML.safe_load(user_input, permitted_classes: [Date, Time])
+
+# ✅ Good: Safe JSON parsing
+begin
+  data = JSON.parse(raw_body)
+rescue JSON::ParserError => e
+  render json: { error: "Invalid JSON" }, status: :bad_request
+end
+```
 
 ---
 
@@ -456,8 +667,9 @@ params.require(:user).permit(:name, :email)
 - [ ] System tests must fail when JavaScript is broken
 - [ ] Test DB constraints, not just validations
 - [ ] Use `data-testid` attributes for stable selectors
-- [ ] Mock external dependencies (RSpec mocks or VCR)
+- [ ] Mock external dependencies (RSpec mocks, VCR, or `webmock`)
 - [ ] Don't over-test controllers — focus on behavior
+- [ ] Consider `shoulda-matchers` for concise association/validation specs
 
 ```ruby
 # ❌ Bad: Code change without specs
@@ -490,6 +702,17 @@ params.require(:user).permit(:name, :email)
 
 ---
 
+## Asset Pipeline & Importmaps
+
+- [ ] Assets organized logically (images, stylesheets, JavaScript)
+- [ ] Production asset precompilation verified
+- [ ] Images optimized for web (compressed, appropriate format)
+- [ ] Use lazy loading for below-the-fold images
+- [ ] No unused assets checked in
+- [ ] Importmap pins are version-locked
+
+---
+
 ## Error Handling
 
 - [ ] Use custom exception classes when appropriate
@@ -497,6 +720,85 @@ params.require(:user).permit(:name, :email)
 - [ ] Log errors appropriately (Rollbar)
 - [ ] Provide meaningful error messages
 - [ ] **Never swallow exceptions or fail silently**
+
+---
+
+## Deployment & Zero-Downtime Migrations
+
+Migrations must be **backward-compatible** with the currently running code. This is critical for zero-downtime deployments.
+
+- [ ] **Never rename columns directly** — add new column, migrate data, update code, remove old column in separate deploys
+- [ ] **Never remove columns** that running code still references — remove code references first, deploy, then remove column
+- [ ] Use `strong_migrations` gem to automatically catch unsafe migration patterns
+- [ ] Adding an index on a large table should use `algorithm: :concurrently` (Postgres)
+- [ ] Data migrations belong in rake tasks, not in schema migrations
+- [ ] Test migrations against a production-sized dataset to estimate runtime
+
+```ruby
+# ❌ Bad: Renaming a column in one step — breaks running code during deploy
+class RenameUserNameToFullName < ActiveRecord::Migration[7.1]
+  def change
+    rename_column :users, :name, :full_name
+  end
+end
+
+# ✅ Good: Multi-step safe rename
+# Step 1 (Deploy 1): Add new column
+class AddFullNameToUsers < ActiveRecord::Migration[7.1]
+  def change
+    add_column :users, :full_name, :string
+  end
+end
+
+# Step 2: Backfill data (rake task, not migration)
+# Step 3 (Deploy 2): Update code to use full_name, write to both columns
+# Step 4 (Deploy 3): Remove old column
+class RemoveNameFromUsers < ActiveRecord::Migration[7.1]
+  def change
+    safety_assured { remove_column :users, :name }
+  end
+end
+```
+
+---
+
+## PR & Code Hygiene
+
+- [ ] **PRs should be small and focused** — one concern per PR
+- [ ] Commit messages are meaningful and explain *why*, not just *what*
+- [ ] No unrelated changes bundled into a PR
+- [ ] Draft PRs used for early feedback on architecture decisions
+- [ ] PR description explains context, links to ticket/issue
+- [ ] Reviewer checklist completed before requesting review
+- [ ] No TODO/FIXME without a linked issue or ticket
+- [ ] Dead code removed — don't leave commented-out code in the codebase
+
+---
+
+## Websockets / ActionCable
+
+If ActionCable is used:
+- [ ] Channel authorization properly implemented
+- [ ] Stream names follow a consistent naming convention
+- [ ] Connection authentication verified (`connect` method)
+- [ ] Broadcasts scoped to appropriate audience
+- [ ] No sensitive data broadcast to unauthorized subscribers
+- [ ] Disconnection and cleanup handled properly
+
+```ruby
+# ✅ Correct ActionCable pattern
+class ChatChannel < ApplicationCable::Channel
+  def subscribed
+    chat = Chat.find(params[:id])
+    reject unless current_user.can_access?(chat)
+    stream_for chat
+  end
+
+  def unsubscribed
+    stop_all_streams
+  end
+end
+```
 
 ---
 
@@ -858,3 +1160,16 @@ Prioritized list of changes to make.
 | Shared mutable state | 🔴 | Use `RequestStore`, `Current`, or Rails.cache |
 | Unsafe memoization in class methods | 🔴 | Use thread-safe memoization or cache |
 | Global state modification | 🔴 | Use database or proper state management |
+| Enum with array syntax | 🔴 | Use explicit hash syntax |
+| `.each` on large dataset | 🟡 | Use `find_each` / `in_batches` |
+| `.present?` for existence check | 🟡 | Use `.exists?` |
+| `Marshal.load` on untrusted data | 🔴 | Never — remote code execution risk |
+| `YAML.load` on user input | 🔴 | Use `YAML.safe_load` |
+| Column rename in single migration | 🔴 | Multi-step safe rename |
+| Full objects passed to jobs | 🟡 | Pass IDs (primitives) only |
+| Junk drawer concerns | 🟡 | Split into focused concerns |
+| Deeply nested routes (>1 level) | 🟡 | Flatten with `shallow:` or new controllers |
+| TODOs/FIXMEs without linked issue | 🟡 | Link to ticket or remove |
+| Commented-out dead code | 🟡 | Remove — use version control |
+| Unbounded `delete_all` / `update_all` | 🔴 | Add proper `where` scope |
+| Missing `strong_migrations` gem | 🟢 | Add for migration safety checks |
