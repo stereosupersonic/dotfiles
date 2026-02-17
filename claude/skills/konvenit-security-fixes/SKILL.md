@@ -1,5 +1,5 @@
 ---
-name: security-fixes
+name: konvenit-security-fixes
 description: Automated dependency security fixes for Konvenit projects with full Jira integration and Dependabot verification. Creates a pull request with dependency updates for Dependabot alerts, manages Jira ticket status, verifies alerts are resolved, and links PR to ticket. Use when the user asks to fix Dependabot issues, update dependencies for security, create a security fix PR, or mentions a Jira ticket for security updates. Triggers on phrases like "fix dependabot issues", "security dependency updates", "create security PR for MP-1234", "fix security vulnerabilities in dependencies".
 ---
 
@@ -9,10 +9,13 @@ Automates the complete workflow of fixing Dependabot security alerts including J
 
 ## Workflow
 
+please follow these steps in order to ensure a smooth and effective security fix process.
+
 ### 1. Get Jira Ticket Number
 
-Check if there is an open Jira with the title "### <APPLICATION>> ### Fix Security Alerts". If not provided,
+Check if there is an open  and unassigned Jira ticket with the title "### <APPLICATION>> ### Fix Security Alerts". If not provided,
 Ask the user for the Jira ticket number if not provided:
+The application name can be determined from the git remote URL, so you can also ask for that if the user does not provide a ticket number. For example: auftragsbuch, katalysator, miceplace, reaktor, ratefinder2, etc.
 ```
 What's the Jira ticket number for this security fix? (e.g., MP-1234)
 ```
@@ -84,16 +87,17 @@ Use GitHub CLI to create PR:
 gh pr create --title "<TICKET-NUMBER> security fix" --body "[PR body with Jira link]"
 ```
 
-The PR will include:
+The Pullrequest will include:
 - Title: `<TICKET-NUMBER> security fix`
 - Body: Including link to Jira ticket and Dependabot verification results
-- Get the PR URL from the output
+- Get the Pullrequest URL from the output
 
-### 6. Link PR to Jira and Update Status
+### 6. Link Pullrequest to Jira and Update Status
 
-After PR is created:
-- **Post PR link as comment to Jira ticket** using Atlassian tools
+After Pullrequest is created:
+- **Post Pullrequest link as comment to Jira ticket** using Atlassian tools
 - **Move ticket status to "In Codereview"**
+- **Assign Pullrequest to reviewer**
 
 ### 7. Report Complete Results
 
@@ -101,7 +105,7 @@ Provide comprehensive summary to user:
 - Branch name
 - Commit hash
 - Dependabot verification results (alerts fixed vs remaining)
-- PR link
+- Pullrequest link
 - List of updated dependencies
 - Jira ticket status confirmation
 - Any warnings or next steps
@@ -115,10 +119,11 @@ Provide comprehensive summary to user:
 2. Run `scripts/fix_security_deps.sh MP-1234`
 3. **Verify Dependabot alerts at https://github.com/konvenit/mice-portal/security/dependabot**
 4. Report verification results
-5. Create PR (if alerts were fixed)
-6. Post PR link to Jira ticket
-7. Move ticket to "In Codereview"
-8. Final report:
+5. Create Pullrequest (if alerts were fixed)
+6. Post Pullrequest link to Jira ticket
+7. Assign Pullrequest link to Jira ticket
+8. Move ticket to "In Codereview"
+9. Final report:
    ```
    ✅ Jira MP-1234: Assigned to you, status → In Arbeit
    ✅ Created branch: MP-1234-security-fix
@@ -130,8 +135,9 @@ Provide comprehensive summary to user:
       - 3 critical alerts resolved ✅
       - 0 alerts remaining
       - All security issues fixed!
-   ✅ PR created: https://github.com/konvenit/mice-portal/pull/123
-   ✅ Jira MP-1234: Added PR comment, status → In Codereview
+   ✅ Pullrequest created: https://github.com/konvenit/mice-portal/pull/123
+   ✅ Pullrequest assigned to reviewer
+   ✅ Jira MP-1234: Added Pullrequest comment, status → In Codereview
    ```
 
 ## Complete Workflow Steps
