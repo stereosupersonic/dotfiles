@@ -1,6 +1,11 @@
 #Alias erzeugen $HOME/.bashrc
 #for shared with dropbox for private config
 
+# Alles, was Output erzeugt, nur bei interaktiven Sessions ausführen.
+if [[ $- != *i* ]]; then
+  return
+fi
+
 # Identify OS and Machine -----------------------------------------
 export OS=`uname -s | sed -e 's/ *//g;y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/'`
 export OSVERSION=`uname -r`; OSVERSION=`expr "$OSVERSION" : '[^0-9]*\([0-9]*\.[0-9]*\)'`
