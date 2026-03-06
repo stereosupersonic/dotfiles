@@ -36,7 +36,7 @@ scripts/fix_security_deps.sh <TICKET-NUMBER>
 
 The script will:
 1. Create a new branch: `<TICKET-NUMBER>-security-fix` from the latest master
-2. Bump Ruby gems to patch versions (if Gemfile exists) - this needs to run bundle that the version updates the Gemfile.lock
+2. Bump gems to patch versions (if Gemfile exists) - this needs to run bundle that the version updates the Gemfile.lock
 3. Run `bundle update --patch` to update Ruby gems
 4. Run `yarn upgrade` to update JavaScript packages (if package.json exists)
 5. Run tests to ensure updates do not break the build, only on Gems not Apps because they run to long
@@ -64,6 +64,7 @@ https://github.com/konvenit/<APPLICATION>/security/dependabot
 - Are there still open alerts?
 - Which alerts were fixed by the updates?
 - Are there any remaining alerts that need different action?
+- Is the version updated if its a ruby gem and Gemfile.lock was updated wuth the new version?
 
 **Report to user:**
 - ✅ "All Dependabot alerts resolved" (if no alerts remain)
@@ -145,11 +146,12 @@ Provide comprehensive summary to user:
 1. **Start**: Get Jira ticket number
 2. **Jira Update 1**: Assign to user + status → "In Arbeit"
 3. **Git Operations**: Branch, update deps, commit, push
-4. **Verification**: Check Dependabot alerts page to confirm fixes
-5. **Decision Point**: Proceed with PR based on verification results
-6. **PR Creation**: Create PR with Jira link and verification results in description
-7. **Jira Update 2**: Comment with PR link + status → "In Codereview"
-8. **Report**: Summarize all actions including Dependabot verification
+4. **Version Update**: update the version number and check if Gemfile.lock was updated with the new version
+5. **Verification**: Check Dependabot alerts page to confirm fixes
+6. **Decision Point**: Proceed with PR based on verification results
+7. **PR Creation**: Create PR with Jira link and verification results in description
+8. **Jira Update 2**: Comment with PR link + status → "In Codereview"
+9. **Report**: Summarize all actions including Dependabot verification
 
 ## Dependabot Verification Details
 

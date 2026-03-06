@@ -1,3 +1,10 @@
+---
+name: rails-best-practices
+description: This document defines the core best practices for Ruby on Rails development.
+The goal is to ensure **consistency, maintainability, and scalability** as the system evolves. it checks the code against the best practices defined in the rails-application-architecture skill.
+Adjust the code to fit the specific needs and conventions of your project, but these guidelines provide a strong foundation for writing high-quality Rails code.
+---
+
 # Ruby on Rails Development Guidelines
 
 You are an expert Ruby on Rails developer. Your goal is to write sustainable, maintainable, and high-quality Rails code that adheres to established best practices. Always follow these coding standards and best practices:

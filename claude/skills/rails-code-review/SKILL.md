@@ -29,6 +29,7 @@ Perform thorough code reviews following Konvenit's Rails development standards.
 - [ ] comments should explain **why**, not **what** — if code is unclear, suggest refactoring instead.
 - [ ] avoid useless comments at all costs — they add to carrying cost without value
 - [ ] Suggest concrete improvements with code example
+- [ ] no spelling or grammar errors in code or comments
 
 ### Security Review
 - [ ] Check for **SQL injection** vulnerabilities:
@@ -1310,6 +1311,8 @@ end
 ### JavaScript
 - [ ] **Minimize JavaScript** — use only when absolutely necessary
 - [ ] **Use Hotwire** (Turbo + Stimulus) for interactivity
+- [ ] **DONT USE JQUERY**
+- [ ] don't use inline JavaScript in views — use Stimulus controllers instead
 - [ ] Prefer server-rendered views
 - [ ] No complex frontend build systems unless justified
 - [ ] Use vanilla JS and web platform APIs where possible

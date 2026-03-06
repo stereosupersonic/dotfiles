@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "accessibility-compliance",
+  "owner": "wshobson",
+  "repo": "agents",
+  "path": "plugins/ui-design/skills/accessibility-compliance",
+  "branch": "main",
+  "sha": "e179358f4815139c33256b77952988f67ed481bd",
+  "source": "manual"
+}
