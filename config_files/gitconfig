@@ -1,6 +1,7 @@
 [user]
 	name = MICE Portal
 	email = michael@deimel.de
+	signingkey = /Users/michaeldeimel/.ssh/id_ed25519.pub
 
 [github]
   user = $GITHUB_USER
@@ -108,3 +109,9 @@
 [credential "https://gist.github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
+[gpg "ssh"]
+	allowedSignersFile = /Users/michaeldeimel/.config/git/allowed_signers
