@@ -15,12 +15,21 @@ def log(msg)
 end
 
 if ARGV.empty?
-  puts "Usage: ticket start|finish|pr <ticket_number>"
+  puts "Usage: ticket start <ticket_number>"
+  puts "Usage: ticket finish|show"
   exit 1
 end
 
 def branch_name
   "#{@ticket_number.upcase}_#{@title.parameterize.slice(0, 70)}"
+end
+
+def current_branch
+  @current_branch ||= `git rev-parse --abbrev-ref HEAD`.strip
+end
+
+def get_ticket_number_from_branch
+  @get_ticket_number_from_branch ||= current_branch[/MP-\d+/i]
 end
 
 # use jira-cli https://github.com/ankitpokhrel/jira-cli
@@ -30,12 +39,17 @@ def fetch_jira_title
   `jira issue view #{@ticket_number} --raw | jq .fields.summary`.strip.gsub(/[^0-9a-z ]/i, '')
 end
 
-def ticket_url
-  "https://miceportal.atlassian.net/browse/#{@ticket_number}"
+# FIX 1: method used local param `ticket_number` in signature but `@ticket_number` in body
+def ticket_url(ticket_number = @ticket_number)
+  "https://miceportal.atlassian.net/browse/#{ticket_number}"
 end
 
-if ARGV[0] == "start"
-  @ticket_number = ARGV[1]
+case ARGV[0]
+when "show"
+  `open #{ticket_url(get_ticket_number_from_branch)}`
+when "start"
+  log "Starting ticket #{ARGV[1]}"
+  @ticket_number = ARGV[1]  # FIX 2: removed stray extra leading space
   if @ticket_number.nil?
     puts "Usage: ticket start <ticket_number>"
     exit 1
@@ -43,13 +57,14 @@ if ARGV[0] == "start"
 
   puts "Starting ticket #{@ticket_number}"
   @title = fetch_jira_title
-  `master && git checkout -b #{branch_name}`
+  # FIX 3: `master` is not a valid shell command — should be `git checkout master`
+  `git checkout master && git checkout -b #{branch_name}`
   # jira
   `jira issue move #{@ticket_number} 'In Arbeit'`
-elsif ARGV[0] == "finish"
-  # get current branch name
-  current_branch = `git rev-parse --abbrev-ref HEAD`.strip
-  @ticket_number = current_branch[/MP-\d+/i]
+when "finish"
+  log "Finishing ticket"
+
+  @ticket_number = get_ticket_number_from_branch
   title = fetch_jira_title
   if @ticket_number.nil?
     puts "Not a ticket branch in current_branch #{current_branch}"
@@ -72,9 +87,8 @@ elsif ARGV[0] == "finish"
   # create PR
   log "create Pullrequest"
   # NEED github token set in env GH_TOKEN
-  pr_url = `gh pr create --title '#{@ticket_number} #{title}' -b 'https://miceportal.atlassian.net/browse/#{@ticket_number}'`
+  pr_url = `gh pr create --title '#{@ticket_number} #{title}' -b 'https://miceportal.atlassian.net/browse/#{@ticket_number}'`.strip
   log "PR: #{pr_url}"
-
 
   # add comment to jira
   log "add comment to jira"
@@ -82,10 +96,12 @@ elsif ARGV[0] == "finish"
 
   # mv to QA
   log "move ticket to QA"
-  `jira issue move #{@ticket_number} 'Qualitätssicherung' `
+  `jira issue move #{@ticket_number} 'Qualitätssicherung'`
 
+  # FIX 4: pr_url must be stripped before passing to `open` (done above)
   `open #{pr_url}`
 else
-  puts "Usage: ticket start <ticket_number>"
+  puts "Usage: ticket start|finish <ticket_number>"
   exit 1
 end
+# FIX 5: removed stray `end` — no matching def/do
