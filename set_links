@@ -51,8 +51,10 @@ ln -nfsv "$DOTFILE/vim/gvimrc" $HOME/.gvimrc
 #claude
 mv $HOME/.claude/CLAUDE.md $HOME/.claude/CLAUDE.md.bak
 mv $HOME/.claude/skills $HOME/.claude/skills.bak
-ln -nfsv "$DOTFILE/claude/CLAUDE.md" $HOME/.claude/CLAUDE.md 
+mv $HOME/.claude/rules $HOME/.claude/rules.bak
+ln -nfsv "$DOTFILE/claude/CLAUDE.md" $HOME/.claude/CLAUDE.md
 ln -nfsv "$DOTFILE/claude/skills" $HOME/.claude/skills
+ln -nfsv "$DOTFILE/claude/rules" $HOME/.claude/rules
 
 # git rubocop
 mv $HOME/.rubocop.yml $HOME/.rubocop.bak
