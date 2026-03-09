@@ -2,6 +2,38 @@
 
 ## Controller Guidelines
 
+### Routing
+
+- Use `member` and `collection` blocks for multiple custom routes on a resource
+- Use `shallow: true` for nested resources deeper than 1 level
+- Avoid wildcard/match routes — use explicit verb-based routes
+- Keep routes RESTful — model actions as resources (see CRUD Resource Modeling below)
+
+```ruby
+# Good - shallow nesting prevents deep URLs
+resources :forums do
+  resources :topics, shallow: true do
+    resources :posts, shallow: true
+  end
+end
+# Produces: /forums/:forum_id/topics (index, create)
+#           /topics/:id (show, edit, update, destroy)
+
+# Good - member/collection blocks
+resources :users do
+  member do
+    get :profile
+    get :activity
+  end
+  collection do
+    get :search
+  end
+end
+
+# Bad - match/wildcard routes
+match "/api/*path", to: "api#handle", via: :all
+```
+
 ### Strong Parameters
 
 Use the Rails 8+ `params.expect` syntax for cleaner, more explicit parameter handling:
@@ -153,6 +185,23 @@ end
 - Avoid fat models with too many responsibilities
 - Avoid callbacks
 - Validations should also be handled within the database
+- Prefer `has_many :through` over `has_and_belongs_to_many` — join models are almost always needed eventually
+- Always specify `dependent:` on `has_many` and `has_one` associations
+- Use bang persistence methods (`save!`, `create!`, `update!`) unless explicitly handling the return value
+- Use `self[:attribute]` over `read_attribute`/`write_attribute`
+
+### Model Macro Ordering
+
+Follow this order for macro-style declarations in models:
+
+1. `include` / `extend`
+2. `enum`
+3. Associations (`belongs_to`, `has_many`, `has_one`)
+4. Validations
+5. Scopes
+6. Callbacks (use sparingly)
+7. Class methods
+8. Instance methods
 
 ```ruby
 class User < ApplicationRecord

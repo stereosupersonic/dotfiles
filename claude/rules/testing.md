@@ -101,6 +101,31 @@ RSpec.describe Users::CreateUser do
 end
 ```
 
+## Time-Dependent Tests
+
+Use `freeze_time` or `travel_to` for tests that depend on the current time. Never rely on `Time.current` producing a stable value during test execution.
+
+```ruby
+# Good - frozen time
+it "expires after 30 days" do
+  freeze_time do
+    subscription = create(:subscription)
+    travel 31.days
+    expect(subscription).to be_expired
+  end
+end
+
+# Good - specific time
+it "shows morning greeting before noon" do
+  travel_to Time.zone.local(2024, 6, 15, 9, 0) do
+    expect(helper.greeting).to eq("Good morning")
+  end
+end
+
+# Bad - don't use travel_to with Time.now/Time.current just to freeze
+travel_to(Time.current) { ... } # Use freeze_time instead
+```
+
 ## Testing Strategy
 - **Unit tests**: Test service objects, presenters, models in isolation
 - **Integration tests**: Test controllers and request flows

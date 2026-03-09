@@ -23,7 +23,7 @@ end
 
 **Other column type guidelines:**
 - Use `datetime` instead of `timestamp` for consistency
-- Boolean columns should be nullable unless business logic requires a default
+- Boolean columns should always have `default:` and `null: false` to avoid the 3-state problem (`true`/`false`/`nil`). If you need three states, use an enum instead
 - Use `decimal` for money (with precision and scale), never `float`
 
 ## Migration Best Practices
@@ -83,6 +83,10 @@ end
 - Use `pluck` for fetching single columns
 - Use `exists?` instead of `present?` for existence checks
 - Use `find_each` and `in_batches` for large datasets
+- Never use string interpolation in queries — always use parameterized conditions
+- Prefer named placeholders over `?` for readability
+- Don't order by `id` — use `created_at` instead (IDs aren't guaranteed sequential with UUIDs or partitioning)
+- Use `where.missing(:association)` for finding records without associated records (Rails 6.1+)
 
 ```ruby
 # Good - eager loading
@@ -99,11 +103,26 @@ User.find_each(batch_size: 1000) do |user|
   user.send_notification
 end
 
+# Good - named placeholders
+User.where("created_at > :start AND created_at < :end", start: 1.week.ago, end: Time.current)
+
+# Good - missing associations
+Post.where.missing(:comments)
+
 # Bad - N+1 query
 @users = User.all
 @users.each do |user|
   puts user.posts.count # N+1 query!
 end
+
+# Bad - string interpolation in queries
+User.where("email = '#{email}'") # SQL injection risk
+
+# Bad - ordering by id
+User.order(:id)
+
+# Good - ordering by timestamp
+User.order(:created_at)
 ```
 
 ## Transactions

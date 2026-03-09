@@ -35,11 +35,19 @@
 - Use layouts for common page structure
 - Use view helpers sparingly—prefer presenters
 - Keep views focused on presentation
+- Pass local variables to partials instead of relying on instance variables — makes partials reusable and dependencies explicit
 
 ```haml
 / Using data-testid for testing
 %button.btn.btn-primary{ data: { testid: "submit-button" } }
   Submit Order
+
+/ Good - pass locals to partials
+= render "shared/user_card", user: @user
+
+/ Bad - partial relies on instance variable
+= render "shared/user_card"
+/ (and inside the partial: @user — implicit, fragile, not reusable)
 ```
 
 ## Internationalization (I18n)
