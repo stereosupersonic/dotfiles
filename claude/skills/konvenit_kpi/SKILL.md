@@ -30,45 +30,43 @@ Beispiel für März 2026:
 
 ---
 
-## Schritt 3: JQL-Query per Atlassian MCP ausführen
+## Schritt 3: Ticket-Keys per acli suchen
 
-Nutze das Atlassian MCP Tool (`Atlassian:jira_search` o.ä.) mit folgendem JQL:
+Verwende `acli jira workitem search` mit folgendem JQL:
 
-```
-project = MP
-AND created >= "DATE_FROM"
-AND created <= "DATE_TO"
-AND (status CHANGED TO "Geschlossen" DURING ("DATE_FROM", "DATE_TO"))
-AND text ~ "github.com"
-AND priority = Blocker
+```bash
+acli jira workitem search --jql 'project = MP AND created >= "DATE_FROM" AND created <= "DATE_TO" AND (status CHANGED TO "Geschlossen" DURING ("DATE_FROM", "DATE_TO")) AND text ~ "github.com" AND priority = Blocker' --fields "key,summary,assignee,status,priority" --paginate --json
 ```
 
-Beispiel für März 2026:
-```
-project = MP AND created >= "2026-03-01" AND created <= "2026-03-31" AND (status CHANGED TO "Geschlossen" DURING ("2026-03-01", "2026-03-31")) AND text ~ "github.com" AND priority = Blocker
-```
-
-Felder, die du abrufen musst:
-- `key`
-- `summary`
-- `assignee` (displayName)
-- `created`
-- `resolutiondate` (= Resolved)
-- `status`
-- `priority`
+**Wichtig:** Die Search-Funktion unterstützt NICHT die Felder `created` und `resolutiondate`. Deshalb werden in diesem Schritt nur die Ticket-Keys und Basisdaten geholt.
 
 ---
 
-## Schritt 4: Dauer berechnen
+## Schritt 4: Datumsfelder per workitem view nachladen
+
+Für jedes gefundene Ticket die Datumsfelder einzeln abrufen:
+
+```bash
+acli jira workitem view <KEY> --fields "key,summary,assignee,created,resolutiondate,statuscategorychangedate" --json
+```
+
+**Fallback-Logik für das Schließdatum:**
+- Primär: `resolutiondate` verwenden
+- Fallback: Wenn `resolutiondate` null ist (häufig bei geschlossenen Tickets ohne formale Resolution), `statuscategorychangedate` als Schließdatum verwenden
+
+---
+
+## Schritt 5: Dauer berechnen
 
 Für jedes Ticket:
-- `Duration` = `resolutiondate` - `created`
+- `Resolved` = `resolutiondate` || `statuscategorychangedate`
+- `Duration` = `Resolved` - `created`
 - Ausgabe in **ganzen Tagen** (z.B. `3d`, `0d`, `12d`)
-- Falls `resolutiondate` fehlt → zeige `–` an
+- Falls weder `resolutiondate` noch `statuscategorychangedate` vorhanden → zeige `–` an
 
 ---
 
-## Schritt 5: Ergebnisse als Tabelle ausgeben
+## Schritt 6: Ergebnisse als Tabelle ausgeben
 
 Gib die Tickets in dieser Tabellenstruktur aus:
 
@@ -89,20 +87,24 @@ Tickets gesamt:    5
 ⏱ Längste Dauer:   7 Tage (MP-1267)
 ```
 
+Status Text: Blocker: <Anzahl Tickets> (all security updates) - MTTC: AVG (<Durchlaufzeit> Days) longest: <Längste Dauer> days
 ---
 
-## Schritt 6: Sonderfälle
+## Schritt 7: Sonderfälle
 
 | Situation | Verhalten |
 |---|---|
 | Keine Tickets gefunden | "Keine Blocker-Tickets für diesen Monat gefunden." |
-| `resolutiondate` fehlt | Duration = `–`, wird aus Durchschnitt ausgeschlossen |
+| `resolutiondate` null | `statuscategorychangedate` als Fallback verwenden |
+| Beide Datumsfelder null | Duration = `–`, wird aus Durchschnitt ausgeschlossen |
 | Ticket noch offen | Wird nicht angezeigt (JQL filtert bereits danach) |
 
 ---
 
-## Hinweise zur Atlassian-Integration
+## Hinweise zur acli-Integration
 
-- Verwende das Atlassian cli tool acli Jira-Abfragen
-- Stelle sicher, dass die JQL korrekt formatiert ist und die Datumsgrenzen stimmen
-- Achte auf die Zeitzonen bei der Berechnung von `Duration` (Jira gibt Zeiten in UTC zurück)
+- Verwende `acli jira workitem search` für die JQL-Suche und `acli jira workitem view` für Detailfelder
+- Die Search-Funktion unterstützt nur bestimmte Felder: `key`, `summary`, `assignee`, `status`, `priority`, `issuetype`
+- Datumsfelder (`created`, `resolutiondate`, `statuscategorychangedate`) müssen per `workitem view --fields` einzeln abgerufen werden
+- Verwende `--paginate --json` bei der Suche für vollständige Ergebnisse
+- Achte auf die Zeitzonen bei der Berechnung von `Duration` (Jira gibt Zeiten mit Offset zurück, z.B. `+0100`)
