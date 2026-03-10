@@ -2,25 +2,6 @@
 
 ## Column Type Conventions
 
-**Prefer `text` over `string` for text fields:**
-- PostgreSQL treats `text` and `string` (varchar) identically for performance
-- `string` has an arbitrary 255 character limit that causes silent truncation
-- `text` avoids limit-related bugs and migration headaches
-
-```ruby
-# Good - use text for flexibility
-create_table :users do |t|
-  t.text :name                    # No arbitrary length limit
-  t.text :bio                     # Obviously text
-  t.text :email                   # Even short fields benefit
-end
-
-# Avoid - arbitrary 255 char limit
-create_table :users do |t|
-  t.string :name                  # May truncate unexpectedly
-end
-```
-
 **Other column type guidelines:**
 - Use `datetime` instead of `timestamp` for consistency
 - Boolean columns should always have `default:` and `null: false` to avoid the 3-state problem (`true`/`false`/`nil`). If you need three states, use an enum instead

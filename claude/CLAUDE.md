@@ -5,6 +5,7 @@ Detailed rules are in `~/.claude/rules/`:
 - `ruby.md` — Ruby style, formatting, naming, control flow, collections, strings
 - `rails.md` — Controllers, models, Rails-specific conventions
 - `architecture.md` — Service objects, presenters, finders, form objects, namespacing, file structure
+- `documentation.md` — How to document and write comments
 - `database.md` — ActiveRecord, migrations, queries, transactions, constraints
 - `views.md` — HAML, templates, I18n
 - `testing.md` — RSpec, testing philosophy, system tests

@@ -1431,7 +1431,7 @@ end
 - [ ] Handle errors gracefully in controllers
 - [ ] Log errors appropriately (Rollbar)
 - [ ] Provide meaningful error messages
-- [ ] **Never swallow exceptions or fail silently**
+- [ ] **NEVER EVER swallow exceptions or fail silently!!!**
 - [ ] Don't leak internal details in error responses (stack traces, DB schema)
 
 ---
