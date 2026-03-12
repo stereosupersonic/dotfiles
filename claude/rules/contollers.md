@@ -277,6 +277,46 @@ class User < ApplicationRecord
 end
 ```
 
+## Multi-Format Error Handling
+
+When controllers serve both HTML and JSON, handle errors for both formats:
+
+```ruby
+rescue_from ActiveRecord::RecordNotFound do |exception|
+  respond_to do |format|
+    format.html { redirect_to root_path, alert: "Record not found" }
+    format.json { render json: { error: "Not found" }, status: :not_found }
+  end
+end
+```
+
+## API Controllers
+
+For API-only endpoints, inherit from `ActionController::API` instead of `ActionController::Base` for a leaner stack:
+
+- Use `ActionController::API` base class
+- Implement proper HTTP status codes
+- Version APIs from day one (`/api/v1/`)
+- Use serializers (Jbuilder, ActiveModel::Serializers) for consistent JSON output
+- Handle CORS appropriately (e.g., `rack-cors` gem)
+- Skip CSRF protection (token auth or JWT instead)
+
+```ruby
+module Api
+  module V1
+    class BaseController < ActionController::API
+      before_action :authenticate_token
+
+      private
+
+      def authenticate_token
+        # Token-based auth logic
+      end
+    end
+  end
+end
+```
+
 ## Best Practices
 
 1. **Keep controllers thin** - Move business logic to models or service objects
@@ -289,9 +329,23 @@ end
 8. **Use flash messages** for user feedback
 9. **Set instance variables** only for view rendering
 10. **Avoid complex queries** in controllers - use scopes or query objects
-10. **Avoid to define helpers methods inside controlles** helper should be located under helpers
+11. **Avoid defining helper methods inside controllers** - helpers should be located under helpers
 
+## MCP-Enhanced Capabilities
 
+When Rails MCP Server is available, leverage:
+- **Routing Documentation**: Access comprehensive routing guides and DSL reference
+- **Controller Patterns**: Reference ActionController methods and modules
+- **Security Guidelines**: Query official security best practices
+- **API Design**: Access REST and API design patterns from Rails guides
+- **Middleware Information**: Understand the request/response cycle
+
+Use MCP tools to:
+- Verify routing DSL syntax and options
+- Check available controller filters and callbacks
+- Reference proper HTTP status codes and when to use them
+- Find security best practices for the current Rails version
+- Understand request/response format handling
 
 ## References
 

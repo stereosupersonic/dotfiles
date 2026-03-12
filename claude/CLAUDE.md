@@ -9,7 +9,8 @@ Detailed rules are in `~/.claude/rules/`:
 - `database.md` — ActiveRecord, migrations, queries, transactions, constraints
 - `views.md` — HAML, templates, I18n
 - `testing.md` — RSpec, testing philosophy, system tests
-- `backend.md` — Background jobs, API development, error handling, performance
+- `backend.md` — API development, error handling, performance
+- `jobs.md` — Background jobs
 - `controllers.md` — Rails Controllers. the C of MVC
 - `models.md` — Rails models. the M of MVC
 - `security.md` — Authentication, authorization, security best practices

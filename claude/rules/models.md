@@ -288,6 +288,84 @@ end
 ```
 
 
+## Association Tips
+
+Use `:inverse_of` for bidirectional associations when Rails can't infer them automatically (e.g., custom foreign keys, scoped associations, or polymorphic):
+
+```ruby
+class User < ApplicationRecord
+  has_many :authored_posts, class_name: "Post", foreign_key: :author_id, inverse_of: :author
+end
+
+class Post < ApplicationRecord
+  belongs_to :author, class_name: "User", inverse_of: :authored_posts
+end
+```
+
+This ensures both sides of the association share the same in-memory object, avoiding stale data and unnecessary queries.
+
+## Advanced Queries
+
+### Arel for Complex Queries
+
+Use Arel when ActiveRecord's query interface isn't expressive enough:
+
+```ruby
+users = User.arel_table
+posts = Post.arel_table
+
+User.where(
+  users[:created_at].gt(1.month.ago)
+    .and(users[:role].eq("editor"))
+    .or(users[:admin].eq(true))
+)
+```
+
+Prefer ActiveRecord scopes and `where` for straightforward queries — only reach for Arel when you need complex `OR` conditions, subqueries, or operations that can't be expressed cleanly otherwise.
+
+### Bulk Operations
+
+Use bulk methods for performance when operating on large datasets:
+
+```ruby
+# Bulk insert (Rails 6+)
+User.insert_all([
+  { name: "Alice", email: "alice@example.com" },
+  { name: "Bob", email: "bob@example.com" },
+])
+
+# Bulk upsert
+User.upsert_all(records, unique_by: :email)
+
+# Bulk update
+User.where(active: false).update_all(archived: true)
+
+# Bulk delete
+User.where("last_login_at < ?", 2.years.ago).delete_all
+```
+
+Note: `insert_all`, `update_all`, and `delete_all` skip validations and callbacks — use intentionally.
+
+## Migration Safety
+
+- Always test rollbacks before deploying: `rails db:migrate && rails db:rollback`
+- For data migrations that aren't reversible, use explicit `up` and `down` methods
+- Consider the impact on existing data — add `NOT NULL` constraints in two steps if the column has existing `nil` values
+
+```ruby
+# Two-step NOT NULL addition for existing data
+class MakeEmailRequired < ActiveRecord::Migration[7.1]
+  def up
+    User.where(email: nil).update_all(email: "unknown@placeholder.com")
+    change_column_null :users, :email, false
+  end
+
+  def down
+    change_column_null :users, :email, true
+  end
+end
+```
+
 ## Best Practices
 
 1. **Fat models, skinny controllers** - Business logic belongs in models
