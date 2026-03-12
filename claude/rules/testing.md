@@ -52,7 +52,33 @@ end
 - Use let and let! appropriately
 - Use contexts for different scenarios
 - Only mock external dependencies
-- add one model spec for tesing the facotory if the data is valid
+- Add one model spec for testing the factory if the data is valid
+- Use `Faker` for realistic fake values in factories
+
+### Model Testing
+
+- **Test database constraints** in model specs using `update_columns` (bypasses validations intentionally) to verify the DB layer enforces integrity
+- Only test validations when they are complex or use custom validators — single-line validations (`validates :name, presence: true`) are config, not logic
+- Always create a **FactoryBot factory** for every model
+
+```ruby
+# Good - testing a DB constraint
+it "enforces email uniqueness at the database level" do
+  create(:user, email: "test@example.com")
+  duplicate = build(:user, email: "test@example.com")
+  expect { duplicate.save(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+end
+
+# Good - testing a complex custom validator
+it "rejects email from disallowed domain" do
+  user = build(:user, email: "test@blocked.com")
+  expect(user).not_to be_valid
+  expect(user.errors[:email]).to include("is not from an allowed domain")
+end
+
+# Unnecessary - testing a trivial validation
+it { should validate_presence_of(:name) }  # skip unless you need the coverage signal
+```
 
 ### RSpec Best Practices
 
@@ -94,8 +120,8 @@ end
 
 ### System Specs
 
-* don't use `data-testid` attributes for test selectors use aria-label instead
-* aria-labels are better for accessibility for users with disabilities and compatibility with AI agents and screen readers
+* Prefer semantic HTML selectors (`button`, `nav`, `h1`) and aria-labels over `data-testid` — semantic markup is more stable across refactors and better for accessibility
+* Use aria-labels for compatibility with screen readers and AI agents
 ```ruby
 RSpec.describe 'User Registration', type: :system do
   it 'allows a user to sign up' do

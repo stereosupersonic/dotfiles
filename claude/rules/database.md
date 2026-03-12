@@ -3,6 +3,7 @@
 ## Column Type Conventions
 
 **Other column type guidelines:**
+- Use `text` instead of `string`/`varchar` in Postgres — there is no performance difference, and arbitrary length limits cause bugs
 - Use `datetime` instead of `timestamp` for consistency
 - Boolean columns should always have `default:` and `null: false` to avoid the 3-state problem (`true`/`false`/`nil`). If you need three states, use an enum instead
 - Use `decimal` for money (with precision and scale), never `float`
@@ -71,7 +72,7 @@ end
 ```
 
 ## Query Optimization
-- Always use eager loading to avoid N+1 queries
+- Always use eager loading to avoid N+1 queries — add the Bullet gem in development to detect N+1s automatically
 - Use `includes` for loading associations you'll use
 - Use `preload` when you don't need joins
 - Use `joins` when filtering by associations

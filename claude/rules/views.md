@@ -29,9 +29,17 @@
       = link_to "Edit", edit_user_path(@user), class: "btn btn-primary"
 ```
 
+## Semantic HTML
+
+- **Use semantic HTML first**: mark up content with the correct tag for its meaning (`<h1>`, `<nav>`, `<section>`, `<aside>`, `<ol>`, `<button>`, etc.)
+- **Then** use `<div>` and `<span>` only to solve layout/styling problems
+- If you see a `<div>` in a view, it should mean "this is purely for styling"
+- Don't choose HTML tags based on their appearance; choose based on purpose
+- Semantic markup = more stable views = more stable tests (anchoring on `<button>`, `<nav>`, `<ul>` is more stable than class selectors)
+- No business logic in views — views should not make database queries or perform calculations
+
 ## View Best Practices
 
-- Use `data-testid` attributes for test selectors
 - Avoid logic in views—use presenters or helpers
 - Use partials for reusable components
 - Use layouts for common page structure
@@ -40,10 +48,6 @@
 - Pass local variables to partials instead of relying on instance variables — makes partials reusable and dependencies explicit
 
 ```haml
-/ Using data-testid for testing
-%button.btn.btn-primary{ data: { testid: "submit-button" } }
-  Submit Order
-
 / Good - pass locals to partials
 = render "shared/user_card", user: @user
 

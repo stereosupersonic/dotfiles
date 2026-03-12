@@ -20,13 +20,16 @@ tags:
 
 ## ActiveJob Best Practices
 
-- Make jobs idempotent (safe to retry)
+- Make jobs idempotent (safe to retry) — jobs **will** be retried, design accordingly
 - Write shallow job classes that delegate to a service object or domain models
 - Use meaningful queue names
 - Set appropriate retry strategies
 - Handle failures gracefully
 - Keep jobs focused on single responsibility
-- Pass IDs, not objects
+- Pass primitive types (IDs, strings, numbers) as job arguments — never pass full ActiveRecord objects
+- **Job arguments must be JSON-safe** — symbols become strings during serialization, custom objects serialize unexpectedly
+- Start side effects in-request and move to background only when you have evidence you need to (response time SLA, fault tolerance, external API calls)
+- **Always** use jobs for third-party API calls (email, payments, webhooks) — even at tiny scale, they will fail
 
 
 ### Basic Job Structure
@@ -66,6 +69,12 @@ end
 ```
 
 ## Idempotency Patterns
+
+**Key concepts:**
+- Idempotent: passing a specific `updated_at` value → same result every time
+- Non-idempotent: calling `Time.zone.now` inside the job → different value each retry
+- Charging money, sending emails, making external API calls = especially critical to make idempotent
+- Know the failure/retry risk and severity — not every method needs to be idempotent, but charging someone twice is serious
 
 ### Using Unique Job Keys
 ```ruby

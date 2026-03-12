@@ -131,6 +131,18 @@ class RegistrationsController < ApplicationController
 end
 ```
 
+### Parameter Conversion
+
+Controllers are responsible for converting HTTP strings into proper types before handing off to business logic:
+- For ActiveRecord, strings are often fine (AR handles conversions) — don't add unnecessary `.to_i`
+- For custom types (e.g. dollars → cents), convert in the controller before passing to services
+- Only create a conversion abstraction when you have 3+ duplications
+
+```ruby
+# Convert custom types in the controller
+widget_params[:price_cents] = Price.new(widget_params[:price_cents]).cents
+```
+
 ### Controller Best Practices
 - Keep controllers thin—delegate to services only when complexity warrants it
 - Use `params.expect` (Rails 8+) for strong parameters
@@ -138,7 +150,7 @@ end
 - Use standard CRUD actions when possible (index, show, new, create, edit, update, destroy)
 - Handle errors gracefully with proper HTTP status codes
 - Use before_actions for authentication, authorization, and common setup
-- Limit instance variables—prefer one per action, named after the resource
+- **Expose exactly ONE instance variable per action**, named after the resource (`@widget`, `@widgets`). Exceptions: reference data (dropdown lists), global context (`current_user`), persisted UI state (active tab). Multiple instance variables that collectively represent a resource = a domain modeling problem, not a view problem.
 - Use `respond_to` for multiple formats
 - Return early with guard clauses
 - `before_action` filters should only reference actions defined in the same controller (lexically scoped) — don't filter on inherited actions not visible in the current file

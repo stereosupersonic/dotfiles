@@ -41,9 +41,8 @@ class User < ApplicationRecord
   validates :name, presence: true, length: { minimum: 2 }
   validates :role, inclusion: { in: ROLES }
 
-  # Callbacks
+  # Callbacks (database lifecycle only — never queue jobs or send emails here)
   before_save :normalize_email
-  after_create :send_welcome_email
 
   # Scopes
   scope :active, -> { where(active: true) }
@@ -106,12 +105,23 @@ end
 
 ## Validations
 
+**Validations vs Database Constraints:**
+- Database constraints guarantee data integrity — they are the only true guarantee
+- Rails validations provide user experience (friendly error messages via `.errors`)
+- `validates_uniqueness_of` does **not** guarantee uniqueness — always back it with a database unique index
+- `update_column`/`update_columns` bypasses validations — design your system knowing this
+- Don't test simple single-line validations (presence, format, inclusion) — they're config, not logic. Only test complex or custom validators.
+
+**ActiveModel for non-DB resources:**
+- Use `ActiveModel` for resources not backed by a database table
+- ActiveModel supports validations, making it work seamlessly with Rails form helpers and error display
+
 ```ruby
 class User < ApplicationRecord
   # Presence
   validates :email, presence: true
 
-  # Uniqueness
+  # Uniqueness — ALWAYS back with a DB unique index
   validates :email, uniqueness: { case_sensitive: false }
   validates :username, uniqueness: { scope: :organization_id }
 
@@ -348,7 +358,12 @@ end
 validates :email, email_domain: { in: %w[example.com company.com] }
 ```
 
-### Callback Ordering
+### Callbacks — Database Lifecycle Only
+
+Callbacks are hooks for **database lifecycle events**, not business logic triggers:
+- Acceptable: `normalizes`, data normalization, logging/metrics via `after_commit`
+- Never: sending emails, queueing jobs, making API calls — these run inside a DB transaction and can cause lock cascades
+- If you find yourself writing `after_create :send_welcome_email` — move it to a service object
 
 If callbacks can't be avoided, declare them in execution order for readability:
 `before_validation` → `after_validation` → `before_save` → `around_save` → `before_create`/`before_update` → `after_create`/`after_update` → `after_save` → `after_commit`
