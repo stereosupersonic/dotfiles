@@ -1,6 +1,14 @@
+---
+name: jobs
+description: background jobs
+version: 1.0.0
+rails_version: ">= 7.0"
+tags:
+  - background jobs
+  - sidekiq
+---
+
 # Rails Background Jobs
-
-
 
 ## Core Responsibilities
 
@@ -11,6 +19,15 @@
 5. **Monitoring**: Add logging and instrumentation
 
 ## ActiveJob Best Practices
+
+- Make jobs idempotent (safe to retry)
+- Write shallow job classes that delegate to a service object or domain models
+- Use meaningful queue names
+- Set appropriate retry strategies
+- Handle failures gracefully
+- Keep jobs focused on single responsibility
+- Pass IDs, not objects
+
 
 ### Basic Job Structure
 ```ruby
@@ -259,13 +276,5 @@ This pattern:
 - Puts business logic in testable domain objects
 - Allows easy sync/async switching
 
-### Sidekiq/ActiveJob Best Practices
-- Make jobs idempotent (safe to retry)
-- Write shallow job classes that delegate to a service object or domain models
-- Use meaningful queue names
-- Set appropriate retry strategies
-- Handle failures gracefully
-- Keep jobs focused on single responsibility
-- Pass IDs, not objects
 
 Remember: Background jobs should be idempotent, handle errors gracefully, and be designed for reliability and performance.

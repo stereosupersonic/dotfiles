@@ -16,6 +16,21 @@
 - Use `change` method when possible for reversible migrations
 - Use `up` and `down` for complex non-reversible migrations
 - Add comments for complex database structures
+- Name foreign keys explicitly with the `name:` option — don't rely on auto-generated FK names
+- When using models in migrations, define a local migration-scoped class to avoid future breakage
+
+```ruby
+# Define a local model class in migrations to decouple from app code
+class BackfillUserStatus < ActiveRecord::Migration[7.1]
+  class MigrationUser < ActiveRecord::Base
+    self.table_name = :users
+  end
+
+  def up
+    MigrationUser.where(status: nil).update_all(status: "active")
+  end
+end
+```
 
 ```ruby
 class CreateOrders < ActiveRecord::Migration[7.1]
@@ -68,6 +83,11 @@ end
 - Prefer named placeholders over `?` for readability
 - Don't order by `id` — use `created_at` instead (IDs aren't guaranteed sequential with UUIDs or partitioning)
 - Use `where.missing(:association)` for finding records without associated records (Rails 6.1+)
+- Prefer `ids` over `pluck(:id)` — `User.ids` not `User.pluck(:id)`
+- Prefer `size` over `count` for potentially-loaded collections — `size` checks if the collection is already loaded before hitting the DB
+- Prefer `where.not(id: id)` over `where("id != ?", id)`
+- Prefer `find` for primary key lookup (raises `RecordNotFound`), `find_by` for attribute lookup (returns `nil`)
+- Use heredocs with `squish` for raw SQL in `find_by_sql`
 
 ```ruby
 # Good - eager loading

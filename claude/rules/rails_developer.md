@@ -1,12 +1,9 @@
-
 ---
 name: rails-developer
 description: General Rules for working om a rails code base
 version: 1.0.0
 rails_version: ">= 8.0"
-
 ---
-
 
 ## 📚 Core Rails Principles
 

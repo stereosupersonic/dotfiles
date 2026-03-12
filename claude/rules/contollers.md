@@ -141,6 +141,7 @@ end
 - Limit instance variables—prefer one per action, named after the resource
 - Use `respond_to` for multiple formats
 - Return early with guard clauses
+- `before_action` filters should only reference actions defined in the same controller (lexically scoped) — don't filter on inherited actions not visible in the current file
 
 ```ruby
 class UsersController < ApplicationController

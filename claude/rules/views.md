@@ -56,16 +56,16 @@
 
 ### Translation Key Conventions
 
-**Use relative translation keys in views:**
+**Use full translation key paths in views:**
 ```ruby
-# Good - relative keys (Rails resolves based on view path)
+# Good - explicit full paths, greppable and unambiguous
 # In app/views/users/show.html.haml
-= t(".title")           # Looks up "users.show.title"
-= t(".welcome_message") # Looks up "users.show.welcome_message"
-
-# Avoid - absolute keys are verbose and repetitive
 = t("users.show.title")
 = t("users.show.welcome_message")
+
+# Avoid - lazy lookup (dot-prefixed) hides the actual key path
+= t(".title")           # Implicit — hard to grep, breaks on partial moves
+= t(".welcome_message")
 ```
 
 **Use `_html` or `_md` suffix for rich content:**
@@ -81,10 +81,10 @@ en:
 
 ```ruby
 # In view - automatically marks as html_safe
-= t(".bio_html", content: @user.bio)
+= t("users.show.bio_html", content: @user.bio)
 
 # For markdown content (if using a markdown renderer)
-= render_markdown(t(".welcome_md"))
+= render_markdown(t("users.show.welcome_md"))
 ```
 
 ### use linter
@@ -97,17 +97,43 @@ en:
 - Translate all user-facing content
 - Use YAML anchors for shared translations
 - Keep translation files organized by feature/namespace
-- Use interpolation for dynamic values: `t(".greeting", name: @user.name)`
-- For forms, use `include_blank: t(".select_option")` instead of hardcoded strings
+- Use interpolation for dynamic values: `t("users.show.greeting", name: @user.name)`
+- For forms, use `include_blank: t("users.form.select_option")` instead of hardcoded strings
 - Test translations exist in your test suite
 
 ```ruby
 # Form with translated blank option
-= f.select :category, @categories, include_blank: t(".select_category")
+= f.select :category, @categories, include_blank: t("posts.form.select_category")
 
 # Pluralization
-= t(".items_count", count: @items.size)
+= t("posts.index.items_count", count: @items.size)
 # en.yml: items_count:
 #   one: "1 item"
 #   other: "%{count} items"
 ```
+
+### Locale File Organization
+
+Organize locale files into subdirectories by concern:
+
+```
+config/
+└── locales/
+    ├── en.yml                  # Shared formats (date, currency, number)
+    ├── models/
+    │   ├── user.en.yml
+    │   └── post.en.yml
+    └── views/
+        ├── users.en.yml
+        └── posts.en.yml
+```
+
+Load subdirectories in `config/application.rb`:
+
+```ruby
+config.i18n.load_path += Dir[Rails.root.join("config", "locales", "**", "*.{rb,yml}")]
+```
+
+### Partials Consolidation
+
+- When a partial is used from only one view, consider inlining it — partials add indirection and file count without benefit when not reused

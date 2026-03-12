@@ -1,6 +1,7 @@
 # Ruby Style & Formatting
 
 ## General Style
+
 - **Always use double quotes** for strings unless single quotes are specifically needed
 - Use 2 spaces for indentation (no tabs)
 - Keep line length under 100 characters (120 max for exceptional cases)
@@ -160,6 +161,9 @@ message = "Hello, " + user.name + "!"
 - Use `find_each` and `in_batches` for processing large datasets
 - Always use `Time.current` instead of `Time.now` (respects time zones)
 - Use `Date.current` instead of `Date.today`
+- Prefer Ruby stdlib over ActiveSupport aliases: `start_with?` not `starts_with?`, `end_with?` not `ends_with?`
+- Prefer Ruby comparison operators over `Array#inquiry` and `String#inquiry`
+- Use `Time.zone.parse` instead of `Time.parse` (respects application time zone)
 
 ```ruby
 # Good

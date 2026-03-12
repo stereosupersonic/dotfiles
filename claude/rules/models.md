@@ -1,5 +1,5 @@
 ---
-name: rails-models
+name: models
 description: ActiveRecord patterns, migrations, validations, callbacks, associations
 version: 1.0.0
 rails_version: ">= 7.0"
@@ -129,6 +129,10 @@ class User < ApplicationRecord
   # Inclusion/Exclusion
   validates :role, inclusion: { in: ROLES }
   validates :username, exclusion: { in: %w[admin root] }
+
+  # One attribute per validation — don't group unrelated attributes
+  # Bad:  validates :email, :password, presence: true
+  # Good: separate lines per attribute (as shown above)
 
   # Custom validation
   validate :email_domain_allowed
@@ -303,6 +307,51 @@ end
 ```
 
 This ensures both sides of the association share the same in-memory object, avoiding stale data and unnecessary queries.
+
+### `before_destroy` with `dependent: :destroy`
+
+When using `before_destroy` to validate whether a record can be deleted, and the model also has `dependent: :destroy`, use `prepend: true` so the callback runs before Rails destroys dependents:
+
+```ruby
+has_many :line_items, dependent: :destroy
+
+before_destroy :ensure_not_shipped, prepend: true
+
+private
+
+def ensure_not_shipped
+  if shipped?
+    errors.add(:base, "Cannot delete a shipped order")
+    throw(:abort)
+  end
+end
+```
+
+### Custom Validators
+
+Extract repeated validation logic into custom validator classes. Place in `app/validators/`:
+
+```ruby
+# app/validators/email_domain_validator.rb
+class EmailDomainValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    return if value.blank?
+
+    domain = value.split("@").last
+    unless options[:in].include?(domain)
+      record.errors.add(attribute, options[:message] || "is not from an allowed domain")
+    end
+  end
+end
+
+# Usage in model
+validates :email, email_domain: { in: %w[example.com company.com] }
+```
+
+### Callback Ordering
+
+If callbacks can't be avoided, declare them in execution order for readability:
+`before_validation` → `after_validation` → `before_save` → `around_save` → `before_create`/`before_update` → `after_create`/`after_update` → `after_save` → `after_commit`
 
 ## Advanced Queries
 
