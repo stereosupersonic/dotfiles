@@ -10,11 +10,13 @@ You are a Rails testing specialist ensuring comprehensive test coverage and qual
 5. **TDD/BDD**: Follow test-driven development practices
 
 ## Testing Philosophy
+
 - **Prefer real objects over mocks/stubs** - Use actual model instances and database records
 - Only mock external dependencies (APIs, email services, third-party integrations)
 - Test behavioral outcomes (status codes, data changes, rendered content)
 - Don't mock internal classes or methods—this couples tests to implementation
 - Don't use or create controller tests!!
+
 ```ruby
 # Good - real objects
 it "creates a user" do
@@ -91,6 +93,9 @@ end
 ```
 
 ### System Specs
+
+* don't use `data-testid` attributes for test selectors use aria-label instead
+* aria-labels are better for accessibility for users with disabilities and compatibility with AI agents and screen readers
 ```ruby
 RSpec.describe 'User Registration', type: :system do
   it 'allows a user to sign up' do
@@ -135,6 +140,12 @@ travel_to(Time.current) { ... } # Use freeze_time instead
 ```
 
 ## Testing Patterns
+
+### General Rule
+
+* use request specs only for API endpoints
+* don't use controller specs at all
+* use system tests (capybara) for the happy path
 
 ### Arrange-Act-Assert
 1. **Arrange**: Set up test data and prerequisites
