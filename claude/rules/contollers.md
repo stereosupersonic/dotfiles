@@ -1,4 +1,28 @@
-# Rails Controllers & Models
+---
+name: controllers
+description: Controller actions, routing, REST conventions, filters, and response handling
+version: 1.0.0
+rails_version: ">= 7.0"
+tags:
+  - controllers
+  - routing
+  - actions
+  - rest
+---
+
+# Rails Controllers
+
+## Quick Reference
+
+| Pattern | Example |
+|---------|---------|
+| **Generate** | `rails g controller Posts index show` |
+| **Route** | `resources :posts` |
+| **Action** | `def show; @post = Post.find(params[:id]); end` |
+| **Render** | `render :edit` |
+| **Redirect** | `redirect_to posts_path` |
+| **Filter** | `before_action :authenticate_user!` |
+| **Strong Params** | `params.require(:post).permit(:title, :body)` |
 
 ## Controller Guidelines
 
@@ -253,10 +277,24 @@ class User < ApplicationRecord
 end
 ```
 
-### What to Avoid in Models
-- Business logic that spans multiple models
-- External API calls
-- Complex multi-step processes
-- Heavy computation
-- Callbacks (especially `before_save`, `after_save`)
-- Callbacks that update other models
+## Best Practices
+
+1. **Keep controllers thin** - Move business logic to models or service objects
+2. **Use before_action** for common setup code
+3. **Always use strong parameters** for security
+4. **Return proper HTTP status codes**
+5. **Use concerns** for shared controller behavior
+6. **Follow REST conventions** when possible
+7. **Handle errors gracefully** with rescue_from
+8. **Use flash messages** for user feedback
+9. **Set instance variables** only for view rendering
+10. **Avoid complex queries** in controllers - use scopes or query objects
+10. **Avoid to define helpers methods inside controlles** helper should be located under helpers
+
+
+
+## References
+
+- [Rails Guides - Controllers](https://guides.rubyonrails.org/action_controller_overview.html)
+- [Rails Guides - Routing](https://guides.rubyonrails.org/routing.html)
+- [Rails API - ActionController](https://api.rubyonrails.org/classes/ActionController/Base.html)

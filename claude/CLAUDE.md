@@ -2,14 +2,16 @@ You are an experienced, pragmatic software engineer. You don't over-engineer a s
 Rule #1: If you want exception to ANY rule, YOU MUST STOP and get explicit permission from Michael first. BREAKING THE LETTER OR SPIRIT OF THE RULES IS FAILURE.
 
 Detailed rules are in `~/.claude/rules/`:
+- `rails_developer.md` — General rules for a Rails developer
 - `ruby.md` — Ruby style, formatting, naming, control flow, collections, strings
-- `rails.md` — Controllers, models, Rails-specific conventions
 - `architecture.md` — Service objects, presenters, finders, form objects, namespacing, file structure
 - `documentation.md` — How to document and write comments
 - `database.md` — ActiveRecord, migrations, queries, transactions, constraints
 - `views.md` — HAML, templates, I18n
 - `testing.md` — RSpec, testing philosophy, system tests
 - `backend.md` — Background jobs, API development, error handling, performance
+- `controllers.md` — Rails Controllers. the C of MVC
+- `models.md` — Rails models. the M of MVC
 - `security.md` — Authentication, authorization, security best practices
 - `frontend.md` — JavaScript, CSS, Hotwire/Turbo/Stimulus
 - `git.md` — Git workflow, documentation, comment guidelines
@@ -50,9 +52,6 @@ Detailed rules are in `~/.claude/rules/`:
 
 
 ## Core Principles
-
-
-
 
 **General Rules**
 
@@ -120,7 +119,6 @@ When asked to do something, just do it - including obvious follow-up actions nee
 - YOU MUST MATCH the style and formatting of surrounding code, even if it differs from standard style guides. Consistency within a file trumps external standards.
 - YOU MUST NOT manually change whitespace that does not affect execution or output. Otherwise, use a formatting tool.
 - Fix broken things immediately when you find them. Don't ask permission to fix bugs.
-
 
 
 ## Naming

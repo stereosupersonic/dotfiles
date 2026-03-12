@@ -461,3 +461,8 @@ class RegistrationForm
   end
 end
 ```
+
+## Helpers
+
+* use helpers rarley better are Presenter Objects
+* NEVER put them inside of controllers

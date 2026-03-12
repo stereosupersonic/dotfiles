@@ -243,3 +243,11 @@ end
     - cache @post.comments do
       = render @post.comments
 ```
+
+### What to Avoid in Models
+- Business logic that spans multiple models
+- External API calls
+- Complex multi-step processes
+- Heavy computation
+- Callbacks (especially `before_save`, `after_save`)
+- Callbacks that update other models

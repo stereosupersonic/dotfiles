@@ -1,6 +1,7 @@
 # Frontend: JavaScript & CSS
 
 ## JavaScript Guidelines
+
 - **Minimize JavaScript**: Only use when necessary
 - **Prefer server-rendered HTML** with Hotwire (Turbo + Stimulus)
 - Avoid complex frontend frameworks unless absolutely required

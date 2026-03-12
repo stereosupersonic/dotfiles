@@ -7,6 +7,7 @@
 - Keep views simple and declarative
 - Use partials to break down complex views
 
+
 ```haml
 / app/views/users/show.html.haml
 .user-profile
@@ -29,6 +30,7 @@
 ```
 
 ## View Best Practices
+
 - Use `data-testid` attributes for test selectors
 - Avoid logic in views—use presenters or helpers
 - Use partials for reusable components
@@ -84,6 +86,12 @@ en:
 # For markdown content (if using a markdown renderer)
 = render_markdown(t(".welcome_md"))
 ```
+
+### use linter
+
+- source: https://github.com/sds/haml-lint
+- install: gem 'haml_lint', require: false
+- Usage: haml-lint app/views/
 
 ### I18n Best Practices
 - Translate all user-facing content
