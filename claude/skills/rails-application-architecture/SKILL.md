@@ -286,7 +286,7 @@ Benefits:
 
 ## Decision
 
-Application errors will be tracked using **Sentry**.
+Application errors will be tracked using **Rollbar**.
 
 Captured events:
 
@@ -372,13 +372,13 @@ PUT /orders/:id
 
 ## Decision
 
-JSON serialization will use **Blueprinter**.
+JSON serialization will use **Jbuilder**.
 
 Advantages:
 
-* clear serializer definitions
-* high performance
-* maintainable API responses
+* ships with Rails — no extra dependency
+* template-based — colocated with views
+* easy partial reuse for consistent API responses
 
 ---
 

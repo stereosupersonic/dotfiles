@@ -7,6 +7,32 @@ description: Rails code review skill following Konvenit guidelines. Use when the
 
 Perform thorough code reviews following Konvenit's Rails development standards.
 
+## Rules Reference
+
+This skill enforces the rules defined in `~/.claude/rules/`. When reviewing, apply these:
+
+| Rule File | Covers |
+|-----------|--------|
+| `ruby.md` | Style, naming, conditionals, collections, strings |
+| `architecture.md` | Service objects, presenters, finders, form objects |
+| `controllers.md` | Thin controllers, strong params, REST conventions |
+| `models.md` | ActiveRecord, enums, validations, callbacks, associations |
+| `database.md` | Query optimization, N+1, transactions |
+| `migrations.md` | Zero-downtime, constraints, rollback safety |
+| `views.md` | HAML, I18n, partials, semantic HTML |
+| `testing.md` | TDD philosophy, test types, real objects over mocks |
+| `rspec.md` | RSpec syntax, subject/let, matchers, FactoryBot |
+| `api.md` | Versioning, Jbuilder, error formats |
+| `jobs.md` | Idempotency, queue naming, retry strategies |
+| `security.md` | Auth, CSRF, mass assignment, file uploads |
+| `mailers.md` | Naming, HTML+text templates, background delivery |
+| `performance.md` | filter_map, flat_map, match?, Struct over OpenStruct |
+| `backend.md` | Error handling, caching |
+| `frontend.md` | Hotwire/Turbo/Stimulus, minimal JS, CSS discipline |
+| `git.md` | Commit messages, branch naming, PR hygiene |
+
+---
+
 ## Core Mindset
 
 - Optimize for **low carrying cost**, not short-term delivery speed
@@ -834,25 +860,44 @@ resources :employee_activations, only: %i[create destroy]
 
 ## Authentication & Authorization
 
-- [ ] Use `authentifikator` gem for authentication
+- [ ] Use **Rails 8 built-in authentication** (`has_secure_password`, `authenticate_by`, generated `Authentication` concern)
 - [ ] Use `cancancan` for authorization
-- [ ] Define rules in `Authorization::Ability`
-- [ ] Use `web_access` block for authentication
-- [ ] Use `check_authorization` and `authorize_resource`
+- [ ] Define abilities in `app/models/ability.rb`
+- [ ] Use `load_and_authorize_resource` or `authorize!` for every action
 - [ ] **Authorization checks on ALL actions** that modify data — not just some
 - [ ] **Server-side authorization always** — never rely on client-side hiding alone
 - [ ] Scope queries to current user where appropriate
 
 ```ruby
-# ✅ Correct auth pattern
-class InvitationsController < ApplicationController
-  web_access do
-    allow_logged_in :employee
-    allow_logged_in :client, if: :team_group_admin?
-  end
+# app/controllers/application_controller.rb
+class ApplicationController < ActionController::Base
+  include Authentication  # Rails 8 generated concern
+  before_action :require_authentication
+end
 
-  check_authorization
-  authorize_resource :invitation
+# ✅ CanCanCan — load and authorize in one call
+class PostsController < ApplicationController
+  load_and_authorize_resource
+
+  def index
+    # @posts already loaded and scoped by cancancan
+  end
+end
+
+# app/models/ability.rb
+class Ability
+  include CanCan::Ability
+
+  def initialize(user)
+    user ||= User.new  # guest
+
+    if user.admin?
+      can :manage, :all
+    else
+      can :read, :all
+      can :manage, Post, user_id: user.id
+    end
+  end
 end
 ```
 
@@ -1779,8 +1824,6 @@ Current.user = user
 
 ---
 
-also consider the review ruby code See: [../review-ruby-code/skill.md](../review-ruby-code/skill.md)
-
 ## Output Format
 
 ```markdown
@@ -1836,7 +1879,7 @@ Prioritized list of changes to make.
 |---------|--------|-------------|
 | Code without specs | 🔴 | Add corresponding specs |
 | Single quotes for strings | 🔴 | Use double quotes |
-| `Time.now` | 🟡 | Use `Time.zone.now` |
+| `Time.now` | 🟡 | Use `Time.current` |
 | ERB templates | 🟡 | Prefer HAML |
 | Business logic in controller | 🔴 | Use service object |
 | Business logic in model | 🔴 | Use service object |
