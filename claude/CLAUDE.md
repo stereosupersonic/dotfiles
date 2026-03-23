@@ -9,7 +9,8 @@ Detailed rules are in `~/.claude/rules/`:
 - `migrations.md` — Rails database migrations,
 - `database.md` — ActiveRecord, queries, transactions, constraints
 - `views.md` — HAML, templates, I18n
-- `testing.md` — RSpec, testing philosophy, system tests
+- `testing.md` — Testing philosophy, spec types, TDD workflow
+- `rspec.md` — RSpec syntax, formatting, matchers, doubles, FactoryBot
 - `backend.md` —  error handling, performance
 - `api.md` — API development
 - `jobs.md` — Background jobs

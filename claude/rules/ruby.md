@@ -210,6 +210,8 @@ message = "Hello, " + user.name + "!"
 - Prefer Ruby stdlib over ActiveSupport aliases: `start_with?` not `starts_with?`, `end_with?` not `ends_with?`
 - Prefer Ruby comparison operators over `Array#inquiry` and `String#inquiry`
 - Use `Time.zone.parse` instead of `Time.parse` (respects application time zone)
+- Use `exclude?` over `!include?`
+- Use date range helpers over manual ranges: `record.created_at.all_day`, `.all_week`, `.all_month`, `.all_year`
 
 ```ruby
 # Good

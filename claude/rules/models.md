@@ -1,15 +1,3 @@
----
-name: models
-description: ActiveRecord patterns, migrations, validations, callbacks, associations
-version: 1.0.0
-rails_version: ">= 7.0"
-tags:
-  - activerecord
-  - models
-  - database
-  - orm
----
-
 # Rails Models (ActiveRecord)
 
 ## Quick Reference
@@ -223,6 +211,21 @@ end
 
 ## Scopes and Queries
 
+When a scope lambda becomes too complex to read, convert it to a class method returning a relation:
+
+```ruby
+# Scope is fine for simple cases
+scope :published, -> { where(published: true) }
+scope :recent, -> { order(created_at: :desc) }
+
+# Complex logic → class method
+def self.created_between(start_date, end_date)
+  where(created_at: start_date..end_date)
+    .joins(:author)
+    .where(authors: { active: true })
+end
+```
+
 ```ruby
 class Post < ApplicationRecord
   # Scopes
@@ -279,13 +282,19 @@ Post.group(:author_id).average(:views)
 
 ## Enums
 
+Always use hash syntax with explicit integer values — never array syntax. Array-based enums break if you reorder or insert values.
+
 ```ruby
+# Good - explicit values, safe to reorder
 class Post < ApplicationRecord
   enum status: {
     draft: 0,
     published: 1,
     archived: 2
   }
+
+# Bad - array syntax, insertion breaks existing data
+# enum status: [:draft, :published, :archived]
 
   # Or with prefix/suffix
   enum visibility: {

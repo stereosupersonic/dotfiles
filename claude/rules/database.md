@@ -19,6 +19,10 @@
 - Prefer `where.not(id: id)` over `where("id != ?", id)`
 - Prefer `find` for primary key lookup (raises `RecordNotFound`), `find_by` for attribute lookup (returns `nil`)
 - Use heredocs with `squish` for raw SQL in `find_by_sql`
+- Use `pick` to fetch a single value from a single record — `User.where(email: email).pick(:id)`
+- Use range conditions instead of comparison operators — `where(age: 18..40)` over `where("age >= 18 AND age <= 40")`
+- Avoid passing multiple attributes to `where.not` — it generates OR NOT logic, not AND NOT, which is rarely what you want
+- Don't memoize `find_by` results with `||=` — `||=` won't re-query if the result is `nil`, masking records that don't exist
 
 ```ruby
 # Good - eager loading

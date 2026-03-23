@@ -136,7 +136,7 @@ widget_params[:price_cents] = Price.new(widget_params[:price_cents]).cents
 - Use `params.expect` (Rails 8+) for strong parameters
 - Follow REST conventions—model actions as resources
 - Use standard CRUD actions when possible (index, show, new, create, edit, update, destroy)
-- Handle errors gracefully with proper HTTP status codes
+- Handle errors gracefully with proper HTTP status codes — always use symbolic status codes (`:not_found`, `:forbidden`, `:unprocessable_entity`) over numeric (`404`, `403`, `422`)
 - Use before_actions for authentication, authorization, and common setup
 - **Expose exactly ONE instance variable per action**, named after the resource (`@widget`, `@widgets`). Exceptions: reference data (dropdown lists), global context (`current_user`), persisted UI state (active tab). Multiple instance variables that collectively represent a resource = a domain modeling problem, not a view problem.
 - Use `respond_to` for multiple formats
