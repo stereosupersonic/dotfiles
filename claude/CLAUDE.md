@@ -11,7 +11,8 @@ Detailed rules are in `~/.claude/rules/`:
 - `views.md` — HAML, templates, I18n
 - `testing.md` — Testing philosophy, spec types, TDD workflow
 - `rspec.md` — RSpec syntax, formatting, matchers, doubles, FactoryBot
-- `backend.md` —  error handling, performance
+- `backend.md` — error handling, performance
+- `performance.md` — Ruby performance patterns (collections, strings, regex, blocks)
 - `api.md` — API development
 - `jobs.md` — Background jobs
 - `controllers.md` — Rails Controllers. the C of MVC
