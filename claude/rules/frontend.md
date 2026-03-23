@@ -11,6 +11,7 @@
 - Handle errors explicitly with meaningful logs
 - Use ES Modules or Import Maps, not asset pipeline
 - Keep JavaScript modular and scoped
+- no inline Javascript code!
 
 ```javascript
 // app/javascript/controllers/dropdown_controller.js
@@ -56,6 +57,7 @@ export default class extends Controller {
 - Keep specificity low
 - Use meaningful class names
 - Organize CSS by component or page
+- no inline CSS
 
 ```css
 /* Good - BEM methodology */
