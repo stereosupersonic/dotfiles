@@ -1,15 +1,3 @@
----
-name: controllers
-description: Controller actions, routing, REST conventions, filters, and response handling
-version: 1.0.0
-rails_version: ">= 7.0"
-tags:
-  - controllers
-  - routing
-  - actions
-  - rest
----
-
 # Rails Controllers
 
 ## Quick Reference
@@ -208,84 +196,6 @@ class UsersController < ApplicationController
 
   def search_params
     params.permit(:q, :status, :role, :page)
-  end
-end
-```
-
-## Model Guidelines
-
-### Keep Models Focused
-- Models should handle data persistence, associations, and simple validations
-- Extract complex business logic to service objects
-- Extract complex queries to query objects
-- Use scopes for common, reusable queries
-- Avoid fat models with too many responsibilities
-- Avoid callbacks
-- Validations should also be handled within the database
-- Prefer `has_many :through` over `has_and_belongs_to_many` — join models are almost always needed eventually
-- Always specify `dependent:` on `has_many` and `has_one` associations
-- Use bang persistence methods (`save!`, `create!`, `update!`) unless explicitly handling the return value
-- Use `self[:attribute]` over `read_attribute`/`write_attribute`
-
-### Model Macro Ordering
-
-Follow this order for macro-style declarations in models:
-
-1. `include` / `extend`
-2. `enum`
-3. Associations (`belongs_to`, `has_many`, `has_one`)
-4. Validations
-5. Scopes
-6. Callbacks (use sparingly)
-7. Class methods
-8. Instance methods
-
-```ruby
-class User < ApplicationRecord
-  # Concerns (use sparingly)
-  include Searchable
-
-  # Enums
-  enum role: { viewer: 0, editor: 1, admin: 2 }
-  enum status: { inactive: 0, active: 1, suspended: 2 }
-
-  # Associations
-  belongs_to :company
-  has_many :posts, dependent: :destroy
-  has_many :comments, dependent: :destroy
-  has_one :profile, dependent: :destroy
-
-  # Validations
-  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :name, presence: true, length: { minimum: 2, maximum: 100 }
-  validates :role, presence: true
-
-  # Scopes
-  scope :active, -> { where(status: :active) }
-  scope :recent, -> { order(created_at: :desc) }
-  scope :admins, -> { where(role: :admin) }
-
-  # Callbacks (use sparingly)
-  before_validation :normalize_email
-
-  # Class methods
-  def self.search(query)
-    where("name ILIKE ? OR email ILIKE ?", "%#{query}%", "%#{query}%")
-  end
-
-  # Instance methods
-  def full_name
-    "#{first_name} #{last_name}".strip
-  end
-
-  def admin?
-    role == "admin"
-  end
-
-  private
-
-  def normalize_email
-    self.email = email.downcase.strip if email.present?
   end
 end
 ```

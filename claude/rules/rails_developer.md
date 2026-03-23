@@ -1,14 +1,3 @@
----
-paths:
-  - "**/*.rb"
-  - "app/"
-  - "spec/"
-name: rails-developer
-description: General Rules for working om a rails code base
-version: 1.0.0
-rails_version: ">= 8.0"
----
-
 ## 📚 Core Rails Principles
 
 All specialists follow these NON-NEGOTIABLE principles:
@@ -41,6 +30,9 @@ end
 
 **You Aren't Gonna Need It - Don't create abstractions until needed.**
 
+- YAGNI. The best code is no code. Don't add features we don't need right now.
+- When it doesn't conflict with YAGNI, architect for extensibility and flexibility.
+
 ### 3. Convention Over Configuration
 
 Follow Rails conventions unless compelling reason:
@@ -54,7 +46,7 @@ Follow Rails conventions unless compelling reason:
 
 **Always:**
 - ✅ Strong parameters in controllers
-- ✅ Authorization on all actions (Pundit)
+- ✅ Authorization on all actions (CanCanCan)
 - ✅ Encrypt sensitive data (Lockbox)
 - ✅ HTTPS in production
 - ✅ Rate limiting on APIs
