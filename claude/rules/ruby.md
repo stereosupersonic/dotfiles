@@ -13,6 +13,27 @@
 - Follow Ruby/Rails conventions (Rubocop Rails Omakase with customizations)
 - All files must end with a newline
 
+## Method Behavior
+
+- Don't mutate method arguments
+- Omit `return` where not needed — the last expression is the return value
+- Omit `self` where not needed (required only for attribute writers)
+- Use `public_send` over `send` to respect visibility modifiers
+- Prefer keyword arguments over an options hash
+
+```ruby
+# Good
+def create(name:, role:)
+  # ...
+end
+
+# Bad
+def create(options = {})
+  name = options[:name]
+  role = options[:role]
+end
+```
+
 ## Method Naming
 
 **Bang methods (`!`):** Only use `!` when a non-bang counterpart exists. Don't use `!` merely to indicate destructive actions—many Ruby/Rails methods are destructive without `!`.
@@ -32,6 +53,9 @@ def process_payment!  # Don't do this unless process_payment exists
   # ...
 end
 ```
+
+**Naming:**
+- Predicate methods end with `?` — never prefix with `is_` or `get_`
 
 ## Method Ordering
 
@@ -92,6 +116,8 @@ end
 - Never use `unless` with `else`—always use `if/else` instead
 - Prefer positive conditionals over negative ones when clarity improves
 - Use `case/when` for multiple conditions instead of long `if/elsif` chains
+- Use `&&`/`||` instead of `and`/`or`; use `!` instead of `not`
+- Use `||=` to initialize variables, but not for booleans (use `if @var.nil?` instead)
 
 ```ruby
 # Good - guard clause
@@ -112,6 +138,21 @@ def process_order(order)
 end
 ```
 
+## Blocks
+- Use `{...}` for single-line blocks, `do..end` for multi-line blocks
+- Prefix unused block parameters with `_`
+
+```ruby
+# Good
+[1, 2, 3].map { |n| n * 2 }
+
+hash.each do |key, value|
+  # multi-line
+end
+
+[1, 2, 3].each_with_index.map { |_n, i| i }
+```
+
 ## Collections (Arrays & Hashes)
 - Use `%w` and `%i` for word and symbol arrays
 - Use trailing commas in multi-line collections for cleaner diffs
@@ -119,6 +160,9 @@ end
 - Prefer `fetch` over `[]` when you want to handle missing keys explicitly
 - Use `dig` for safely accessing nested hash/array values
 - Prefer `map`, `select`, `reject` over `each` with mutation
+- Use `first`/`last` over `[0]`/`[-1]`
+- Use `key?`/`value?` over `has_key?`/`has_value?`
+- Use `find` over `detect`, `map` over `collect`
 
 ```ruby
 # Good
@@ -139,6 +183,8 @@ user.dig(:address, :city) # Safe nested access
 - Use heredocs (`<<~TEXT`) for multi-line strings with proper indentation
 - Prefer `String#strip` for cleaning whitespace
 - Use `String#squish` to remove excess whitespace in Rails
+- Don't call `to_s` on interpolated objects — it's implicit
+- Prefer `tr`/`delete` over `gsub` when no regex is needed
 
 ```ruby
 # Good
