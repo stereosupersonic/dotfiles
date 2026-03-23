@@ -141,6 +141,11 @@ Then:
 - [ ] comments should explain **why**, not **what** — if code is unclear, suggest refactoring instead.
 - [ ] avoid useless comments at all costs — they add to carrying cost without value
 - [ ] Suggest concrete improvements with code example
+- [ ] **EVERY RUBY CODE CHANGE MUST BE COVERED BY SPECS** — no exceptions!!!
+
+### Controller Review
+- [ ] New response formats (format.json, format.xml) in existing controllers are covered by request specs
+- [ ] New controller actions are covered by request specs
 
 ### Security Review
 - [ ] Check for **SQL injection** vulnerabilities:
@@ -1419,7 +1424,7 @@ end
 
 ## Testing
 
-- [ ] **Every Ruby code change must be covered by specs** — no exceptions
+- [ ] **EVERY RUBY CODE CHANGE MUST BE COVERED BY SPECS** — no exceptions!!!
 - [ ] Use RSpec with Arrange-Act-Assert pattern
 - [ ] Use FactoryBot, not fixtures
 - [ ] Test service objects thoroughly
@@ -1890,9 +1895,9 @@ Prioritized list of changes to make.
 | Callbacks with side effects | 🔴 | Explicit orchestration |
 | Multiple instance variables | 🟡 | One per action |
 | `unless` with `else` | 🔴 | Use `if` |
-| N+1 queries | 🔴 | Use `includes` / `preload` / `eager_load` |
+| N+1 queries | 🟡  | Use `includes` / `preload` / `eager_load` |
 | Missing indexes | 🔴 | Add index |
-| Fat controller | 🔴 | Extract to service |
+| Fat controller | 🟡  | Extract to service |
 | Inline JS/complex frameworks | 🟡 | Use Hotwire |
 | Swallowed exceptions | 🔴 | Handle explicitly |
 | `permit!` | 🔴 | Explicit whitelist |
