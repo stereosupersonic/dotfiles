@@ -12,6 +12,55 @@
 | **Scope** | `scope :active, -> { where(active: true) }` |
 | **Query** | `User.where(active: true).order(created_at: :desc)` |
 
+## Model Organization Order
+
+Declare model internals in this order for consistency:
+
+```ruby
+class Cloud < ApplicationRecord
+  # 1. Gems/DSL extensions
+  include Turbo::Broadcastable
+  has_paper_trail
+
+  # 2. Associations
+  belongs_to :participant
+  has_many :cards, dependent: :destroy
+  has_one_attached :image
+
+  # 3. Enums
+  enum :state, { uploaded: "uploaded", analyzing: "analyzing", generated: "generated", failed: "failed" }
+
+  # 4. Normalizations (Rails 7.1+)
+  normalizes :email, with: ->(e) { e.strip.downcase }
+
+  # 5. Validations
+  validates :title, presence: true, length: { maximum: 100 }
+
+  # 6. Scopes
+  scope :recent, -> { order(created_at: :desc) }
+  scope :pending, -> { where(state: %i[uploaded analyzing]) }
+
+  # 7. Callbacks
+  before_create :generate_slug
+  after_commit :broadcast_update, on: :update
+
+  # 8. Delegated methods
+  delegate :email, to: :participant, prefix: true
+
+  # 9. Public instance methods
+  def ready?
+    generated? && cards.any?
+  end
+
+  # 10. Private methods
+  private
+
+  def generate_slug
+    self.slug ||= title.parameterize
+  end
+end
+```
+
 ## Model Definition
 
 ```ruby
@@ -226,6 +275,33 @@ def self.created_between(start_date, end_date)
 end
 ```
 
+### Scope Naming Conventions
+
+Follow consistent naming patterns for scopes:
+
+| Pattern | Purpose | Example |
+|---------|---------|---------|
+| `with_*` | Eager load associations | `with_creator`, `with_attachments` |
+| `preloaded` | Full eager load for view rendering | `preloaded` (all associations) |
+| `chronologically` | Oldest first ordering | `chronologically` |
+| `reverse_chronologically` | Newest first ordering | `reverse_chronologically` |
+| `latest` | Single most recent record | `latest` |
+| `page_before` / `page_after` | Cursor-based pagination | `page_before(cursor)` |
+| `indexed_by_*` | Hash lookup by key | `indexed_by_room` |
+| `excluding` | Filter out records | `excluding(user)` |
+
+```ruby
+class Message < ApplicationRecord
+  scope :with_creator, -> { includes(:creator) }
+  scope :preloaded, -> { includes(:creator, :mentions) }
+  scope :chronologically, -> { order(created_at: :asc) }
+  scope :reverse_chronologically, -> { order(created_at: :desc) }
+  scope :latest, -> { order(created_at: :desc).limit(1) }
+  scope :page_before, ->(cursor) { where("id < ?", cursor.id).order(id: :desc).limit(50) }
+  scope :page_after, ->(cursor) { where("id > ?", cursor.id).order(id: :asc).limit(50) }
+end
+```
+
 ```ruby
 class Post < ApplicationRecord
   # Scopes
@@ -280,6 +356,28 @@ Post.group(:category).count
 Post.group(:author_id).average(:views)
 ```
 
+### Query Methods Worth Knowing
+
+```ruby
+# Find records with/without associations (Rails 6.1+)
+Invoice.where.missing(:payments)    # invoices with no payment
+Invoice.where.associated(:payments) # invoices with at least one payment
+
+# Sort by enum value in custom order
+Proposal.in_order_of(:status, %w[accepted in_review rejected]).order(:name)
+
+# Combine relations with OR
+inactive = Account.where("last_activity_at < ?", 14.days.ago)
+low_usage = Account.where("actions_last_month < ?", 10)
+at_risk = inactive.or(low_usage)
+
+# Lambda defaults on associations — auto-set on create
+class Card < ApplicationRecord
+  belongs_to :creator, class_name: "User", default: -> { Current.user }
+  belongs_to :account, default: -> { board.account }
+end
+```
+
 ## Enums
 
 Always use hash syntax with explicit integer values — never array syntax. Array-based enums break if you reorder or insert values.
@@ -310,6 +408,38 @@ class Post < ApplicationRecord
 end
 ```
 
+
+### PostgreSQL-Level Enums
+
+For PostgreSQL, define enums at the database level for type safety and self-documenting schemas:
+
+```ruby
+# Migration
+class AddCloudStateEnum < ActiveRecord::Migration[8.0]
+  def up
+    create_enum :cloud_state, %w[uploaded analyzing analyzed generating generated failed]
+    add_column :clouds, :state, :cloud_state, default: "uploaded", null: false
+    add_index :clouds, :state
+  end
+
+  def down
+    remove_column :clouds, :state
+    drop_enum :cloud_state
+  end
+end
+
+# Model
+class Cloud < ApplicationRecord
+  enum :state, {
+    uploaded: "uploaded",
+    analyzing: "analyzing",
+    generated: "generated",
+    failed: "failed"
+  }, validate: true
+end
+```
+
+Invalid states are rejected at the database level. Use string values in the hash to match the PostgreSQL enum names.
 
 ## Association Tips
 
@@ -345,6 +475,75 @@ def ensure_not_shipped
   end
 end
 ```
+
+### Rich Error Objects with Symbol Codes
+
+Use symbol error codes instead of strings for better i18n and test assertions:
+
+```ruby
+class Admin < ApplicationRecord
+  EMAIL_DOMAIN = "@company.com"
+
+  validate :email_domain_valid
+
+  private
+
+  def email_domain_valid
+    return if email.blank?
+    return if email.end_with?(EMAIL_DOMAIN)
+
+    errors.add(
+      :email,
+      :invalid_email_domain,       # Symbol code (used for i18n lookup)
+      expected: EMAIL_DOMAIN,      # Extra params available in error details
+      actual: email.split("@").last
+    )
+  end
+end
+
+# In tests — assert on codes, not strings
+admin.errors.details[:email]
+# => [{ error: :invalid_email_domain, expected: "@company.com", actual: "gmail.com" }]
+```
+
+### State as Records
+
+Model optional state as a separate associated record rather than a boolean column. Captures who changed it, when, and optionally why — and reverting is as simple as destroying the record.
+
+```ruby
+class Card < ApplicationRecord
+  has_one :closure
+
+  def close(by:, reason: nil)
+    create_closure!(closed_by: by, reason: reason)
+  end
+
+  def reopen
+    closure&.destroy!
+  end
+
+  def closed?
+    closure.present?
+  end
+end
+
+class Closure < ApplicationRecord
+  belongs_to :card, touch: true
+  belongs_to :closed_by, class_name: "User"
+end
+```
+
+```ruby
+# Migration
+create_table :closures do |t|
+  t.references :card, null: false, foreign_key: true
+  t.references :closed_by, null: false, foreign_key: { to_table: :users }
+  t.text :reason
+  t.timestamps
+end
+```
+
+**When to use:** Whenever you need an audit trail, a timestamp, or a "by whom" for a boolean — prefer a state record over a boolean + nullable timestamp + nullable foreign key column.
 
 ### Custom Validators
 
@@ -461,7 +660,6 @@ end
 3. **Validate at database level** with constraints when possible
 4. **Use indexes** for frequently queried columns
 5. **Eager load associations** to avoid N+1 queries
-6. **Use concerns** to share behavior across models
 7. **Keep callbacks simple** - avoid complex logic
 8. **Use transactions** for multi-step operations
 9. **Avoid callbacks for cross-cutting concerns** - use service objects instead

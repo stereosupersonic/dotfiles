@@ -30,6 +30,11 @@ This skill enforces the rules defined in `~/.claude/rules/`. When reviewing, app
 | `performance.md` | filter_map, flat_map, match?, Struct over OpenStruct |
 | `backend.md` | Error handling, caching |
 | `frontend.md` | Hotwire/Turbo/Stimulus, minimal JS, CSS discipline |
+| `hotwire.md` | Turbo Frames, Turbo Streams, morphing, Stimulus controller catalog |
+| `caching.md` | HTTP caching, Russian doll, Solid Cache, counter caches |
+| `delegated-types.md` | Delegated types vs STI, Contactable pattern |
+| `webhooks.md` | SSRF protection, delivery lifecycle, signature verification |
+| `activestorage.md` | Attachment removal, direct uploads, custom keys |
 | `javascript.md` | JavaScript style (Airbnb), Hotwire/Turbo/Stimulus |
 | `css.md` | CSS methodology, BEM, variables, specificity |
 | `git.md` | Commit messages, branch naming, PR hygiene |

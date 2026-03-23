@@ -9,9 +9,11 @@
 - Implement proper authorization (CanCanCan)
 - Never store sensitive data in logs
 - Use encrypted credentials for secrets
-- Implement rate limiting for APIs
+- Implement rate limiting for APIs (Rails 8 built-in `rate_limit`)
 - Validate and sanitize file uploads
 - Use parameterized queries (ActiveRecord does this)
+- Always use `ActiveSupport::SecurityUtils.secure_compare` for token comparison — never `==` (prevents timing attacks)
+- Validate and block private IP ranges before any outbound HTTP request (SSRF protection) — see `webhooks.md`
 
 ```ruby
 # config/initializers/secure_headers.rb
@@ -95,6 +97,34 @@ class ApplicationController < ActionController::Base
   before_action :require_authentication
 end
 ```
+
+## Modern CSRF Protection (Rails 8+)
+
+Rails 8 supports CSRF protection via browser `Sec-Fetch-Site` headers without requiring CSRF tokens — suitable for same-origin/same-site applications. Implement as a controller concern:
+
+```ruby
+# app/controllers/concerns/request_forgery_protection.rb
+module RequestForgeryProtection
+  extend ActiveSupport::Concern
+
+  included do
+    before_action :verify_request_origin, unless: :safe_request?
+  end
+
+  private
+
+  def verify_request_origin
+    return if request.headers["Sec-Fetch-Site"].in?(%w[same-origin same-site none])
+    head :unprocessable_entity
+  end
+
+  def safe_request?
+    request.get? || request.head?
+  end
+end
+```
+
+Use this in addition to (not instead of) Rails' built-in CSRF token protection when transitioning.
 
 ## XSS Prevention
 

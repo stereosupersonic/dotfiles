@@ -6,8 +6,8 @@ Detailed rules are in `~/.claude/rules/`:
 - `ruby.md` — Ruby style, formatting, naming, control flow, collections, strings
 - `architecture.md` — Service objects, presenters, finders, form objects, namespacing, file structure
 - `documentation.md` — How to document and write comments
-- `migrations.md` — Rails database migrations,
-- `database.md` — ActiveRecord, queries, transactions, constraints
+- `migrations.md` — Rails database migrations
+- `database.md` — ActiveRecord, queries, transactions, constraints, indexing, hard deletes
 - `views.md` — HAML, templates, I18n
 - `testing.md` — Testing philosophy, spec types, TDD workflow
 - `rspec.md` — RSpec syntax, formatting, matchers, doubles, FactoryBot
@@ -15,13 +15,20 @@ Detailed rules are in `~/.claude/rules/`:
 - `performance.md` — Ruby performance patterns (collections, strings, regex, blocks)
 - `api.md` — API development
 - `jobs.md` — Background jobs
-- `controllers.md` — Rails Controllers. the C of MVC
-- `models.md` — Rails models. the M of MVC
-- `security.md` — Authentication, authorization, security best practices
+- `controllers.md` — Rails Controllers, concerns, routing, rate limiting
+- `models.md` — Rails models, scopes, enums, associations, state patterns
+- `security.md` — Authentication, authorization, CSRF, SSRF, security best practices
 - `design.md` — SOLID principles, Sandi Metz rules, Law of Demeter
-- `javascript.md` — JavaScript style (Airbnb), Hotwire/Turbo/Stimulus
+- `javascript.md` — JavaScript style (Airbnb)
+- `hotwire.md` — Turbo Frames, Turbo Streams, morphing, Stimulus controllers catalog
 - `css.md` — CSS methodology, BEM, variables, specificity
+- `caching.md` — Russian doll caching, Solid Cache, HTTP caching, counter caches
+- `delegated-types.md` — Delegated types vs STI, Recording pattern
+- `webhooks.md` — SSRF protection, delivery lifecycle, retry, cleanup
+
+- `activestorage.md` — File attachments, direct uploads, variants
 - `git.md` — Git workflow, documentation, comment guidelines
+- `mailers.md` — ActionMailer conventions
 
 ## Additional Resources
 

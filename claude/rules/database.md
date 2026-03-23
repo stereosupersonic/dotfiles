@@ -62,6 +62,54 @@ User.order(:id)
 User.order(:created_at)
 ```
 
+## Indexing
+
+### Composite Index Column Ordering
+
+For composite indexes, put **equality conditions first**, then range conditions. The database can only range-scan on the last key part after equality matches.
+
+```ruby
+# Query: cards for a board, ordered by position
+add_index :cards, [:board_id, :position]
+
+# Query: active cards in a column by due date
+add_index :cards, [:column_id, :status, :due_at]
+
+# Wrong order — range condition before equality wastes the index
+# add_index :cards, [:due_at, :column_id]
+```
+
+## Deletes: Hard vs Soft
+
+Prefer **hard deletes** over soft deletes (`deleted_at` columns). Soft deletes add pervasive `where(deleted_at: nil)` conditions to every query, inflate table size, and create risk of accidentally including deleted data.
+
+When audit trail matters, use an event log instead:
+
+```ruby
+class Card < ApplicationRecord
+  after_destroy_commit :log_deletion
+
+  private
+
+  def log_deletion
+    Event.create!(
+      action: "card.destroyed",
+      recordable_type: "Card",
+      recordable_id: id,
+      metadata: attributes.except("id"),
+      actor: Current.user
+    )
+  end
+end
+
+class Event < ApplicationRecord
+  belongs_to :actor, class_name: "User", optional: true
+  scope :deletions, -> { where("action LIKE ?", "%.destroyed") }
+end
+```
+
+If you genuinely need to query deleted records (e.g., restore functionality), reconsider soft deletes — but keep it scoped to models that truly require it, not as a default.
+
 ## Transactions
 - Use transactions for multi-step operations
 - Keep transactions short and focused

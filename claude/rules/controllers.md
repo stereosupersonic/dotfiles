@@ -46,6 +46,54 @@ end
 match "/api/*path", to: "api#handle", via: :all
 ```
 
+### Direct Routes for External URLs
+
+```ruby
+# config/routes.rb
+direct(:partner_website) { "https://www.example.com" }
+
+# Usage
+partner_website_url  # => "https://www.example.com"
+```
+
+### Authenticated Route Constraints
+
+Serve different roots based on authentication state:
+
+```ruby
+# config/initializers/routing_helpers.rb
+class AuthenticatedConstraint
+  def matches?(request)
+    cookies = ActionDispatch::Cookies::CookieJar.build(request, request.cookies)
+    if (session_token = cookies.signed[:session_token])
+      Session.exists?(id: session_token)
+    end
+  rescue
+    false
+  end
+end
+
+# config/routes.rb
+constraints(AuthenticatedConstraint.new) do
+  root to: "dashboard#index", as: :authenticated_root
+end
+
+root to: "pages#home"
+```
+
+### Rate Limiting (Rails 8+)
+
+```ruby
+class SessionsController < ApplicationController
+  rate_limit to: 10, within: 3.minutes, only: :create
+end
+
+class ApiController < ApplicationController
+  rate_limit to: 5, within: 1.minute, by: :ip,
+    with: -> { render json: { error: "Too many requests" }, status: :too_many_requests }
+end
+```
+
 ### Strong Parameters
 
 Use the Rails 8+ `params.expect` syntax for cleaner, more explicit parameter handling:
@@ -238,6 +286,7 @@ module Api
     end
   end
 end
+
 ```
 
 ## Best Practices

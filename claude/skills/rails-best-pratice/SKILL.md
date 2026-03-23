@@ -27,6 +27,11 @@ Apply all rules from `~/.claude/rules/` when writing or reviewing Rails code.
 | `performance.md` | filter_map, flat_map, match?, Struct over OpenStruct |
 | `backend.md` | Error handling, custom exceptions, caching |
 | `frontend.md` | Hotwire/Turbo/Stimulus, minimal JS, CSS discipline |
+| `hotwire.md` | Turbo Frames, Turbo Streams, morphing, Stimulus controller catalog |
+| `caching.md` | HTTP caching, Russian doll, Solid Cache, counter caches |
+| `delegated-types.md` | Delegated types vs STI, Contactable pattern |
+| `webhooks.md` | SSRF protection, delivery lifecycle, signature verification |
+| `activestorage.md` | Attachment removal, direct uploads, custom keys |
 | `git.md` | Commit messages, branch naming, PR hygiene |
 
 ## Core Principles
@@ -58,7 +63,7 @@ Background Job  (async work)
 - Complex queries → `app/queries/`
 - View formatting → `app/presenters/` (extend `ApplicationPresenter`)
 - Multi-model forms → `app/forms/`
-- Search/filter → `app/finders/`
+- Search/filter → `app/filters/`
 
 ## Non-Negotiables
 
