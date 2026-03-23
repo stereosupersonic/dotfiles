@@ -96,6 +96,58 @@ class ApplicationController < ActionController::Base
 end
 ```
 
+## XSS Prevention
+
+Rails auto-escapes view output by default — the main risk is explicitly bypassing that protection.
+
+**Never do this with user-generated content:**
+```ruby
+<%= @user.bio.html_safe %>   # user can inject <script> tags
+<%= raw @comment.body %>     # same risk
+content_tag :div, params[:content].html_safe
+```
+
+**Embedding user data in JavaScript requires explicit escaping:**
+```ruby
+# Bad - not escaped in JS context
+<script>var msg = "<%= @message %>";</script>
+
+# Good - to_json handles escaping
+<script>var msg = <%= @message.to_json %>;</script>
+```
+
+**When you need to allow limited HTML (e.g. rich text):**
+```ruby
+<%= sanitize @post.body, tags: %w[strong em a], attributes: %w[href] %>
+```
+
+---
+
+## Session Management
+
+**Secure cookie settings:**
+```ruby
+# config/initializers/session_store.rb
+Rails.application.config.session_store :cookie_store,
+  key: "_app_session",
+  secure: Rails.env.production?,
+  httponly: true,
+  same_site: :lax
+```
+
+**Always reset the session on login** to prevent session fixation:
+```ruby
+def create
+  if user = User.authenticate_by(...)
+    reset_session           # must come before writing to session
+    session[:user_id] = user.id
+    redirect_to root_path
+  end
+end
+```
+
+---
+
 ## CanCanCan Authorization
 
 Define abilities in a single file for clear authorization rules:

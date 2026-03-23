@@ -3,9 +3,10 @@
 
 ## Query Optimization
 - Always use eager loading to avoid N+1 queries — add the Bullet gem in development to detect N+1s automatically
-- Use `includes` for loading associations you'll use
-- Use `preload` when you don't need joins
-- Use `joins` when filtering by associations
+- Use `includes` for loading associations you'll use — Rails chooses between a JOIN or separate queries
+- Use `preload` to force separate queries (safer for large datasets, avoids cartesian product)
+- Use `eager_load` to force a LEFT OUTER JOIN (required when filtering/ordering on the association)
+- Use `joins` when filtering by associations but not loading them — does **not** prevent N+1 on access
 - Use `select` to load only needed columns for large datasets
 - Use `pluck` for fetching single columns
 - Use `exists?` instead of `present?` for existence checks

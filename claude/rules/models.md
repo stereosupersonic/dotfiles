@@ -370,7 +370,14 @@ validates :email, email_domain: { in: %w[example.com company.com] }
 ### Callbacks — Database Lifecycle Only
 
 Callbacks are hooks for **database lifecycle events**, not business logic triggers:
-- Acceptable: `normalizes`, data normalization, logging/metrics via `after_commit`
+- Not Acceptable: `normalizes`, data normalization. use the rails 8 normalize method
+```ruby
+class User < ActiveRecord::Base
+  normalizes :name, with: -> name { name.strip.titlecase }
+end
+```
+
+- Use `after_commit` (not `after_save`) for any side effects — `after_commit` runs after the transaction completes, avoiding lock cascades and partial rollback surprises
 - Never: sending emails, queueing jobs, making API calls — these run inside a DB transaction and can cause lock cascades
 - If you find yourself writing `after_create :send_welcome_email` — move it to a service object
 
