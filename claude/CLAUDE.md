@@ -18,7 +18,9 @@ Detailed rules are in `~/.claude/rules/`:
 - `controllers.md` — Rails Controllers. the C of MVC
 - `models.md` — Rails models. the M of MVC
 - `security.md` — Authentication, authorization, security best practices
-- `frontend.md` — JavaScript, CSS, Hotwire/Turbo/Stimulus
+- `design.md` — SOLID principles, Sandi Metz rules, Law of Demeter
+- `javascript.md` — JavaScript style (Airbnb), Hotwire/Turbo/Stimulus
+- `css.md` — CSS methodology, BEM, variables, specificity
 - `git.md` — Git workflow, documentation, comment guidelines
 
 ## Additional Resources

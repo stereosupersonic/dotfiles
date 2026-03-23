@@ -24,11 +24,14 @@ This skill enforces the rules defined in `~/.claude/rules/`. When reviewing, app
 | `rspec.md` | RSpec syntax, subject/let, matchers, FactoryBot |
 | `api.md` | Versioning, Jbuilder, error formats |
 | `jobs.md` | Idempotency, queue naming, retry strategies |
-| `security.md` | Auth, CSRF, mass assignment, file uploads |
+| `security.md` | Auth, CSRF, XSS, session management, mass assignment, file uploads |
+| `design.md` | SOLID principles, Sandi Metz rules, Law of Demeter |
 | `mailers.md` | Naming, HTML+text templates, background delivery |
 | `performance.md` | filter_map, flat_map, match?, Struct over OpenStruct |
 | `backend.md` | Error handling, caching |
 | `frontend.md` | Hotwire/Turbo/Stimulus, minimal JS, CSS discipline |
+| `javascript.md` | JavaScript style (Airbnb), Hotwire/Turbo/Stimulus |
+| `css.md` | CSS methodology, BEM, variables, specificity |
 | `git.md` | Commit messages, branch naming, PR hygiene |
 
 ---
