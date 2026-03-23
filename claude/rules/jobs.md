@@ -1,13 +1,3 @@
----
-name: jobs
-description: background jobs
-version: 1.0.0
-rails_version: ">= 7.0"
-tags:
-  - background jobs
-  - sidekiq
----
-
 # Rails Background Jobs
 
 ## Core Responsibilities
@@ -30,6 +20,10 @@ tags:
 - **Job arguments must be JSON-safe** — symbols become strings during serialization, custom objects serialize unexpectedly
 - Start side effects in-request and move to background only when you have evidence you need to (response time SLA, fault tolerance, external API calls)
 - **Always** use jobs for third-party API calls (email, payments, webhooks) — even at tiny scale, they will fail
+- Never spawn threads inside a job — each thread opens a new DB connection and can exhaust the pool
+- Never use `Kernel.sleep` inside a job — it blocks the worker thread; reschedule for later instead
+- Never enqueue jobs from inside a database transaction — the job may run before the transaction commits; enqueue after the transaction succeeds
+- When renaming a job class, keep the old class name as an alias until all in-flight jobs with that name have drained
 
 
 ### Basic Job Structure
