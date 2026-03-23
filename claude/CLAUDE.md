@@ -11,6 +11,7 @@ Detailed rules are in `~/.claude/rules/`:
 - `views.md` — HAML, templates, I18n
 - `testing.md` — Testing philosophy, spec types, TDD workflow
 - `rspec.md` — RSpec syntax, formatting, matchers, doubles, FactoryBot
+- `capybara.md` — Capybara system spec style, finders, matchers, actions, scoping
 - `backend.md` — error handling, performance
 - `performance.md` — Ruby performance patterns (collections, strings, regex, blocks)
 - `api.md` — API development

@@ -20,6 +20,7 @@ Apply all rules from `~/.claude/rules/` when writing or reviewing Rails code.
 | `views.md` | HAML, I18n, partials, semantic HTML |
 | `testing.md` | TDD philosophy, test types, real objects over mocks |
 | `rspec.md` | RSpec syntax, subject/let, matchers, FactoryBot |
+| `capybara.md` | Capybara system spec style, finders, matchers, actions, scoping |
 | `api.md` | Versioning, Jbuilder serialization, error formats |
 | `jobs.md` | Idempotency, queue naming, retry strategies |
 | `security.md` | Rails 8 auth, CanCanCan, CSRF, mass assignment |

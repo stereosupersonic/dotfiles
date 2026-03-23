@@ -22,6 +22,7 @@ This skill enforces the rules defined in `~/.claude/rules/`. When reviewing, app
 | `views.md` | HAML, I18n, partials, semantic HTML |
 | `testing.md` | TDD philosophy, test types, real objects over mocks |
 | `rspec.md` | RSpec syntax, subject/let, matchers, FactoryBot |
+| `capybara.md` | Capybara system spec style, finders, matchers, actions, scoping |
 | `api.md` | Versioning, Jbuilder, error formats |
 | `jobs.md` | Idempotency, queue naming, retry strategies |
 | `security.md` | Auth, CSRF, XSS, session management, mass assignment, file uploads |
