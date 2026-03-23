@@ -6,10 +6,12 @@ Detailed rules are in `~/.claude/rules/`:
 - `ruby.md` — Ruby style, formatting, naming, control flow, collections, strings
 - `architecture.md` — Service objects, presenters, finders, form objects, namespacing, file structure
 - `documentation.md` — How to document and write comments
-- `database.md` — ActiveRecord, migrations, queries, transactions, constraints
+- `migrations.md` — Rails database migrations,
+- `database.md` — ActiveRecord, queries, transactions, constraints
 - `views.md` — HAML, templates, I18n
 - `testing.md` — RSpec, testing philosophy, system tests
-- `backend.md` — API development, error handling, performance
+- `backend.md` —  error handling, performance
+- `api.md` — API development
 - `jobs.md` — Background jobs
 - `controllers.md` — Rails Controllers. the C of MVC
 - `models.md` — Rails models. the M of MVC
@@ -51,6 +53,7 @@ Detailed rules are in `~/.claude/rules/`:
   together before implementation. Routine fixes and clear implementations don't need
   discussion.
 
+- IMPORTANT RULE: Branch first, always. Before you touche any spec files, make sure you're on a feature branch!!!
 
 ## Core Principles
 

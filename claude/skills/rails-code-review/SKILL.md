@@ -11,13 +11,19 @@ Perform thorough code reviews following Konvenit's Rails development standards.
 
 All coding standards are defined in `~/.claude/rules/`. Read and apply these during every review:
 
+- `rails_developer.md` — General rules for a Rails developer
 - `ruby.md` — Ruby style, formatting, naming, control flow, collections, strings
-- `rails.md` — Controllers, models, routing, Rails-specific conventions
-- `architecture.md` — Service objects, presenters, finders, form objects, namespacing
-- `database.md` — ActiveRecord, migrations, queries, transactions, constraints
-- `views.md` — HAML, templates, I18n, partials
-- `testing.md` — RSpec, testing philosophy, system tests, time-dependent tests
-- `backend.md` — Background jobs, API development, error handling, performance
+- `architecture.md` — Service objects, presenters, finders, form objects, namespacing, file structure
+- `documentation.md` — How to document and write comments
+- `migrations.md` — Rails database migrations,
+- `database.md` — ActiveRecord, queries, transactions, constraints
+- `views.md` — HAML, templates, I18n
+- `testing.md` — RSpec, testing philosophy, system tests
+- `backend.md` —  error handling, performance
+- `api.md` — API development
+- `jobs.md` — Background jobs
+- `controllers.md` — Rails Controllers. the C of MVC
+- `models.md` — Rails models. the M of MVC
 - `security.md` — Authentication, authorization, security best practices
 - `frontend.md` — JavaScript, CSS, Hotwire/Turbo/Stimulus
 - `git.md` — Git workflow, documentation, comment guidelines

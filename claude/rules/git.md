@@ -1,4 +1,14 @@
-# Git Workflow & Documentation
+---
+description: "Git and PR conventions"
+# no paths: = loads every session
+---
+
+# Commits
+- Append Jira key or GitHub issue: [MP-XXX]
+- Imperative mood: "Fix bug" not "Fixed bug"
+
+# Always branch first
+- Never work on main. Remind me if I haven't branched.
 
 ## Git Best Practices
 - Branch from `main` or `master`

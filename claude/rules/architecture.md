@@ -163,10 +163,13 @@ The Golden Rule: A Service Object = Business Use Case
 - Return a result object or use dry-monads for success/failure
 - Keep service objects focused—one responsibility per service
 - Make them testable in isolation
+- it uses  ActiveModel::Model for validation and adding values via attr_accessor
 
 ```ruby
 # app/services/base_service.rb
 class BaseService
+
+  include ActiveModel::Model
   def self.call(...)
     new(...).call
   end
@@ -179,12 +182,7 @@ end
 # app/services/users/create_user.rb
 module Users
   class CreateUser < BaseService
-    attr_reader :params, :errors
-
-    def initialize(params)
-      @params = params
-      @errors = []
-    end
+    attr_accessor :params, :errors
 
     def call
       user = User.new(user_params)
@@ -222,8 +220,6 @@ module Users
   end
 end
 ```
-
-See `rails.md` for controller usage patterns with service objects.
 
 ## Presenter Objects
 
