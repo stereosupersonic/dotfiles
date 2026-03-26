@@ -9,9 +9,19 @@
 - Use PascalCase for class names
 - Use SCREAMING_SNAKE_CASE for constants
 - Use descriptive names—avoid abbreviations (prefer `user_registration` over `usr_reg`)
-- Use parallel assignment sparingly and only when it improves readability
+- Avoid multiple assignments per line (`one, two = 1, 2`)
 - Follow Ruby/Rails conventions (Rubocop Rails Omakase with customizations)
 - All files must end with a newline
+- Avoid monkey-patching
+- Prefer nested class and module definitions over the shorthand version (`class Foo::Bar`)
+- Use empty lines around multi-line blocks
+- Avoid organizational comments (`# Validations`, `# Callbacks`) — structure code to be self-evident
+
+## Naming
+
+- Prefix unused variables or parameters with underscore (`_`)
+- Use `@_variable` prefix for memoized instance variables (e.g., `@_user ||= User.find(id)`)
+- Prefer method invocation over exposing instance variables directly
 
 ## Method Behavior
 
@@ -20,6 +30,8 @@
 - Omit `self` where not needed (required only for attribute writers)
 - Use `public_send` over `send` to respect visibility modifiers
 - Prefer keyword arguments over an options hash
+- Avoid optional parameters — if a method needs them, it may be doing too much
+- Use `def` with parentheses when there are arguments
 
 ```ruby
 # Good
@@ -56,6 +68,12 @@ end
 
 **Naming:**
 - Predicate methods end with `?` — never prefix with `is_` or `get_`
+
+## Visibility
+
+- Use `def self.method`, not `class << self`
+- Prefer `private` when indicating scope
+- Use `protected` only for comparison methods like `def ==(other)`, `def <(other)`, `def >(other)`
 
 ## Method Ordering
 
@@ -110,8 +128,10 @@ end
 ```
 
 ## Conditionals & Control Flow
+
 - Use guard clauses to reduce nesting and improve early returns
-- Use modifier conditionals (`return unless valid?`) for simple one-liners
+- Avoid ternary operators — use multi-line `if` to make branches explicit
+- Use modifier conditionals (`return unless valid?`) only for short, simple cases — avoid on long lines or complex conditions
 - Use `unless` sparingly—only for simple negative conditions without `else`
 - Never use `unless` with `else`—always use `if/else` instead
 - Prefer positive conditionals over negative ones when clarity improves
@@ -120,31 +140,38 @@ end
 - Use `||=` to initialize variables, but not for booleans (use `if @var.nil?` instead)
 
 ```ruby
-# Good - guard clause
-def process_order(order)
-  return unless order.valid?
-  return if order.processed?
+# Good - guard clause with modifier
+return unless order.valid?
 
-  # main logic here
+# Good - multi-line when condition is complex or long
+if signed_in? && !current_user.active?
+  block_access!
 end
 
-# Bad - nested conditionals
-def process_order(order)
-  if order.valid?
-    if !order.processed?
-      # main logic here
-    end
-  end
+# Bad - conditional modifier on complex condition
+block_access! if signed_in? && !current_user.active?
+
+# Bad - ternary
+result = condition ? value_if_true : value_if_false
+
+# Good
+result = if condition
+  value_if_true
+else
+  value_if_false
 end
 ```
 
 ## Blocks
+
 - Use `{...}` for single-line blocks, `do..end` for multi-line blocks
 - Prefix unused block parameters with `_`
+- Prefer `&:method_name` over `{ |item| item.method_name }` for simple method calls
 
 ```ruby
 # Good
 [1, 2, 3].map { |n| n * 2 }
+users.map(&:email)
 
 hash.each do |key, value|
   # multi-line
@@ -154,6 +181,7 @@ end
 ```
 
 ## Collections (Arrays & Hashes)
+
 - Use `%w` and `%i` for word and symbol arrays
 - Use trailing commas in multi-line collections for cleaner diffs
 - Use `Hash.new` with block for complex default values
@@ -162,7 +190,7 @@ end
 - Prefer `map`, `select`, `reject` over `each` with mutation
 - Use `first`/`last` over `[0]`/`[-1]`
 - Use `key?`/`value?` over `has_key?`/`has_value?`
-- Use `find` over `detect`, `map` over `collect`
+- Use `find` over `detect`, `map` over `collect`, `select` over `find_all`, `reduce` over `inject`
 
 ```ruby
 # Good
@@ -178,8 +206,9 @@ user.dig(:address, :city) # Safe nested access
 ```
 
 ## String Manipulation
+
 - Use string interpolation instead of concatenation
-- Use `%()` or `%Q()` for strings with many quotes
+- Use `%()` for single-line strings containing double-quotes that require interpolation
 - Use heredocs (`<<~TEXT`) for multi-line strings with proper indentation
 - Prefer `String#strip` for cleaning whitespace
 - Use `String#squish` to remove excess whitespace in Rails
@@ -200,6 +229,7 @@ message = "Hello, " + user.name + "!"
 ```
 
 ## Rails-Specific Conventions
+
 - Use Rails time helpers instead of Ruby Time methods (`2.days.ago`, `Time.current`)
 - Prefer `present?` and `blank?` over `nil?` and `empty?`
 - Use safe navigation (`&.`) for potentially nil objects

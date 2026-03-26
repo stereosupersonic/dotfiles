@@ -147,7 +147,7 @@ Then:
 - [ ] comments should explain **why**, not **what** — if code is unclear, suggest refactoring instead.
 - [ ] avoid useless comments at all costs — they add to carrying cost without value
 - [ ] Suggest concrete improvements with code example
-- [ ] **EVERY RUBY CODE CHANGE MUST BE COVERED BY SPECS** — no exceptions!!!
+- [ ] **EVERY CODE CHANGE MUST BE COVERED BY SPECS** — no exceptions!!!
 
 ### Controller Review
 - [ ] New response formats (format.json, format.xml) in existing controllers are covered by request specs
@@ -1430,7 +1430,7 @@ end
 
 ## Testing
 
-- [ ] **EVERY RUBY CODE CHANGE MUST BE COVERED BY SPECS** — no exceptions!!!
+- [ ] **EVERY CODE CHANGE MUST BE COVERED BY SPECS** — no exceptions!!!
 - [ ] Use RSpec with Arrange-Act-Assert pattern
 - [ ] Use FactoryBot, not fixtures
 - [ ] Test service objects thoroughly

@@ -47,6 +47,7 @@ For each logical unit of work:
 - Run the full relevant test suite and ensure it is green
 - Report a summary: what was changed, why, and any decisions made
 - Flag anything incomplete or that needs Michael's review
+- run rubocop for styling issues
 
 ## Conventions to Follow
 
