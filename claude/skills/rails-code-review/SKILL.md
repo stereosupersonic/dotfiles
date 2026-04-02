@@ -198,6 +198,8 @@ Then:
 - [ ] I18n keys are namespaced logically (`en.controllers.users.create.success`)
 - [ ] Pluralization rules defined where needed
 - [ ] Date/time formatting uses I18n helpers
+- [ ] Any new or changed I18n keys are present in **all** locale files (e.g. `en.yml`, `de.yml`, `fr.yml`) — missing keys in any locale are a bug
+- [ ] Translation values are spell-checked — typos in locale files appear directly in the UI
 
 ### Logging & Observability
 - [ ] Appropriate log levels used (debug, info, warn, error)
