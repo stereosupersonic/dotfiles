@@ -1917,6 +1917,8 @@ Prioritized list of changes to make.
 | Unused columns | 🟡 | Remove or document |
 | Personal preference changes | 🟡 | Create Rubocop issue instead |
 | Hardcoded strings in views | 🟡 | Use I18n keys |
+| I18n key missing in any locale | 🔴 | Add to all locale files |
+| Typos in translation values | 🟡 | Spell-check locale files |
 | God objects (>200 lines) | 🔴 | Split responsibilities |
 | Methods >15 lines | 🟡 | Extract smaller methods |
 | Logging sensitive data | 🔴 | Filter or exclude PII |
