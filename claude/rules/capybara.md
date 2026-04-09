@@ -171,3 +171,60 @@ expect(page).to have_text("Saved successfully")
 sleep 1
 expect(page).to have_text("Saved successfully")
 ```
+
+## Driver Selection
+
+Default to `:rack_test` for system tests that don't require JavaScript — it runs in-process with no browser overhead, making it ~10x faster than headless Chrome:
+
+```ruby
+# spec/support/capybara.rb
+RSpec.configure do |config|
+  config.before(:each, type: :system) do
+    driven_by :rack_test
+  end
+
+  config.before(:each, type: :system, js: true) do
+    driven_by :selenium, using: :headless_chrome
+  end
+end
+```
+
+Tag tests that need JavaScript explicitly:
+
+```ruby
+it "submits the form via Turbo", :js do
+  # ...
+end
+```
+
+Most system tests don't need JavaScript. Defaulting to `:rack_test` keeps the suite fast and reserves the browser for tests that actually exercise JS behavior.
+
+## Failure Diagnostics
+
+Use a `with_clues` helper to dump page HTML on system test failures — essential when debugging CI failures without a visible browser:
+
+```ruby
+# spec/support/with_clues.rb
+module WithClues
+  def with_clues
+    yield
+  rescue Exception => ex
+    puts "\n[with_clues] Test failed: #{ex.message}"
+    puts page.html
+    raise ex
+  end
+end
+
+RSpec.configure do |config|
+  config.include WithClues, type: :system
+end
+```
+
+```ruby
+it "processes the checkout" do
+  with_clues do
+    click_button "Pay Now"
+    expect(page).to have_text("Order confirmed")
+  end
+end
+```

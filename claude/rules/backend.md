@@ -45,6 +45,36 @@ def process_payment
 end
 ```
 
+## Rake Tasks
+
+Use Rake tasks for operational automation: one-time backfills, data migrations, periodic reports, admin scripts. They are preferred over one-off scripts because they are discoverable (`rake -T`), testable, namespaced, and runnable across all environments.
+
+```ruby
+# lib/tasks/users.rake
+namespace :users do
+  desc "Backfill missing display names from email address"
+  task backfill_display_names: :environment do
+    scope = User.where(display_name: nil)
+    count = scope.count
+
+    scope.find_each do |user|
+      user.update_columns(display_name: user.email.split("@").first)
+    end
+
+    puts "Done. Backfilled #{count} users."
+  end
+end
+```
+
+Keep tasks thin — delegate to service objects or model methods for the actual logic. Tasks orchestrate; they don't implement.
+
+Avoid Rake tasks for:
+- Work that should be a background job (use Solid Queue instead)
+- Scheduled recurring work (use `config/recurring.yml` instead)
+- Anything requiring interactive input (use a console or admin UI instead)
+
+---
+
 ## Performance
 
 ### Optimization Strategies

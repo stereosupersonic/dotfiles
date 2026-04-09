@@ -141,3 +141,21 @@ config.i18n.load_path += Dir[Rails.root.join("config", "locales", "**", "*.{rb,y
 ### Partials Consolidation
 
 - When a partial is used from only one view, consider inlining it — partials add indirection and file count without benefit when not reused
+
+## Strict Locals
+
+Declare locals explicitly in every partial using the magic comment (Rails 7.1+):
+
+```haml
+-# app/views/users/_user.html.haml
+-# locals: (user:, show_actions: false)
+```
+
+```erb
+<%# app/views/shared/_alert.html.erb %>
+<%# locals: (message:, type: "info") %>
+```
+
+This raises `ArgumentError` if an unexpected local is passed, serves as in-file documentation of the partial's interface, and makes refactoring safer — you'll know immediately if a caller passes a removed local.
+
+For partials rendered via `render @collection`, Rails infers the local automatically — no declaration needed.

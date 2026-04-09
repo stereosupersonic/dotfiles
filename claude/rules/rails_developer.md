@@ -59,6 +59,106 @@ Each commit should:
 - ✅ Be deployable
 - ✅ Represent complete feature slice
 
+## Developer Workflow Scripts
+
+Every project must have three executable scripts in `bin/`:
+
+**`bin/setup`** — Idempotent bootstrapping. A new developer runs this once to get the app running:
+
+```ruby
+#!/usr/bin/env ruby
+require "optparse"
+
+def setup
+  log "Installing gems"
+  system! "bundle check || bundle install"
+
+  log "Setting up database"
+  system! "bin/rails db:reset || bin/rails db:migrate"
+  system!({ "RAILS_ENV" => "test" }, "bin/rails db:reset")
+
+  log "Done. Run bin/dev to start the app."
+end
+
+def system!(*args)
+  system(*args) || abort("\n== Command #{args} failed ==")
+end
+
+def log(message)
+  puts "\n== #{message} =="
+end
+
+setup
+```
+
+**`bin/dev`** — Starts all dev processes via Overmind/Foreman using `Procfile.dev`:
+
+```bash
+#!/usr/bin/env bash
+exec overmind start -f Procfile.dev "$@"
+```
+
+**`bin/ci`** — Mirrors CI locally. Run before pushing:
+
+```bash
+#!/usr/bin/env bash
+set -e
+bundle exec rspec
+bundle exec rubocop
+bundle exec brakeman --no-pager
+bundle exec bundle-audit check
+```
+
+These three scripts are the project's living documentation for how to get it running. A new developer runs `bin/setup` then `bin/dev` — that's the whole setup story.
+
+---
+
+## Runtime Configuration (12-Factor)
+
+Use environment variables for all runtime configuration. Use `dotenv` for dev/test:
+
+```ruby
+# Gemfile
+gem "dotenv-rails", groups: [:development, :test]
+```
+
+```bash
+# .env.development — not committed, used in development
+DATABASE_URL=postgres://localhost/myapp_development
+REDIS_URL=redis://localhost:6379/0
+
+# .env.test — not committed, used in tests
+DATABASE_URL=postgres://localhost/myapp_test
+```
+
+Never use `config/environments/` YAML files for things that differ per deployment. ENV is the only mechanism that works consistently across local, CI, staging, and production without code changes.
+
+Commit `.env.development.sample` and `.env.test.sample` as documentation of required variables.
+
+---
+
+## Gemfile Documentation
+
+Add a brief comment to every non-obvious gem explaining why it's included:
+
+```ruby
+# Password hashing
+gem "bcrypt"
+
+# Paginate ActiveRecord collections
+gem "pagy"
+
+# Authorization
+gem "cancancan"
+
+# Detect N+1 queries in development
+gem "bullet", group: :development
+```
+
+Skip comments for gems whose purpose is obvious from the name. The Gemfile is read by every developer who joins — comments answer "why is this here?" which `bundle info` cannot.
+
+---
+
 ## 📋 Quality Checklist
 
 Before any commit, specialists ensure:
